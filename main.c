@@ -15,7 +15,7 @@ struct thread_param {
 
 void thread_action(void *args) {
     struct thread_param* tp = args;
-    sleep(1);
+    sleep(4);
     printf("Thread %d done\n", tp->id);
     thread_status[tp->id] = 'a';
     free(tp);
@@ -69,8 +69,11 @@ int main(int argc, char** argv) {
                 break;
             }
         }
+        // sleep(1);
         if(!j)
             printf("Fail to handle request [%d]\n", k);
+        else
+            printf("Handled request [%d]\n", k);
         --k;
     }
 
