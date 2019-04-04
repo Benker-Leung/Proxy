@@ -14,8 +14,14 @@ void print_time();
 #define log(...)\
         do {if(!logger_start) init_logger();\
             print_time();\
-            printf(__VA_ARGS__);\
+            fprintf(stdout, __VA_ARGS__);\
             fflush(stdout); } while(0)
+
+#define printf(...)\
+        do{\
+            if(logger_start) fprintf(stderr, __VA_ARGS__);\
+            else fprintf(stdout, __VA_ARGS__);\
+        } while(0)
 
 
 #endif

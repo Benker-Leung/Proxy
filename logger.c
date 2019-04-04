@@ -13,7 +13,6 @@ void init_logger() {
     // if logger started
     if(logger_start)
         return;
-    fprintf(stderr, "Logger activated...\n\n");
     // open log file
     int log_fd = open("log", O_CREAT|O_WRONLY|O_APPEND, 0644);
     
@@ -38,7 +37,7 @@ void print_time() {
     my_tm = localtime(&my_time);
 
     if(my_tm != NULL)
-        printf("%.4d/%.2d/%.2d %.2d:%.2d:%.2d : ", my_tm->tm_year+1900, my_tm->tm_mon+1, my_tm->tm_mday, my_tm->tm_hour, my_tm->tm_min, my_tm->tm_sec);
+        fprintf(stdout, "%.4d/%.2d/%.2d %.2d:%.2d:%.2d : ", my_tm->tm_year+1900, my_tm->tm_mon+1, my_tm->tm_mday, my_tm->tm_hour, my_tm->tm_min, my_tm->tm_sec);
     // if no time available
     else {
         fprintf(stderr, "No time available: ");

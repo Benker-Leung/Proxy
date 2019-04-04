@@ -2,21 +2,17 @@
 CC=gcc
 # use these flags
 CFLAGS=-c -Wall
+# use to link library
+CLINK=-lpthread
 
-all: main
+all: main.o logger.o
+	$(CC) -o proxy main.o logger.o $(CLINK)
 
 # to be continued
-main: logger.o to_be_continue.c
-	$(CC) -o proxy logger.o
+main.o: main.c logger.o
+	$(CC) $(CFLAGS) main.c
 
-# for testing
-test: test.o logger.o
-	$(CC) -o test test.o logger.o
-
-test.o: test.c
-	$(CC) $(CFLAGS) test.c
-
-logger.o: logger.c
+logger.o: logger.c logger.h
 	$(CC) $(CFLAGS) logger.c
 
 clean:
