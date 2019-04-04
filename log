@@ -1,20 +1,84 @@
-2019/04/04 09:32:22 : Start proxy at port [1234]
-2019/04/04 09:32:22 : Assigned max_thread :[990]
-2019/04/04 09:32:37 : Start proxy at port [2134]
-2019/04/04 09:32:37 : Assigned max_thread :[3]
-2019/04/04 09:40:20 : Start proxy at port [1234]
-2019/04/04 09:40:20 : Assigned max_thread :[3]
-2019/04/04 09:40:26 : Start proxy at port [1234]
-2019/04/04 09:40:26 : Assigned max_thread :[10]
-2019/04/04 10:00:55 : Start proxy at port [1234]
-2019/04/04 10:00:55 : Assigned max_thread :[3]
-2019/04/04 10:03:14 : Start proxy at port [123]
-2019/04/04 10:03:14 : Assigned max_thread :[10]
-2019/04/04 10:06:45 : Start proxy at port [123]
-2019/04/04 10:06:45 : Assigned max_thread :[4]
-2019/04/04 10:08:38 : Start proxy at port [3]
-2019/04/04 10:08:38 : Assigned max_thread :[3]
-2019/04/04 10:09:32 : Start proxy at port [3]
-2019/04/04 10:09:32 : Assigned max_thread :[3]
-2019/04/04 10:10:12 : Start proxy at port [3]
-2019/04/04 10:10:12 : Assigned max_thread :[3]
+2019/04/04 22:37:24 : Start proxy, listen at port [12345]
+2019/04/04 22:37:24 : Max_thread supported:[5]
+2019/04/04 22:37:42 : Closing proxy...
+2019/04/04 22:39:08 : Start proxy, listen at port [12345]
+2019/04/04 22:39:08 : Max_thread supported:[5]
+2019/04/04 22:39:34 : Closing proxy...
+2019/04/04 22:40:21 : Start proxy, listen at port [12345]
+2019/04/04 22:40:21 : Max_thread supported:[5]
+2019/04/04 22:40:57 : Closing proxy...
+2019/04/04 22:41:31 : Start proxy, listen at port [12345]
+2019/04/04 22:41:31 : Max_thread supported:[5]
+2019/04/04 22:42:20 : Closing proxy...
+2019/04/04 22:42:26 : Start proxy, listen at port [12345]
+2019/04/04 22:42:26 : Max_thread supported:[5]
+2019/04/04 22:42:33 : Closing proxy...
+2019/04/04 22:44:11 : Start proxy, listen at port [12345]
+2019/04/04 22:44:11 : Max_thread supported:[5]
+2019/04/04 22:44:45 : Closing proxy...
+2019/04/04 22:44:51 : Start proxy, listen at port [12345]
+2019/04/04 22:44:51 : Max_thread supported:[5]
+2019/04/04 22:44:56 : Closing proxy...
+2019/04/04 22:55:57 : Start proxy, listen at port [12345]
+2019/04/04 22:55:57 : Max_thread supported:[5]
+2019/04/04 22:56:19 : Closing proxy...
+2019/04/04 22:56:28 : Start proxy, listen at port [12345]
+2019/04/04 22:56:28 : Max_thread supported:[5]
+2019/04/04 22:56:44 : Closing proxy...
+2019/04/04 22:58:18 : Start proxy, listen at port [12345]
+2019/04/04 22:58:18 : Max_thread supported:[5]
+2019/04/04 22:58:45 : Closing proxy...
+2019/04/04 23:01:00 : Start proxy, listen at port [12345]
+2019/04/04 23:01:00 : Max_thread supported:[5]
+2019/04/04 23:01:13 : Closing proxy...
+2019/04/04 23:09:55 : Start proxy, listen at port [12345]
+2019/04/04 23:09:55 : Max_thread supported:[5]
+2019/04/04 23:10:38 : Closing proxy...
+2019/04/04 23:17:27 : Start proxy, listen at port [12345]
+2019/04/04 23:17:27 : Max_thread supported:[1]
+2019/04/04 23:17:41 : Closing proxy...
+2019/04/04 23:21:00 : Start proxy, listen at port [12345]
+2019/04/04 23:21:00 : Max_thread supported:[5]
+2019/04/04 23:21:18 : Closing proxy...
+2019/04/04 23:24:52 : Start proxy, listen at port [12345]
+2019/04/04 23:24:52 : Max_thread supported:[5]
+2019/04/04 23:25:01 : Closing proxy...
+2019/04/04 23:25:08 : Start proxy, listen at port [12345]
+2019/04/04 23:25:08 : Max_thread supported:[5]
+2019/04/04 23:25:38 : Start proxy, listen at port [12345]
+2019/04/04 23:25:38 : Max_thread supported:[1]
+2019/04/04 23:25:53 : Closing proxy...
+2019/04/04 23:34:02 : Start proxy, listen at port [12345]
+2019/04/04 23:34:02 : Max_thread supported:[1]
+2019/04/04 23:34:05 : Closing proxy...
+2019/04/04 23:34:32 : Start proxy, listen at port [12345]
+2019/04/04 23:34:32 : Max_thread supported:[5]
+2019/04/04 23:34:38 : Closing proxy...
+2019/04/04 23:35:27 : Start proxy, listen at port [12345]
+2019/04/04 23:35:27 : Max_thread supported:[5]
+2019/04/04 23:35:33 : Closing proxy...
+2019/04/04 23:36:08 : Start proxy, listen at port [12345]
+2019/04/04 23:36:08 : Max_thread supported:[5]
+2019/04/04 23:36:12 : Closing proxy...
+2019/04/04 23:38:55 : Start proxy, listen at port [12345]
+2019/04/04 23:38:55 : Max_thread supported:[5]
+2019/04/04 23:39:27 : Cannot accept connection, errno: [0]
+2019/04/04 23:39:32 : Closing proxy...
+2019/04/04 23:43:26 : Start proxy, listen at port [12345]
+2019/04/04 23:43:26 : Max_thread supported:[5]
+2019/04/04 23:43:46 : Closing proxy...
+2019/04/04 23:44:22 : Start proxy, listen at port [12345]
+2019/04/04 23:44:22 : Max_thread supported:[5]
+2019/04/04 23:44:49 : Closing proxy...
+2019/04/04 23:46:18 : Start proxy, listen at port [12345]
+2019/04/04 23:46:18 : Max_thread supported:[5]
+2019/04/04 23:46:22 : Timeout for the request fd:[4]
+2019/04/04 23:46:25 : Closing proxy...
+2019/04/04 23:47:18 : Start proxy, listen at port [12345]
+2019/04/04 23:47:18 : Max_thread supported:[5]
+2019/04/04 23:47:23 : Timeout for the request fd:[4]
+2019/04/04 23:48:17 : Closing proxy...
+2019/04/04 23:48:50 : Start proxy, listen at port [12345]
+2019/04/04 23:48:50 : Max_thread supported:[5]
+2019/04/04 23:48:56 : Timeout for the request fd:[4]
+2019/04/04 23:49:07 : Closing proxy...
