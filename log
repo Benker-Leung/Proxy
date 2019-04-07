@@ -1,39 +1,68 @@
-2019/04/05 00:07:17 [000]: Start proxy, listen at port [10000]
-2019/04/05 00:07:17 [001]: Max_thread supported:[80]
-2019/04/05 00:07:18 [002]: Closing proxy...
-2019/04/05 00:07:22 [003]: Start proxy, listen at port [10000]
-2019/04/05 00:07:22 [004]: Max_thread supported:[80]
-2019/04/05 00:07:23 [005]: Closing proxy...
-2019/04/07 11:59:01 [006]: Start proxy, listen at port [12345]
-2019/04/07 11:59:01 [007]: Max_thread supported:[2]
-2019/04/07 11:59:18 [008]: Timeout for the request fd:[4]
-2019/04/07 11:59:24 [009]: Timeout for the request fd:[5]
-2019/04/07 11:59:29 [010]: Timeout for the request fd:[6]
-2019/04/07 11:59:37 [011]: Closing proxy...
-2019/04/07 12:01:26 [012]: Start proxy, listen at port [12345]
-2019/04/07 12:01:26 [013]: Max_thread supported:[45]
-2019/04/07 12:01:32 [014]: Closing proxy...
-2019/04/07 12:03:15 [015]: Start proxy, listen at port [12345]
-2019/04/07 12:03:15 [016]: Max_thread supported:[10]
-2019/04/07 12:03:33 [017]: Timeout for the request fd:[4]
-2019/04/07 12:04:10 [018]: Closing proxy...
-2019/04/07 12:13:05 [019]: Start proxy, listen at port [12345]
-2019/04/07 12:13:05 [020]: Max_thread supported:[10]
-2019/04/07 12:13:19 [021]: Closing proxy...
-2019/04/07 12:13:57 [022]: Start proxy, listen at port [12345]
-2019/04/07 12:13:57 [023]: Max_thread supported:[10]
-2019/04/07 12:14:00 [024]: Closing proxy...
+2019/04/07 20:21:17 [000]: Start proxy, listen at port [12345]
+2019/04/07 20:21:17 [001]: Max_thread supported:[10]
+2019/04/07 20:21:23 [002]: Closing proxy...
 
 
-2019/04/07 12:14:04 [027]: Start proxy, listen at port [12345]
-2019/04/07 12:14:04 [028]: Max_thread supported:[10]
-2019/04/07 12:14:42 [029]: Timeout for the request [0]
-2019/04/07 12:14:54 [030]: Closing proxy...
+2019/04/07 20:21:43 [005]: Start proxy, listen at port [12345]
+2019/04/07 20:21:43 [006]: Max_thread supported:[10]
+2019/04/07 20:21:48 [007]: Accepted request to sgss.edu.hk(104.28.30.16)
+2019/04/07 20:21:49 [008]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:21:49 [009]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:21:49 [010]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:21:50 [011]: Closing proxy...
 
 
-2019/04/07 12:16:08 [033]: Start proxy, listen at port [12345]
-2019/04/07 12:16:08 [034]: Max_thread supported:[10]
-2019/04/07 12:16:22 [035]: Timeout for the request [0]
-2019/04/07 12:17:02 [036]: Closing proxy...
+2019/04/07 20:23:36 [014]: Start proxy, listen at port [12345]
+2019/04/07 20:23:36 [015]: Max_thread supported:[10]
+2019/04/07 20:23:37 [016]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:23:38 [017]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:23:38 [018]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:23:38 [019]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:23:38 [020]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:23:39 [021]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:23:40 [022]: Closing proxy...
+
+
+2019/04/07 20:23:53 [025]: Start proxy, listen at port [12345]
+2019/04/07 20:23:53 [026]: Max_thread supported:[10]
+2019/04/07 20:23:58 [027]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:23:59 [028]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:24:00 [029]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:24:00 [030]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:24:03 [031]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:24:03 [032]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:24:04 [033]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:24:04 [034]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:24:04 [035]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:24:04 [036]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:24:05 [037]: Accepted request to cse.ust.hk(143.89.41.177)
+2019/04/07 20:24:08 [038]: Too many connections, max_thread num:[10] may not handle
+2019/04/07 20:24:08 [039]: Too many connections, max_thread num:[10] may not handle
+2019/04/07 20:24:08 [040]: Too many connections, max_thread num:[10] may not handle
+2019/04/07 20:24:08 [041]: Too many connections, max_thread num:[10] may not handle
+2019/04/07 20:24:08 [042]: Too many connections, max_thread num:[10] may not handle
+2019/04/07 20:24:08 [043]: Too many connections, max_thread num:[10] may not handle
+2019/04/07 20:24:08 [044]: Too many connections, max_thread num:[10] may not handle
+2019/04/07 20:24:08 [045]: Too many connections, max_thread num:[10] may not handle
+2019/04/07 20:24:08 [046]: Too many connections, max_thread num:[10] may not handle
+2019/04/07 20:24:08 [047]: Too many connections, max_thread num:[10] may not handle
+2019/04/07 20:24:08 [048]: Too many connections, max_thread num:[10] may not handle
+2019/04/07 20:24:17 [049]: Closing proxy...
+
+
+2019/04/07 20:24:49 [052]: Start proxy, listen at port [12345]
+2019/04/07 20:24:49 [053]: Max_thread supported:[1000]
+2019/04/07 20:24:51 [054]: Accepted request to cse.ust.hk(143.89.41.177)
+2019/04/07 20:24:52 [055]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:24:55 [056]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:24:56 [057]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:24:56 [058]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:24:59 [059]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:24:59 [060]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:25:00 [061]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:25:00 [062]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:25:00 [063]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:25:00 [064]: Accepted request to sgss.edu.hk(104.28.31.16)
+2019/04/07 20:25:06 [065]: Closing proxy...
 
 

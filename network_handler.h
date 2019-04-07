@@ -8,6 +8,14 @@ int get_listen_fd(int port, int maxListen);
 
 
 /**
+ *  This function get ip by host name
+ * 
+ *  Return -1 if resolve fail, 1 if success
+ * 
+ */
+int get_ip_by_host(char* host, char* ip_buf);
+
+/**
  *  This function get request header, assume non-blocking takes place
  * 
  *  Return -EAGAIN if not ready to read

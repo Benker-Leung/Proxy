@@ -11,6 +11,55 @@
 #include "logger.h"
 #include "network_handler.h"
 
+int get_ip_by_host(char* host, char* ip_buf) {
+    
+    struct addrinfo hints;
+    struct addrinfo* result;
+    struct addrinfo* next;
+    int status;
+
+    hints.ai_family = AF_INET;      // IPv4 only
+    hints.ai_socktype = SOCK_STREAM;// TCP
+    hints.ai_protocol = 0;          // TCP
+
+    status = getaddrinfo(host, "http", &hints, &result);
+    if(status != 0) {
+        printf("Invalid host: %s\n", host);
+        return -1;
+    }
+
+    for(next = result; next != NULL; next = next->ai_next) {
+        struct sockaddr_in *p;
+        p = (struct sockaddr_in*)next->ai_addr;
+        if(inet_ntop(AF_INET, &(p->sin_addr), ip_buf, 15) != NULL) {
+            log("Accepted request to %s(%s)\n", host, ip_buf);
+            freeaddrinfo(result);
+            return 1;
+        }
+    }
+    freeaddrinfo(result);
+    return -1;
+}
+
+int get_serverfd(char* ip_buf) {
+
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    struct sockaddr_in sa;
+    bzero(&sa, sizeof(struct sockaddr_in));
+
+    sa.sin_family = AF_INET;
+    sa.sin_port = htons(80);
+    inet_aton(ip_buf, &sa.sin_addr);
+
+    if(connect(sockfd, (struct sockaddr*)&sa, sizeof(sa)) < 0) {
+        log("Connection fail to ip:[%s]\n", ip_buf);
+        close(sockfd);
+        return -1;
+    }
+    return sockfd;
+}
+
+
 int get_listen_fd(int port, int maxListen) {
 
     int i;
@@ -90,9 +139,55 @@ int get_request_header(int fd, char* buf, int size, int request_id) {
 
 }
 
+int connect_server(char* req_buffer) {
+
+    char* start;
+    char* end;
+    char* temp;
+    int ret;
+    char ip_buf[16];
+    bzero(ip_buf, 16);
+
+    start = end = strstr(req_buffer, "Host:");
+    if(start) {
+        while(*end != '\r' && *end != '\0')
+            ++end;
+        *end = '\0';
+        temp = strstr(start, "www.");
+        if(temp) {
+            start = temp+4;
+        }
+        else
+        {
+            start += 6;
+        }
+    }
+    else {
+        // fail to parse host
+        return -1;
+    }
+    ret = get_ip_by_host(start, ip_buf);
+    *end = ' ';
+    if(ret == -1)
+        // cannot solve ip
+        return -1;
+
+    ret = get_serverfd(ip_buf);
+    if(ret <= 0)
+        // cannot get server fd
+        return -1;
+
+    printf("Successfully got server fd\n");
+    
+    return ret;
+
+}
+
+
 int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int request_id) {
 
     int ret;
+    int serverfd;
     char timeout = 0;
     
     while(1) {
@@ -120,7 +215,16 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
         }
         else if(ret == 0) {
             printf("Header captured, request [%d]:\n", request_id);
-            printf("%s\n", req_buffer);
+            // printf("%s\n", req_buffer);
+            serverfd = connect_server(req_buffer);
+            if(serverfd == -1){
+                printf("Cannot connect to host\n");
+                return -1;
+            }
+            else {
+                printf("Connected to server fd:[%d]\n", serverfd);
+                close(serverfd);
+            }
             return 0;
         }
     }
