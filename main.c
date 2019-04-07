@@ -81,7 +81,7 @@ void cleanup_before_exit() {
         }
     }
     close(proxyfd);
-    log("Closing proxy...\n");
+    log("Closing proxy...\n\n\n");
     printf("\n");
     exit(0);
 }
@@ -108,7 +108,7 @@ void* thread_network_action(void *args) {
     struct thread_param* tp = args;
 
     bzero(tp->request_header_buffer, HEADER_BUFFER_SIZE);
-    if((status = proxy_routine(tp->fd, tp->request_header_buffer, tp->response_header_buffer, HEADER_BUFFER_SIZE)) != 0) {
+    if((status = proxy_routine(tp->fd, tp->request_header_buffer, tp->response_header_buffer, HEADER_BUFFER_SIZE, tp->id)) != 0) {
         if(status == -EAGAIN)
             printf("Time out for thread[%d]\n", tp->id);
         else

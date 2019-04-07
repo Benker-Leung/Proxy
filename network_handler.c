@@ -51,13 +51,12 @@ int get_listen_fd(int port, int maxListen) {
     return listenfd;
 }
 
-int get_request_header(int fd, char* buf, int size) {
+int get_request_header(int fd, char* buf, int size, int request_id) {
 
     // get offset
     int i = strlen(buf);
     int j = 0;
     char r = 0;
-
 
     while(i < size-1) {
         // read 1 byte each time
@@ -65,12 +64,12 @@ int get_request_header(int fd, char* buf, int size) {
         if(j <= 0) {
             // not ready to read
             if(errno == EAGAIN) {
-                printf("Not ready to read\n");
+                // printf("Not ready to read\n");
                 return -EAGAIN;
             }
             // other error
             else {
-                log("Error in reading, errno: [%d]\n", errno);
+                log("Error in reading, errno: [%d], request [%d]\n", errno, request_id);
                 return -1;
             }
         }
@@ -85,25 +84,23 @@ int get_request_header(int fd, char* buf, int size) {
     }
 
     // header too long
-    printf("HTTP header too long, refuse the forward\n");
-    log("HTTP header too long, denied\n");
+    // printf("HTTP header too long, refuse the forward, request [%d]\n", request_id);
+    log("HTTP header too long, denied, request [%d]\n", request_id);
     return -1;
 
 }
 
-int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size) {
-
+int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int request_id) {
 
     int ret;
     char timeout = 0;
     
     while(1) {
 
-        printf("routine...\n");
         if(timeout)
             sleep(3);
 
-        if((ret = get_request_header(fd, req_buffer, size)) < 0) {
+        if((ret = get_request_header(fd, req_buffer, size, request_id)) < 0) {
             // if not ready, give it a chance
             if(ret == -EAGAIN) {
                 if(timeout < 3){
@@ -111,18 +108,18 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size) {
                     continue;
                 }
                 else {
-                    log("Timeout for the request fd:[%d]\n", fd);
-                    printf("Timeout for the request fd:[%d]\n", fd);
+                    log("Timeout for the request [%d]\n", request_id);
+                    // printf("Timeout for the request [%d]\n", request_id);
                     return -EAGAIN;
                 }
             }
             // error
-            log("Error in get request header\n");
-            printf("Cannot get request header\n");
+            log("Error in get request [%d] header\n", request_id);
+            // printf("Cannot get request [%d] header\n", request_id);
             return -1;
         }
         else if(ret == 0) {
-            printf("Header captured:\n");
+            printf("Header captured, request [%d]:\n", request_id);
             printf("%s\n", req_buffer);
             return 0;
         }

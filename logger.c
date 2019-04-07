@@ -23,7 +23,7 @@ void init_logger() {
         if(l == '\n')
             ++file_line;
     }
-
+    file_line %= 1000;
     close(1);
     
     // assign log_fd to 1, if fail, print err msg

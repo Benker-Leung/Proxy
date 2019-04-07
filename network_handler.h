@@ -14,7 +14,7 @@ int get_listen_fd(int port, int maxListen);
  *         -1 if error, check errno
  *          0 if success
  */
-int get_request_header(int fd, char* buf, int size);
+int get_request_header(int fd, char* buf, int size, int request_id);
 
 
 int get_request_data();
@@ -36,4 +36,4 @@ int get_response_data();
  *  Return -1 if fail or timeout, should close this fd
  * 
  */
-int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size);
+int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int request_id);
