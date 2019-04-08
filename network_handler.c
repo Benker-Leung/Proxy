@@ -11,6 +11,7 @@
 #include "logger.h"
 #include "network_handler.h"
 
+/* get ip addr and put into ip_buf */
 int get_ip_by_host(char* host, char* ip_buf) {
     
     struct addrinfo hints;
@@ -24,7 +25,7 @@ int get_ip_by_host(char* host, char* ip_buf) {
 
     status = getaddrinfo(host, "http", &hints, &result);
     if(status != 0) {
-        printf("Invalid host: %s\n", host);
+        log("Invalid host: %s\n", host);
         return -1;
     }
 
@@ -41,6 +42,7 @@ int get_ip_by_host(char* host, char* ip_buf) {
     return -1;
 }
 
+/* get server file descriptor given ip, called by connect_server() */
 int get_serverfd(char* ip_buf) {
 
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -59,7 +61,7 @@ int get_serverfd(char* ip_buf) {
     return sockfd;
 }
 
-
+/* get the listen fd given port and maxListen(no actual use) */
 int get_listen_fd(int port, int maxListen) {
 
     int i;
@@ -100,7 +102,9 @@ int get_listen_fd(int port, int maxListen) {
     return listenfd;
 }
 
-int get_request_header(int fd, char* buf, int size, int request_id) {
+
+/* get request/response header and put to buf */
+int get_reqres_header(int fd, char* buf, int size, int request_id) {
 
     // get offset
     int i = strlen(buf);
@@ -139,6 +143,8 @@ int get_request_header(int fd, char* buf, int size, int request_id) {
 
 }
 
+
+/* get the server fd given req_buffer if success */
 int connect_server(char* req_buffer) {
 
     char* start;
@@ -177,13 +183,31 @@ int connect_server(char* req_buffer) {
         // cannot get server fd
         return -1;
 
-    printf("Successfully got server fd\n");
-    
+    // got the server fd
     return ret;
 
 }
 
+/* forward the request header given server fd and req_buffer */
+int forward_request_header(int serverfd, char* req_buffer) {
 
+    int ret;
+    int len = strlen(req_buffer);
+
+    while(len != 0) {
+        ret = write(serverfd, req_buffer, len);
+        if(ret < 0) {
+            log("Cannot forward request to server, errno: [%d]\n", errno);
+            return ret;
+        }
+        len -= ret;
+    }
+    return 1;
+}
+
+
+
+/* handle 1 proxy http request routine */
 int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int request_id) {
 
     int ret;
@@ -195,7 +219,7 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
         if(timeout)
             sleep(3);
 
-        if((ret = get_request_header(fd, req_buffer, size, request_id)) < 0) {
+        if((ret = get_reqres_header(fd, req_buffer, size, request_id)) < 0) {
             // if not ready, give it a chance
             if(ret == -EAGAIN) {
                 if(timeout < 3){
@@ -222,7 +246,13 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
                 return -1;
             }
             else {
+                timeout = 0;
                 printf("Connected to server fd:[%d]\n", serverfd);
+                forward_request_header(serverfd, req_buffer);
+                while((ret = get_reqres_header(serverfd, res_buffer, size, request_id)) != 0) {
+                    // printf("Waitng response header");
+                }
+                printf("%s\n", res_buffer);
                 close(serverfd);
             }
             return 0;
