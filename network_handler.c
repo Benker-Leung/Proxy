@@ -266,19 +266,6 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
     int serverfd;
     char timeout = 0;
     char buf[10240];
-    
-    // char ip_buf[16];
-	// char* host = "www.cse.ust.hk";
-
-	// ret = get_ip_by_host(host, ip_buf);
-
-	// if(ret < 0) {
-	// 	printf("fail to get ip ret:[%d]\n", ret);
-	// 	return 0;
-	// }
-
-	// printf("ip: [%s]\n", ip_buf);
-	// return 0;
 
 
     while(1) {
@@ -306,8 +293,8 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
         }
         else if(ret == 0) {
             printf("Header captured, request [%d]:\n", request_id);
-            printf("%s\n", req_buffer);
             serverfd = connect_server(req_buffer);
+            printf("%s\n", req_buffer);
             if(serverfd == -1){
                 printf("Cannot connect to host\n");
                 clear_buffer(req_buffer, res_buffer, size);
@@ -334,8 +321,8 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
                 printf("Got data\n");
                 printf("%s\n", buf);
 
-                // forward_packet(fd, res_buffer);
-                // forward_packet(fd, buf);
+                forward_packet(fd, res_buffer);
+                forward_packet(fd, buf);
 
                 clear_buffer(req_buffer, res_buffer, size);
                 close(serverfd);

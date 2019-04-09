@@ -21,6 +21,7 @@ void print_time();
         do{\
             if(logger_start) fprintf(stderr, __VA_ARGS__);\
             else fprintf(stdout, __VA_ARGS__);\
+            fflush(stdout);\
         } while(0)
 
 
