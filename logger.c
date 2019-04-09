@@ -19,7 +19,7 @@ void init_logger() {
     // open log file
     int log_fd = open("log", O_CREAT|O_RDWR, 0644);
     
-    while(read(log_fd, &l, 1) != 0) {
+    while(read(log_fd, &l, 1) != 0 && file_line < 1000) {
         if(l == '\n')
             ++file_line;
     }

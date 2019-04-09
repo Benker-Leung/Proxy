@@ -19,7 +19,7 @@ network_handler.o: network_handler.c network_handler.h
 	$(CC) $(CFLAGS) network_handler.c
 
 clean:
-	rm -rf *.o proxy test
+	rm -rf *.o proxy test log
 
 
 

@@ -7,40 +7,10 @@
 #include <unistd.h>
 #include <string.h>
 #include <fcntl.h>
+#include <stdlib.h>
 
 #include "logger.h"
 #include "network_handler.h"
-
-/* get ip addr and put into ip_buf */
-int get_ip_by_host(char* host, char* ip_buf) {
-    
-    struct addrinfo hints;
-    struct addrinfo* result;
-    struct addrinfo* next;
-    int status;
-
-    hints.ai_family = AF_INET;      // IPv4 only
-    hints.ai_socktype = SOCK_STREAM;// TCP
-    hints.ai_protocol = 0;          // TCP
-
-    status = getaddrinfo(host, "http", &hints, &result);
-    if(status != 0) {
-        log("Invalid host: %s\n", host);
-        return -1;
-    }
-
-    for(next = result; next != NULL; next = next->ai_next) {
-        struct sockaddr_in *p;
-        p = (struct sockaddr_in*)next->ai_addr;
-        if(inet_ntop(AF_INET, &(p->sin_addr), ip_buf, 15) != NULL) {
-            log("Accepted request to %s(%s)\n", host, ip_buf);
-            freeaddrinfo(result);
-            return 1;
-        }
-    }
-    freeaddrinfo(result);
-    return -1;
-}
 
 /* get server file descriptor given ip, called by connect_server() */
 int get_serverfd(char* ip_buf) {
@@ -60,6 +30,15 @@ int get_serverfd(char* ip_buf) {
     }
     return sockfd;
 }
+
+/* clear the buffer */
+void clear_buffer(char* req_buffer, char* res_buffer, int size) {
+    bzero(req_buffer, size);
+    bzero(res_buffer, size);
+    return;
+}
+
+/* ================================= Actual function can be used outside here =================== */
 
 /* get the listen fd given port and maxListen(no actual use) */
 int get_listen_fd(int port, int maxListen) {
@@ -102,6 +81,36 @@ int get_listen_fd(int port, int maxListen) {
     return listenfd;
 }
 
+/* get ip addr and put into ip_buf */
+int get_ip_by_host(char* host, char* ip_buf) {
+    
+    struct addrinfo hints;
+    struct addrinfo* result;
+    struct addrinfo* next;
+    int status;
+
+    hints.ai_family = AF_INET;      // IPv4 only
+    hints.ai_socktype = SOCK_STREAM;// TCP
+    hints.ai_protocol = 0;          // TCP
+
+    status = getaddrinfo(host, "http", &hints, &result);
+    if(status != 0) {
+        log("Invalid host: [%s], return: [%d]\n", host, status);
+        return -1;
+    }
+
+    for(next = result; next != NULL; next = next->ai_next) {
+        struct sockaddr_in *p;
+        p = (struct sockaddr_in*)next->ai_addr;
+        if(inet_ntop(AF_INET, &(p->sin_addr), ip_buf, 15) != NULL) {
+            log("Accepted request to %s(%s)\n", host, ip_buf);
+            freeaddrinfo(result);
+            return 1;
+        }
+    }
+    freeaddrinfo(result);
+    return -1;
+}
 
 /* get request/response header and put to buf */
 int get_reqres_header(int fd, char* buf, int size, int request_id) {
@@ -143,13 +152,12 @@ int get_reqres_header(int fd, char* buf, int size, int request_id) {
 
 }
 
-
 /* get the server fd given req_buffer if success */
 int connect_server(char* req_buffer) {
 
     char* start;
     char* end;
-    char* temp;
+    // char* temp;
     int ret;
     char ip_buf[16];
     bzero(ip_buf, 16);
@@ -159,14 +167,15 @@ int connect_server(char* req_buffer) {
         while(*end != '\r' && *end != '\0')
             ++end;
         *end = '\0';
-        temp = strstr(start, "www.");
-        if(temp) {
-            start = temp+4;
-        }
-        else
-        {
-            start += 6;
-        }
+        // temp = strstr(start, "www.");
+        // if(temp) {
+        //     start = temp+4;
+        // }
+        // else
+        // {
+        //     start += 6;
+        // }
+        start += 6;
     }
     else {
         // fail to parse host
@@ -189,13 +198,13 @@ int connect_server(char* req_buffer) {
 }
 
 /* forward the request header given server fd and req_buffer */
-int forward_request_header(int serverfd, char* req_buffer) {
+int forward_packet(int serverfd, char* buf) {
 
     int ret;
-    int len = strlen(req_buffer);
+    int len = strlen(buf);
 
     while(len != 0) {
-        ret = write(serverfd, req_buffer, len);
+        ret = write(serverfd, buf, len);
         if(ret < 0) {
             log("Cannot forward request to server, errno: [%d]\n", errno);
             return ret;
@@ -205,6 +214,49 @@ int forward_request_header(int serverfd, char* req_buffer) {
     return 1;
 }
 
+/* get Content-Length if any */
+int get_content_length(char* buf) {
+
+    char* start;
+    char* end;
+    int len;
+
+    start = end = strstr(buf, "Content-Length:");
+    if(!start) {
+        log("No content_length\n");
+        return -1;
+    }
+    start += 16;
+    // get number in Content-Length:
+    while(*end != ' '){
+        if(*end == '\0' || *end == '\r'){
+            log("Wrong format of header Content-Length field\n");
+            return -1;
+        }
+        ++end;
+    }
+    *end = '\0';
+    len = atoi(start);
+    *end = ' ';
+    return len;
+}
+
+/* read specific bytes */
+int get_data(int fd, char* buf, int bytes_to_read) {
+    
+    int ret;
+
+    while(bytes_to_read > 0) {
+        ret = read(fd, buf, bytes_to_read);
+        if(ret <= 0) {
+            log("Error in getting data\n");
+            return -1;
+        }
+        bytes_to_read -= ret;
+        buf += ret;
+    }
+    return 0;
+}
 
 
 /* handle 1 proxy http request routine */
@@ -213,11 +265,26 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
     int ret;
     int serverfd;
     char timeout = 0;
+    char buf[10240];
     
+    // char ip_buf[16];
+	// char* host = "www.cse.ust.hk";
+
+	// ret = get_ip_by_host(host, ip_buf);
+
+	// if(ret < 0) {
+	// 	printf("fail to get ip ret:[%d]\n", ret);
+	// 	return 0;
+	// }
+
+	// printf("ip: [%s]\n", ip_buf);
+	// return 0;
+
+
     while(1) {
 
         if(timeout)
-            sleep(3);
+            sleep(1);
 
         if((ret = get_reqres_header(fd, req_buffer, size, request_id)) < 0) {
             // if not ready, give it a chance
@@ -228,35 +295,55 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
                 }
                 else {
                     log("Timeout for the request [%d]\n", request_id);
-                    // printf("Timeout for the request [%d]\n", request_id);
+                    clear_buffer(req_buffer, res_buffer, size);
                     return -EAGAIN;
                 }
             }
             // error
             log("Error in get request [%d] header\n", request_id);
-            // printf("Cannot get request [%d] header\n", request_id);
+            clear_buffer(req_buffer, res_buffer, size);
             return -1;
         }
         else if(ret == 0) {
             printf("Header captured, request [%d]:\n", request_id);
-            // printf("%s\n", req_buffer);
+            printf("%s\n", req_buffer);
             serverfd = connect_server(req_buffer);
             if(serverfd == -1){
                 printf("Cannot connect to host\n");
+                clear_buffer(req_buffer, res_buffer, size);
                 return -1;
             }
             else {
                 timeout = 0;
                 printf("Connected to server fd:[%d]\n", serverfd);
-                forward_request_header(serverfd, req_buffer);
+                forward_packet(serverfd, req_buffer);
                 while((ret = get_reqres_header(serverfd, res_buffer, size, request_id)) != 0) {
                     // printf("Waitng response header");
                 }
-                printf("%s\n", res_buffer);
+                printf("Got response header\n");
+                ret = get_content_length(res_buffer);
+                printf("Parsed Content-Length: [%d]\n", ret);
+                bzero(buf, 10240);
+                ret = get_data(serverfd, buf, ret);
+                if(ret < 0) {
+                    printf("Cannot get data\n");
+                    clear_buffer(req_buffer, res_buffer, size);
+                    return -1;
+                }
+
+                printf("Got data\n");
+                printf("%s\n", buf);
+
+                // forward_packet(fd, res_buffer);
+                // forward_packet(fd, buf);
+
+                clear_buffer(req_buffer, res_buffer, size);
                 close(serverfd);
             }
             return 0;
         }
-    }
+        clear_buffer(req_buffer, res_buffer, size);
+    }    
+
     return 0;
 }
