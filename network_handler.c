@@ -359,6 +359,7 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
                 return -1;
             }
             else {
+                int data_len;
                 timeout = 0;
                 // printf("Connected to server fd:[%d]\n", serverfd);
                 forward_packet(serverfd, req_buffer);
@@ -368,10 +369,10 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
                 // printf("Got response header, request [%d]\n", request_id);
                 printf("\n\n================== Resppnse header =========================\n");
                 printf("%s\n", res_buffer);
-                ret = get_content_length(res_buffer);
+                data_len = get_content_length(res_buffer);
                 // printf("Parsed Content-Length: [%d]\n", ret);
                 bzero(buf, 10240);
-                ret = get_data(serverfd, buf, ret);
+                ret = get_data(serverfd, buf, data_len);
                 if(ret < 0) {
                     printf("Cannot get data\n");
                     clear_buffer(req_buffer, res_buffer, size);
@@ -379,7 +380,11 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
                 }
 
                 // printf("Got data\n");
-                printf("\n\n================== Data =========================\n");
+                printf("\n\n================== Data(%d) =========================\n", data_len);
+                
+                // int tempfd = open("data", O_CREAT | O_RDWR, 0644);
+                // write(tempfd, buf, data_len);
+                // close(tempfd);
                 printf("%s\n", buf);
 
                 forward_packet(fd, res_buffer);
@@ -387,6 +392,7 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
 
                 clear_buffer(req_buffer, res_buffer, size);
                 close(serverfd);
+                // exit(0);
             }
             return 0;
         }
