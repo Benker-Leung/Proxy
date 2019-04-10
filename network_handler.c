@@ -191,10 +191,9 @@ int connect_server(char* req_buffer) {
 }
 
 /* forward the request header given server fd and req_buffer */
-int forward_packet(int serverfd, char* buf) {
+int forward_packet(int serverfd, char* buf, int len) {
 
     int ret;
-    int len = strlen(buf);
 
     while(len != 0) {
         ret = write(serverfd, buf, len);
@@ -362,7 +361,7 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
                 int data_len;
                 timeout = 0;
                 // printf("Connected to server fd:[%d]\n", serverfd);
-                forward_packet(serverfd, req_buffer);
+                forward_packet(serverfd, req_buffer, strlen(req_buffer));
                 while((ret = get_reqres_header(serverfd, res_buffer, size, request_id)) != 0) {
                     // printf("Waitng response header");
                 }
@@ -387,9 +386,9 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
                 // close(tempfd);
                 printf("%s\n", buf);
 
-                forward_packet(fd, res_buffer);
-                forward_packet(fd, buf);
-
+                forward_packet(fd, res_buffer, strlen(res_buffer));
+                forward_packet(fd, buf, data_len);
+                continue;
                 clear_buffer(req_buffer, res_buffer, size);
                 close(serverfd);
                 // exit(0);

@@ -69,7 +69,7 @@ int connect_server(char* req_buffer);
  *  Return (+ve) if success, (-ve) if fail
  *
  */
-int forward_packet(int serverfd, char* req_buffer);
+int forward_packet(int serverfd, char* req_buffer, int len);
 
 /**
  *  This function parse the content length from header
