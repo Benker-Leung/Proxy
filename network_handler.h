@@ -4,6 +4,7 @@
  */
 void clear_buffer(char* req_buffer, char* res_buffer, int size);
 
+
 /**
  *  This function get file descriptor given ip, default port is 80
  * 
@@ -14,6 +15,16 @@ int get_serverfd(char* ip_buf);
 
 
 /* ================================= Actual function can be used outside are below =================== */
+
+
+/**
+ *  This function helps to reformat the request header,
+ *  e.g set [GET http://sgss.edu.hk/] to [GET /]
+ * 
+ *  Return (+ve) if no error, (-ve) if error occur (wrong format)
+ * 
+ */
+int reformat_request_header(char* req_buf);
 
 
 /**

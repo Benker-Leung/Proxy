@@ -41,6 +41,7 @@ int get_serverfd(char* ip_buf) {
 
 /* ================================= Actual function can be used outside are below =================== */
 
+
 /* get the listen fd given port and maxListen(no actual use) */
 int get_listen_fd(int port, int maxListen) {
 
@@ -158,7 +159,6 @@ int connect_server(char* req_buffer) {
 
     char* start;
     char* end;
-    // char* temp;
     int ret;
     char ip_buf[16];
     bzero(ip_buf, 16);
@@ -168,14 +168,6 @@ int connect_server(char* req_buffer) {
         while(*end != '\r' && *end != '\0')
             ++end;
         *end = '\0';
-        // temp = strstr(start, "www.");
-        // if(temp) {
-        //     start = temp+4;
-        // }
-        // else
-        // {
-        //     start += 6;
-        // }
         start += 6;
     }
     else {
@@ -183,7 +175,7 @@ int connect_server(char* req_buffer) {
         return -1;
     }
     ret = get_ip_by_host(start, ip_buf);
-    *end = ' ';
+    *end = '\r';
     if(ret == -1)
         // cannot solve ip
         return -1;
@@ -229,7 +221,7 @@ int get_content_length(char* buf) {
     }
     start += 16;
     // get number in Content-Length:
-    while(*end != ' ' && *end != '\r'){
+    while(*end != '\r'){
         if(*end == '\0' || *end == '\n'){
             log("Wrong format of header Content-Length field\n");
             return -1;
@@ -238,7 +230,7 @@ int get_content_length(char* buf) {
     }
     *end = '\0';
     len = atoi(start);
-    *end = ' ';
+    *end = '\r';
     return len;
 }
 
@@ -259,6 +251,69 @@ int get_data(int fd, char* buf, int bytes_to_read) {
     return 0;
 }
 
+/* reformat request header */
+int reformat_request_header(char* req_buf) {
+    
+    int len = strlen(req_buf);
+    int host_len;
+    int i, j;
+    char* start;
+    char* end;
+
+
+    start = end = strstr(req_buf, "Host:");
+    if(start) {
+        while(*end != '\r' && *end != '\0')
+            ++end;
+        *end = '\0';
+        // get host start address
+        start += 6;
+        host_len = strlen(start);
+        *end = '\r';
+    }
+    else {
+        // fail to parse host
+        return -1;
+    }
+
+    
+    // remove http:// or https:// to \0
+    i = 7+host_len;
+    j = 0;
+    start = strstr(req_buf, "http://");
+    if(!start) {
+        ++i;
+        start = strstr(req_buf, "https://");
+    }
+    while(j != i) {
+        start[j++] = '\0';
+    }
+
+    // remove Accept-Encoding ??
+    start = strstr(req_buf+j+i, "Accept-Encoding:");
+    i=0;
+    if(start) {
+        while(start[i] != '\n'){
+            start[i++] = '\0';
+        }
+        start[i] = '\0';
+    }
+
+    char* req = calloc(len+1, sizeof(char));
+    i = j = 0;
+    while(i != len) {
+        if(req_buf[i] != '\0') {
+            // copy those not \0 char only
+            req[j++] = req_buf[i];
+        }
+        ++i;
+    }
+    req[j++] = '\0';
+    bzero(req_buf, len);
+    strncpy(req_buf, req, j);
+    free(req);
+    return 1;
+}
 
 /* handle 1 proxy http request routine */
 int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int request_id) {
@@ -293,8 +348,10 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
             return -1;
         }
         else if(ret == 0) {
-            printf("Header captured, request [%d]:\n", request_id);
+            // printf("Header captured, request [%d]:\n", request_id);
             serverfd = connect_server(req_buffer);
+            reformat_request_header(req_buffer);
+            printf("\n\n================== Request header =========================\n");
             printf("%s\n", req_buffer);
             if(serverfd == -1){
                 printf("Cannot connect to host\n");
@@ -303,14 +360,16 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
             }
             else {
                 timeout = 0;
-                printf("Connected to server fd:[%d]\n", serverfd);
+                // printf("Connected to server fd:[%d]\n", serverfd);
                 forward_packet(serverfd, req_buffer);
                 while((ret = get_reqres_header(serverfd, res_buffer, size, request_id)) != 0) {
                     // printf("Waitng response header");
                 }
-                printf("Got response header\n");
+                // printf("Got response header, request [%d]\n", request_id);
+                printf("\n\n================== Resppnse header =========================\n");
+                printf("%s\n", res_buffer);
                 ret = get_content_length(res_buffer);
-                printf("Parsed Content-Length: [%d]\n", ret);
+                // printf("Parsed Content-Length: [%d]\n", ret);
                 bzero(buf, 10240);
                 ret = get_data(serverfd, buf, ret);
                 if(ret < 0) {
@@ -319,7 +378,8 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
                     return -1;
                 }
 
-                printf("Got data\n");
+                // printf("Got data\n");
+                printf("\n\n================== Data =========================\n");
                 printf("%s\n", buf);
 
                 forward_packet(fd, res_buffer);
