@@ -1,4 +1,22 @@
 /**
+ *  This function clear the buffer with given size 
+ * 
+ */
+void clear_buffer(char* req_buffer, char* res_buffer, int size);
+
+/**
+ *  This function get file descriptor given ip, default port is 80
+ * 
+ *  Return (+ve) if success, -1 if fail
+ * 
+ */
+int get_serverfd(char* ip_buf);
+
+
+/* ================================= Actual function can be used outside are below =================== */
+
+
+/**
  *  This function return fd that can accept connection
  * 
  *  Return nonzero if success, zero if fail

@@ -12,6 +12,13 @@
 #include "logger.h"
 #include "network_handler.h"
 
+/* clear the buffer */
+void clear_buffer(char* req_buffer, char* res_buffer, int size) {
+    bzero(req_buffer, size);
+    bzero(res_buffer, size);
+    return;
+}
+
 /* get server file descriptor given ip, called by connect_server() */
 int get_serverfd(char* ip_buf) {
 
@@ -31,14 +38,8 @@ int get_serverfd(char* ip_buf) {
     return sockfd;
 }
 
-/* clear the buffer */
-void clear_buffer(char* req_buffer, char* res_buffer, int size) {
-    bzero(req_buffer, size);
-    bzero(res_buffer, size);
-    return;
-}
 
-/* ================================= Actual function can be used outside here =================== */
+/* ================================= Actual function can be used outside are below =================== */
 
 /* get the listen fd given port and maxListen(no actual use) */
 int get_listen_fd(int port, int maxListen) {
@@ -228,8 +229,8 @@ int get_content_length(char* buf) {
     }
     start += 16;
     // get number in Content-Length:
-    while(*end != ' '){
-        if(*end == '\0' || *end == '\r'){
+    while(*end != ' ' && *end != '\r'){
+        if(*end == '\0' || *end == '\n'){
             log("Wrong format of header Content-Length field\n");
             return -1;
         }
