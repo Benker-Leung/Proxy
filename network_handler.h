@@ -57,7 +57,7 @@ int get_reqres_header(int fd, char* buf, int size, int request_id);
 /**
  *  This function handle all details stuff e.g parse hostname, get ip etc.
  *
- *  Return (+ve) ==> fd if success, -1 if fail 
+ *  Return (+ve) ==> connected serverfd if success, -1 if fail 
  *
  */
 int connect_server(char* req_buffer);
@@ -79,6 +79,14 @@ int forward_packet(int serverfd, char* req_buffer, int len);
  */
 int get_content_length(char* buf);
 
+/**
+ *  This function read specific bytes from fd
+ * 
+ *  Return zero(0) if success, -1 if fail
+ * 
+ */
+ int get_data(int fd, char* buf, int bytes_to_read);
+
 
 /**
  *  This function handle all actions for proxy networking 
@@ -88,6 +96,16 @@ int get_content_length(char* buf);
  * 
  */
 int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int request_id);
+
+
+/**
+ *  This function handle all actions for proxy networking 
+ *  one thread used to read, one used to write
+ * 
+ *  Return -1 if fail or timeout, should close this fd
+ * 
+ */
+int proxy_routine_2(int fd, char* req_buffer, char* res_buffer, int size, int request_id);
 
 
 

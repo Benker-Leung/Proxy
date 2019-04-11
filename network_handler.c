@@ -314,15 +314,19 @@ int reformat_request_header(char* req_buf) {
     return 1;
 }
 
-int proxy_routine_2(int clientfd, char* req_buffer, char* res_buffer, int buf_size, int request_id, char timeout_allow) {
+int proxy_routine_2(int clientfd, char* req_buffer, char* res_buffer, int buf_size, int request_id) {
+
+    char timeout_allow = 10;
 
     int ret;    // store return value
-    int serverfd;
-    int client_req = 0;     // store correctly received client request header
-    char req_buf_ready = 1; // indicate status of usage of req_buffer
-    char res_buf_ready = 1; // indicate status of usage of res_buffer
+    int serverfd = -1;
+    int expected_req = 0;     // indicate the number of request header from server side
+    int data_len = 0;       // indicate the length of data need to be forward or receive
+    // char req_buf_ready = 1; // indicate status of usage of req_buffer
+    // char res_buf_ready = 1; // indicate status of usage of res_buffer
 
-    char timeout = 0;
+    char client_timeout = 0;
+    char server_timeout = 0;
     char data_buf[10240];   // 10KB data buffer
 
     bzero(req_buffer, buf_size);
@@ -331,28 +335,158 @@ int proxy_routine_2(int clientfd, char* req_buffer, char* res_buffer, int buf_si
     while(1) {
 
         // reached timeout
-        if(timeout >= timeout_allow) {
+        if(client_timeout >= timeout_allow || server_timeout >= timeout_allow) {
             log("Timeout for request[%d]\n", request_id);
+            if(serverfd != -1)
+                // close the serverfd
+                close(serverfd);
+            return -EAGAIN;
         }
-        else if (timeout > 0){
+        // sleep to wait for a while
+        else if (client_timeout > 0 || server_timeout > 0){
             sleep(1);
         }
 
-        // get the request header from client
+GET_CLIENT_REQUEST:
+        // try to get the request header from client
         ret = get_reqres_header(clientfd, req_buffer, buf_size, request_id);
         if(ret == -EAGAIN) {
             // not ready to read request from client, timeout++
-            ++timeout;
+            ++client_timeout;
             // go to read data from server side maybe
-            continue;
+            if(expected_req > 0)
+                goto GET_SERVER_RESPONSE;
+            else
+                continue;
         }
         else if(ret == 0) {
-            ++client_req;
+            
+            // reset client timeout
+            client_timeout = 0;
+
+            // get the serverfd for the first time
+            if(serverfd == -1) {
+                // get the connected serverfd
+                ret = connect_server(req_buffer);
+                if(ret <= 0) {
+                    // fail to connect to this host
+                    printf("Cannot connect to host for request[%d]\n", request_id);
+                    return -1;
+                }
+                serverfd = ret;
+            }
+
+            // correctly format the client request header
+            ret = reformat_request_header(req_buffer);
+            if(ret < 0) {
+                printf("Wrong request header for request[%d]\n", request_id);
+                return -1;
+            }
+
+            // forward the client request header
+            ret = forward_packet(serverfd, req_buffer, strlen(req_buffer));
+            if(ret < 0) {
+                printf("Fail to forward client request header for request[%d]\n", request_id);
+                return -1;
+            }
+
+            printf("================================ Request Header ================================\n");
+            printf("%s\n", req_buffer);
+
+            // clear the request buffer
+            bzero(req_buffer, buf_size);
+            
+            // increase the expected number of response header from the server side
+            ++expected_req;
+
+            // try to get more request header from client side
+            goto GET_CLIENT_REQUEST;            
+        }
+        else {
+            if(serverfd != -1)
+                close(serverfd);
+            printf("Fail to read client request for request[%d]\n", request_id);
+            return -1;
         }
 
+GET_SERVER_RESPONSE:
+        // if expect is zero, then continue to get client request
+        if(expected_req == 0)
+            continue;
 
+        // try to get the request header from server
+        ret = get_reqres_header(serverfd, res_buffer, buf_size, request_id);
+        if(ret == -EAGAIN) {
+            // not ready to read request from server, timeout++
+            ++server_timeout;
+            goto GET_CLIENT_REQUEST;
+        }
+        else if(ret == 0) {
+
+            // reset server timeout
+            server_timeout = 0;
+
+            // get the content-length value if any
+            ret = get_content_length(res_buffer);
+
+            // if have content-length, just forward the response header back to client
+            if(ret > 0) {
+                data_len = ret;
+                ret = get_data(serverfd, data_buf, data_len);
+                if(ret == -1) {
+                    printf("Error when getting response payload for request[%d]\n", request_id);
+                    close(serverfd);
+                    return -1;
+                }
+                printf("================================ Response Data ================================\n\n\n");
+            }
+            else {
+                data_len = 0;
+            }
+
+            // forward the server response header
+            ret = forward_packet(clientfd, res_buffer, strlen(res_buffer));
+            if(ret < 0) {
+                printf("Fail to forward server response header for request[%d]\n", request_id);
+                close(serverfd);
+                return -1;
+            }
+
+            // forward the data if any
+            if(data_len > 0) {
+                ret = forward_packet(clientfd, data_buf, data_len);
+                if(ret < 0) {
+                    printf("Fail to forward server payload for request[%d]\n", request_id);
+                    close(serverfd);
+                    return -1;
+                }
+                // clear data buffer
+                bzero(data_buf, data_len);
+                data_len = 0;
+            }
+            
+            printf("================================ Response Header ================================\n");
+            printf("%s\n", res_buffer);
+
+            // clear the request buffer
+            bzero(res_buffer, buf_size);
+
+            // decrease the expected number of response header from the server side
+            --expected_req;
+
+            // try to get more response header if any
+            if(expected_req > 0) {
+                goto GET_SERVER_RESPONSE;
+            }
+            else
+                goto GET_CLIENT_REQUEST;            
+        }
+        else {
+            close(serverfd);
+            printf("Fail to read response header for request[%d]\n", request_id);
+            return -1;
+        }
     }
-
 }
 
 /* handle 1 proxy http request routine */
@@ -406,7 +540,7 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
                     // printf("Waitng response header");
                 }
                 // printf("Got response header, request [%d]\n", request_id);
-                printf("\n\n================== Resppnse header =========================\n");
+                printf("\n\n================== Response header =========================\n");
                 printf("%s\n", res_buffer);
                 data_len = get_content_length(res_buffer);
                 // printf("Parsed Content-Length: [%d]\n", ret);
