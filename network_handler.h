@@ -45,7 +45,7 @@ int get_listen_fd(int port, int maxListen);
 int get_ip_by_host(char* host, char* ip_buf);
 
 /**
- *  This function get request/response header, assume non-blocking takes place
+ *  This function get request/response header, non-blocking takes place
  * 
  *  Return -EAGAIN if not ready to read
  *         -1 if error, check errno

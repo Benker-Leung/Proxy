@@ -314,6 +314,47 @@ int reformat_request_header(char* req_buf) {
     return 1;
 }
 
+int proxy_routine_2(int clientfd, char* req_buffer, char* res_buffer, int buf_size, int request_id, char timeout_allow) {
+
+    int ret;    // store return value
+    int serverfd;
+    int client_req = 0;     // store correctly received client request header
+    char req_buf_ready = 1; // indicate status of usage of req_buffer
+    char res_buf_ready = 1; // indicate status of usage of res_buffer
+
+    char timeout = 0;
+    char data_buf[10240];   // 10KB data buffer
+
+    bzero(req_buffer, buf_size);
+    bzero(res_buffer, buf_size);
+
+    while(1) {
+
+        // reached timeout
+        if(timeout >= timeout_allow) {
+            log("Timeout for request[%d]\n", request_id);
+        }
+        else if (timeout > 0){
+            sleep(1);
+        }
+
+        // get the request header from client
+        ret = get_reqres_header(clientfd, req_buffer, buf_size, request_id);
+        if(ret == -EAGAIN) {
+            // not ready to read request from client, timeout++
+            ++timeout;
+            // go to read data from server side maybe
+            continue;
+        }
+        else if(ret == 0) {
+            ++client_req;
+        }
+
+
+    }
+
+}
+
 /* handle 1 proxy http request routine */
 int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int request_id) {
 
@@ -321,7 +362,6 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
     int serverfd;
     char timeout = 0;
     char buf[10240];
-
 
     while(1) {
 
