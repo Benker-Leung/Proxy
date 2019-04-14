@@ -1,3 +1,16 @@
+#ifndef __NETWORK_HANDLER_H
+#define __NETWORK_HANDLER_H
+
+enum HTTP_HEADER{REQUEST=0, RESPONSE};
+
+struct header_status {
+    int http_method;    // indicate the method, only support(GET, POST)
+    int is_persistent;  // indicate the HTTP version
+    int hv_data;        // indicate whether HTTP hv data or nt
+    int is_chunked;     // indicate the data transfer method
+    int data_length;    // if is not chunked, the data len should be specify in content-length
+};
+
 /**
  *  This function clear the buffer with given size 
  * 
@@ -15,16 +28,6 @@ int get_serverfd(char* ip_buf);
 
 
 /* ================================= Actual function can be used outside are below =================== */
-
-
-/**
- *  This function helps to reformat the request header,
- *  e.g set [GET http://sgss.edu.hk/] to [GET /]
- * 
- *  Return (+ve) if no error, (-ve) if error occur (wrong format)
- * 
- */
-int reformat_request_header(char* req_buf);
 
 
 /**
@@ -71,13 +74,6 @@ int connect_server(char* req_buffer);
  */
 int forward_packet(int serverfd, char* req_buffer, int len);
 
-/**
- *  This function parse the content length from header
- * 
- *  Return +ve if success, (-ve) if fail
- * 
- */
-int get_content_length(char* buf);
 
 /**
  *  This function read specific bytes from fd
@@ -85,7 +81,16 @@ int get_content_length(char* buf);
  *  Return zero(0) if success, -1 if fail
  * 
  */
- int get_data(int fd, char* buf, int bytes_to_read);
+ int get_data_by_len(int fd, char* buf, int bytes_to_read);
+
+
+/**
+ *  This function init the header status struct
+ * 
+ *  Return 0 if success, return -1 if fail
+ * 
+ */
+int init_header_status(struct header_status* hs, char* req_buf, enum HTTP_HEADER type);
 
 
 /**
@@ -112,15 +117,9 @@ int proxy_routine_2(int fd, char* req_buffer, char* res_buffer, int size, int re
 
 
 
-
-
-
-
-
-
 int get_request_data();
 int preprocess_request();
 int forward_request_data();
 int get_response_data();
 
-
+#endif

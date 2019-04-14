@@ -1,3 +1,6 @@
+#define _GNU_SOURCE
+#include <string.h>
+
 #include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -5,12 +8,32 @@
 #include <strings.h>
 #include <errno.h>
 #include <unistd.h>
-#include <string.h>
 #include <fcntl.h>
 #include <stdlib.h>
 
+
 #include "logger.h"
 #include "network_handler.h"
+#include "http_header_handler.h"
+
+
+// struct header_status {
+//     int http_method;    // indicate the method, only support(GET, POST)
+//     int is_persistent;  // indicate the HTTP version
+//     int hv_data;        // indicate whether HTTP hv data or nt
+//     int is_chunked;     // indicate the data transfer method
+//     int data_length;    // if is not chunked, the data len should be specify in content-length
+// };
+
+void print_header_status(struct header_status *hs) {
+    printf("HTTP_Method: [%d]\n", hs->http_method);
+    printf("Persistent: [%d]\n", hs->is_persistent);
+    printf("Have_data: [%d]\n", hs->hv_data);
+    printf("Is_chunked: [%d]\n", hs->is_chunked);
+    printf("Data_length: [%d]\n", hs->data_length);
+    return;
+}
+
 
 /* clear the buffer */
 void clear_buffer(char* req_buffer, char* res_buffer, int size) {
@@ -163,7 +186,7 @@ int connect_server(char* req_buffer) {
     char ip_buf[16];
     bzero(ip_buf, 16);
 
-    start = end = strstr(req_buffer, "Host:");
+    start = end = strcasestr(req_buffer, "Host:");
     if(start) {
         while(*end != '\r' && *end != '\0')
             ++end;
@@ -206,35 +229,9 @@ int forward_packet(int serverfd, char* buf, int len) {
     return 1;
 }
 
-/* get Content-Length if any */
-int get_content_length(char* buf) {
-
-    char* start;
-    char* end;
-    int len;
-
-    start = end = strstr(buf, "Content-Length:");
-    if(!start) {
-        log("No content_length\n");
-        return -1;
-    }
-    start += 16;
-    // get number in Content-Length:
-    while(*end != '\r'){
-        if(*end == '\0' || *end == '\n'){
-            log("Wrong format of header Content-Length field\n");
-            return -1;
-        }
-        ++end;
-    }
-    *end = '\0';
-    len = atoi(start);
-    *end = '\r';
-    return len;
-}
 
 /* read specific bytes */
-int get_data(int fd, char* buf, int bytes_to_read) {
+int get_data_by_len(int fd, char* buf, int bytes_to_read) {
     
     int ret;
 
@@ -250,97 +247,86 @@ int get_data(int fd, char* buf, int bytes_to_read) {
     return 0;
 }
 
-/* reformat request header */
-int reformat_request_header(char* req_buf) {
-    
-    int len = strlen(req_buf);
-    int host_len;
-    int i, j;
-    char* start;
-    char* end;
+/* init header_status */
+int init_header_status(struct header_status* hs, char* req_buf, enum HTTP_HEADER type) {
+
+    int ret;
 
 
-    start = end = strstr(req_buf, "Host:");
-    if(start) {
-        while(*end != '\r' && *end != '\0')
-            ++end;
-        *end = '\0';
-        // get host start address
-        start += 6;
-        host_len = strlen(start);
-        *end = '\r';
+    // only request need to specify the request method
+    if(type == REQUEST) {
+        // get request method
+        ret = get_request_method(req_buf);
+        if(ret == NOT_SUPPORTED) {
+            printf("The http request method is not supported\n");
+            return -1;
+        }
+        hs->http_method = ret;
+
+        // get persistency of the request
+        ret = is_persistent(req_buf);
+        if(ret == -1) {
+            printf("The http version is not supported\n");
+            return -1;
+        }
+        hs->is_persistent = ret;
     }
-    else {
-        // fail to parse host
+    
+
+    // determine is chunked or not
+    ret = is_chunked(req_buf);
+    if(ret == -1) {
+        printf("Error when determine is chunked\n");
         return -1;
     }
-
-    
-    // remove http:// or https:// to \0
-    i = 7+host_len;
-    j = 0;
-    start = strstr(req_buf, "http://");
-    if(!start) {
-        ++i;
-        start = strstr(req_buf, "https://");
+    // data is chunked
+    else if(ret == 1) {
+        hs->hv_data = 1;
+        hs->data_length = -1;
     }
-    while(j != i) {
-        start[j++] = '\0';
-    }
-
-    // remove Accept-Encoding ??
-    start = strstr(req_buf+j+i, "Accept-Encoding:");
-    i=0;
-    if(start) {
-        while(start[i] != '\n'){
-            start[i++] = '\0';
+    // check content-length if data is not chunked
+    else if(ret == 0) {
+        ret = get_content_length(req_buf);
+        if(ret == -1) {
+            hs->data_length = 0;
+            hs->hv_data = 0;
         }
-        start[i] = '\0';
     }
 
-    char* req = calloc(len+1, sizeof(char));
-    i = j = 0;
-    while(i != len) {
-        if(req_buf[i] != '\0') {
-            // copy those not \0 char only
-            req[j++] = req_buf[i];
-        }
-        ++i;
-    }
-    req[j++] = '\0';
-    bzero(req_buf, len);
-    strncpy(req_buf, req, j);
-    free(req);
-    return 1;
+    return 0;
 }
+
 
 int proxy_routine_2(int clientfd, char* req_buffer, char* res_buffer, int buf_size, int request_id) {
 
+    // this should be move the argument list later
     char timeout_allow = 10;
 
-    int ret;    // store return value
-    int serverfd = -1;
-    int expected_req = 0;     // indicate the number of request header from server side
-    int data_len = 0;       // indicate the length of data need to be forward or receive
-    // char req_buf_ready = 1; // indicate status of usage of req_buffer
-    // char res_buf_ready = 1; // indicate status of usage of res_buffer
+    struct header_status req_hs;
+    struct header_status res_hs;
 
-    char client_timeout = 0;
-    char server_timeout = 0;
-    char data_buf[10240];   // 10KB data buffer
+    int ret;                    // store return value
+    int serverfd = -1;
+    int expected_req = 0;       // indicate the number of request header from server side
+    int data_len = 0;           // indicate the length of data need to be forward or receive
+
+    char client_timeout = 0;    // indicate the # of time client timeout
+    char server_timeout = 0;    // indicate the # of time server timeout
+    char data_buf[10240];       // 10KB data buffer
 
     bzero(req_buffer, buf_size);
     bzero(res_buffer, buf_size);
+    bzero(&req_hs, sizeof(struct header_status));
+    bzero(&res_hs, sizeof(struct header_status));
 
+    // infinity loop
     while(1) {
 
         // reached timeout
         if(client_timeout >= timeout_allow || server_timeout >= timeout_allow) {
             log("Timeout for request[%d]\n", request_id);
-            if(serverfd != -1)
-                // close the serverfd
-                close(serverfd);
-            return -EAGAIN;
+            ret = -EAGAIN;
+            goto EXIT_PROXY_ROUTINE;
         }
         // sleep to wait for a while
         else if (client_timeout > 0 || server_timeout > 0){
@@ -353,7 +339,7 @@ GET_CLIENT_REQUEST:
         if(ret == -EAGAIN) {
             // not ready to read request from client, timeout++
             ++client_timeout;
-            // go to read data from server side maybe
+            // go to read data from server side if possible
             if(expected_req > 0)
                 goto GET_SERVER_RESPONSE;
             else
@@ -361,8 +347,16 @@ GET_CLIENT_REQUEST:
         }
         else if(ret == 0) {
             
-            // reset client timeout
+            // reset client timeout, if got one request header
             client_timeout = 0;
+
+            // init the request header
+            ret = init_header_status(&req_hs, req_buffer, REQUEST);
+            if(ret == -1) {
+                goto EXIT_PROXY_ROUTINE;
+            }
+            // print header_status
+            print_header_status(&req_hs);
 
             // get the serverfd for the first time
             if(serverfd == -1) {
@@ -371,7 +365,8 @@ GET_CLIENT_REQUEST:
                 if(ret <= 0) {
                     // fail to connect to this host
                     printf("Cannot connect to host for request[%d]\n", request_id);
-                    return -1;
+                    ret = -1;
+                    goto EXIT_PROXY_ROUTINE;
                 }
                 serverfd = ret;
             }
@@ -380,19 +375,21 @@ GET_CLIENT_REQUEST:
             ret = reformat_request_header(req_buffer);
             if(ret < 0) {
                 printf("Wrong request header for request[%d]\n", request_id);
-                return -1;
+                ret = -1;
+                goto EXIT_PROXY_ROUTINE;
             }
 
             // forward the client request header
             ret = forward_packet(serverfd, req_buffer, strlen(req_buffer));
             if(ret < 0) {
                 printf("Fail to forward client request header for request[%d]\n", request_id);
-                return -1;
+                ret = -1;
+                goto EXIT_PROXY_ROUTINE;
             }
 
             printf("================================ Request Header ================================\n");
             printf("%s\n", req_buffer);
-
+            
             // clear the request buffer
             bzero(req_buffer, buf_size);
             
@@ -403,10 +400,9 @@ GET_CLIENT_REQUEST:
             goto GET_CLIENT_REQUEST;            
         }
         else {
-            if(serverfd != -1)
-                close(serverfd);
             printf("Fail to read client request for request[%d]\n", request_id);
-            return -1;
+            ret = -1;
+            goto EXIT_PROXY_ROUTINE;
         }
 
 GET_SERVER_RESPONSE:
@@ -426,17 +422,25 @@ GET_SERVER_RESPONSE:
             // reset server timeout
             server_timeout = 0;
 
+            // init the response header
+            ret = init_header_status(&res_hs, req_buffer, RESPONSE);
+            if(ret == -1) {
+                goto EXIT_PROXY_ROUTINE;
+            }
+            // print header_status
+            print_header_status(&res_hs);
+
             // get the content-length value if any
             ret = get_content_length(res_buffer);
 
             // if have content-length, just forward the response header back to client
             if(ret > 0) {
                 data_len = ret;
-                ret = get_data(serverfd, data_buf, data_len);
+                ret = get_data_by_len(serverfd, data_buf, data_len);
                 if(ret == -1) {
                     printf("Error when getting response payload for request[%d]\n", request_id);
-                    close(serverfd);
-                    return -1;
+                    ret = -1;
+                    goto EXIT_PROXY_ROUTINE;
                 }
                 printf("================================ Response Data ================================\n\n\n");
             }
@@ -448,8 +452,8 @@ GET_SERVER_RESPONSE:
             ret = forward_packet(clientfd, res_buffer, strlen(res_buffer));
             if(ret < 0) {
                 printf("Fail to forward server response header for request[%d]\n", request_id);
-                close(serverfd);
-                return -1;
+                ret = -1;
+                goto EXIT_PROXY_ROUTINE;
             }
 
             // forward the data if any
@@ -457,8 +461,8 @@ GET_SERVER_RESPONSE:
                 ret = forward_packet(clientfd, data_buf, data_len);
                 if(ret < 0) {
                     printf("Fail to forward server payload for request[%d]\n", request_id);
-                    close(serverfd);
-                    return -1;
+                    ret = -1;
+                    goto EXIT_PROXY_ROUTINE;
                 }
                 // clear data buffer
                 bzero(data_buf, data_len);
@@ -482,11 +486,15 @@ GET_SERVER_RESPONSE:
                 goto GET_CLIENT_REQUEST;            
         }
         else {
-            close(serverfd);
             printf("Fail to read response header for request[%d]\n", request_id);
-            return -1;
+            ret = -1;
+            goto EXIT_PROXY_ROUTINE;
         }
     }
+EXIT_PROXY_ROUTINE:
+    if(serverfd != -1)
+        close(serverfd);
+    return ret;
 }
 
 /* handle 1 proxy http request routine */
@@ -545,7 +553,7 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
                 data_len = get_content_length(res_buffer);
                 // printf("Parsed Content-Length: [%d]\n", ret);
                 bzero(buf, 10240);
-                ret = get_data(serverfd, buf, data_len);
+                ret = get_data_by_len(serverfd, buf, data_len);
                 if(ret < 0) {
                     printf("Cannot get data\n");
                     clear_buffer(req_buffer, res_buffer, size);

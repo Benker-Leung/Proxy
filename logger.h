@@ -21,9 +21,18 @@ void print_time();
         do{\
             if(logger_start) fprintf(stderr, __VA_ARGS__);\
             else fprintf(stdout, __VA_ARGS__);\
+            } while(0)
+
+
+/* !!!!! seems cannot fflush stdout, the result may be unexpected !!! */
+/*
+#define printf(...)\
+        do{\
+            if(logger_start) fprintf(stderr, __VA_ARGS__);\
+            else fprintf(stdout, __VA_ARGS__);\
             fflush(stdout);\
         } while(0)
-
+*/
 
 
 
