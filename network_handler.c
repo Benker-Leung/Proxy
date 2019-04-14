@@ -353,6 +353,8 @@ GET_CLIENT_REQUEST:
             // init the request header
             ret = init_header_status(&req_hs, req_buffer, REQUEST);
             if(ret == -1) {
+                printf("================== NOT SUPPORTED HEADER ====================\n");
+                printf("%s\n", req_buffer);
                 goto EXIT_PROXY_ROUTINE;
             }
             // print header_status
