@@ -93,15 +93,6 @@ int forward_packet(int serverfd, char* req_buffer, int len);
 int init_header_status(struct header_status* hs, char* req_buf, enum HTTP_HEADER type);
 
 
-/**
- *  This function handle all actions for proxy networking 
- *  one thread used to read, one used to write
- * 
- *  Return -1 if fail or timeout, should close this fd
- * 
- */
-int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int request_id);
-
 
 /**
  *  This function handle all actions for proxy networking 
@@ -110,7 +101,7 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
  *  Return -1 if fail or timeout, should close this fd
  * 
  */
-int proxy_routine_2(int fd, char* req_buffer, char* res_buffer, int size, int request_id);
+int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int request_id, char timeout_allow);
 
 
 
