@@ -158,6 +158,10 @@ int get_request_method(char* buf) {
     if(ret == 0) {
         return POST;
     }
+    ret = strncasecmp(buf, "CONNECT", 8);
+    if(ret == 0) {
+        return CONNECT;
+    }
     
     log("HTTP Method not supported by this proxy\n");
     return NOT_SUPPORTED;

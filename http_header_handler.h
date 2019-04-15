@@ -1,7 +1,7 @@
 #ifndef __HTTP_HEADER_HANDLER_H
 #define __HTTP_HEADER_HANDLER_H
 
-enum HTTP_METHOD{NOT_SUPPORTED=0, GET, POST};
+enum HTTP_METHOD{NOT_SUPPORTED=0, GET, POST, CONNECT};
 
 /**
  *  This function helps to reformat the request header,

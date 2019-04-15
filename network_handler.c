@@ -14,6 +14,7 @@
 
 #include "logger.h"
 #include "network_handler.h"
+#include "routines.h"
 #include "http_header_handler.h"
 
 
@@ -298,6 +299,8 @@ int init_header_status(struct header_status* hs, char* req_buf, enum HTTP_HEADER
 
 
 int proxy_routine(int clientfd, char* req_buffer, char* res_buffer, int buf_size, int request_id, char timeout_allow) {
+
+    return proxy_routines(clientfd, req_buffer, res_buffer, buf_size, request_id, timeout_allow);
 
     // // this should be move the argument list later
     // char timeout_allow = 10;
