@@ -17,7 +17,7 @@ int proxy_routines(int fd, char* req_buffer, char* res_buffer, int size, int req
  *  Return?
  * 
  */
-int https_routine(char* req_header);
+int https_routine(int clientfd, int serverfd, char* req_buffer, char* res_buffer, int buf_size, char timeout_allow);
 
 /**
  *  This function helps to handle the http with cache miss in local

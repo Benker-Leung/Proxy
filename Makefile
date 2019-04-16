@@ -26,7 +26,7 @@ logger.o: logger.c logger.h
 
 
 clean:
-	rm -rf *.o proxy test log unit_test
+	rm -rf *.o proxy test log
 
 
 
