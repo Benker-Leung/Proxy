@@ -158,7 +158,7 @@ int get_request_method(char* buf) {
     if(ret == 0) {
         return POST;
     }
-    ret = strncasecmp(buf, "CONNECT", 8);
+    ret = strncasecmp(buf, "CONNECT", 7);
     if(ret == 0) {
         return CONNECT;
     }

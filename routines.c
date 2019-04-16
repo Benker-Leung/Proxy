@@ -1,4 +1,7 @@
 #include <errno.h>
+#include <unistd.h>
+#include <strings.h>
+#include <string.h>
 
 #include "routines.h"
 #include "network_handler.h"
@@ -35,11 +38,17 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
             sleep(1);
         }
 
+        // if the prev req is not yet retreive all
+        if(!req_ready) {
+            return -1;
+        }
         // try to get the request header from client
         ret = get_reqres_header(clientfd, req_buffer, buf_size, request_id);
         if(ret == -EAGAIN) {
             // not ready to read request from client, timeout++
             ++client_timeout;
+            // this should be change in future
+            continue;
         }
         else if(ret == 0) {
             
@@ -57,6 +66,10 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
             switch(req_hs.http_method) {
                 case CONNECT:
                     printf("%s", req_buffer);
+                    ret = connect_https_server(req_buffer);
+                    printf("serverfd: [%d]\n", ret);
+                    if(ret > 0)
+                        close(ret);
                     return -EFAULT;
                 default:
                     printf("================== NOT SUPPORTED HEADER ====================\n");
@@ -84,6 +97,6 @@ EXIT_PROXY_ROUTINES:
 
 /* routine for https request */
 int https_routine(char* req_header) {
-
+    return 0;
 }
 

@@ -44,14 +44,14 @@ void clear_buffer(char* req_buffer, char* res_buffer, int size) {
 }
 
 /* get server file descriptor given ip, called by connect_server() */
-int get_serverfd(char* ip_buf) {
+int get_serverfd(char* ip_buf, int port) {
 
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     struct sockaddr_in sa;
     bzero(&sa, sizeof(struct sockaddr_in));
 
     sa.sin_family = AF_INET;
-    sa.sin_port = htons(80);
+    sa.sin_port = htons(port);
     inet_aton(ip_buf, &sa.sin_addr);
 
     if(connect(sockfd, (struct sockaddr*)&sa, sizeof(sa)) < 0) {
@@ -114,6 +114,11 @@ int get_ip_by_host(char* host, char* ip_buf) {
     struct addrinfo* result;
     struct addrinfo* next;
     int status;
+
+    // remove "www."
+    if(strncmp(host, "www.", 4) == 0) {
+        host += 4;
+    }
 
     hints.ai_family = AF_INET;      // IPv4 only
     hints.ai_socktype = SOCK_STREAM;// TCP
@@ -204,7 +209,7 @@ int connect_server(char* req_buffer) {
         // cannot solve ip
         return -1;
 
-    ret = get_serverfd(ip_buf);
+    ret = get_serverfd(ip_buf, 80);
     if(ret <= 0)
         // cannot get server fd
         return -1;
@@ -212,6 +217,57 @@ int connect_server(char* req_buffer) {
     // got the server fd
     return ret;
 
+}
+
+/* get the https server fd given req_buffer if success */
+int connect_https_server(char* req_buffer) {
+
+    int ret;
+    int port;
+    char* start;
+    char* start2;
+    char* start3;
+    char ip_buf[16];
+    bzero(ip_buf, 16);
+
+    start = strcasestr(req_buffer, "host:");
+    if(!start) {
+        return -1;
+    }
+
+    start += 6;
+    // get the port number
+    while(*start != ':') {
+        if(*start == '\0' || *start == '\r' || *start == '\n')
+            return -1;
+        ++start;
+    }
+    start3 = start2 = start + 1;
+    while(*start != '\r') {
+        if(*start == '\0' || *start == '\n')
+            return -1;
+        ++start;
+    }
+    *start = '\0';
+    port = atoi(start2);
+    *start = '\r';
+
+    // get the host name
+    start = strcasestr(req_buffer, "host:");
+    start += 6;
+    --start3;
+    *start3 = '\0';
+
+    ret = get_ip_by_host(start, ip_buf);
+    *start3 = ':';
+    if(ret == -1)
+        return -1;
+    
+    ret = get_serverfd(ip_buf, port);
+    if(ret == -1)
+        return -1;
+
+    return ret;
 }
 
 /* forward the request header given server fd and req_buffer */

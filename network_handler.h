@@ -24,7 +24,7 @@ void clear_buffer(char* req_buffer, char* res_buffer, int size);
  *  Return (+ve) if success, -1 if fail
  * 
  */
-int get_serverfd(char* ip_buf);
+int get_serverfd(char* ip_buf, int port);
 
 
 /* ================================= Actual function can be used outside are below =================== */
@@ -58,12 +58,21 @@ int get_reqres_header(int fd, char* buf, int size, int request_id);
 
 
 /**
- *  This function handle all details stuff e.g parse hostname, get ip etc.
+ *  This function handle all details stuff e.g parse hostname, get ip etc, given request header
  *
  *  Return (+ve) ==> connected serverfd if success, -1 if fail 
  *
  */
 int connect_server(char* req_buffer);
+
+
+/**
+ *  This function establish the connection requested by https
+ * 
+ *  Return (+ve) ===> connected serverfd if success, -1 if fail
+ * 
+ */
+int connect_https_server(char* req_buffer);
 
 
 /**
