@@ -328,7 +328,11 @@ int init_header_status(struct header_status* hs, char* req_buf, enum HTTP_HEADER
         }
         hs->is_persistent = ret;
     }
-    
+
+    // method that do not have data
+    if(hs->http_method == GET || hs->http_method == CONNECT) {
+        return 0;
+    }
 
     // determine is chunked or not
     ret = is_chunked(req_buf);

@@ -69,10 +69,11 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
             // use different routines here
             switch(req_hs.http_method) {
                 case CONNECT:
-
+                    timeout_allow = 30;
                     ret = connect_https_server(req_buffer);
                     if(ret == -1) {
                         printf("Error in handling https request id:[%d]\n", request_id);
+                        printf("%s\n", req_buffer);
                         ret = -1;
                         goto EXIT_PROXY_ROUTINES;
                     }
@@ -83,7 +84,8 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
                     goto EXIT_PROXY_ROUTINES;
 
                 default:
-                    printf("================== HEADER NOT SUPPORTED ====================\n");
+                    printf("================== METHOD NOT SUPPORTED ====================\n");
+                    printf("%s\n", req_buffer);
                     ret = -1;
                     goto EXIT_PROXY_ROUTINES;
             }

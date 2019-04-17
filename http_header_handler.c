@@ -45,15 +45,15 @@ int reformat_request_header(char* req_buf) {
         start[j++] = '\0';
     }
 
-    // remove Accept-Encoding ??
-    start = strcasestr(req_buf+j+i, "Accept-Encoding:");
-    i=0;
-    if(start) {
-        while(start[i] != '\n'){
-            start[i++] = '\0';
-        }
-        start[i] = '\0';
-    }
+    // // remove Accept-Encoding ??
+    // start = strcasestr(req_buf+j+i, "Accept-Encoding:");
+    // i=0;
+    // if(start) {
+    //     while(start[i] != '\n'){
+    //         start[i++] = '\0';
+    //     }
+    //     start[i] = '\0';
+    // }
 
     char* req = calloc(len+1, sizeof(char));
     i = j = 0;
@@ -116,7 +116,7 @@ int is_persistent(char* buf) {
     else if(*version == '1')
         return 1;
     else {
-        log("Wrong HTTP version, or not supported\n");
+        log("Wrong HTTP version, or not supported HTTP version\n");
         return -1;
     }
 }
