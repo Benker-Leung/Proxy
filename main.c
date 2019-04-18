@@ -10,6 +10,9 @@
 
 #include "logger.h"
 #include "network_handler.h"
+
+
+
 #define DEFAULT_MAX_THREAD 3
 #define HEADER_BUFFER_SIZE 4096
 
@@ -17,6 +20,7 @@
 struct thread_param* tps;   // thread_param array
 char* thread_status;    // status array, 'a' as available, 'o' as occupied
 pthread_t* thread;       // use to pthread_join
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;  // used for synchronization
 int port;               // port number
 int max_thread;         // max thread
 int proxyfd;               // proxyfd
@@ -74,31 +78,27 @@ void init_proxy(int argc, char** argv) {
 
 /* action to be taken before exit */
 void cleanup_before_exit() {
+
     int i;
+
+    // lock
+    pthread_mutex_lock(&lock);
     for(i=0; i<max_thread; ++i) {
         if(thread_status[i] == 'o') {
             close(tps[i].fd);
+            pthread_cancel(thread[i]);
         }
     }
+    // unlock
+    pthread_mutex_unlock(&lock);
+    // destroy the lock
+    pthread_mutex_destroy(&lock);
+    // close the listen fd
     close(proxyfd);
     log("Closing proxy...\n\n\n");
     printf("\n");
     exit(0);
 }
-
-/* wait for all thread */
-void wait_all_thread() {
-    // join the threads
-    int i;
-    void* ret;
-    for(i=0; i<max_thread; ++i) {
-        if(thread[i] != 0)
-            if(pthread_join(thread[i], &ret))
-                log("Fail to join thread:[%d]\n", i);
-        thread[i] = 'a';
-    }
-}
-
 
 
 /* action to be taken by network thread */
@@ -115,10 +115,15 @@ void* thread_network_action(void *args) {
             printf("Error in proxy routine, thread[%d]\n", tp->id);
     }
 
+    // lock
+    pthread_mutex_lock(&lock);
     thread_status[tp->id] = 'a';
+    // unlock
+    pthread_mutex_unlock(&lock);
+    
     printf("clearing thread[%d]\n", tp->id);
     close(tp->fd);
-    return NULL;
+    pthread_exit(NULL);
 }
 
 int main(int argc, char** argv) {
@@ -139,6 +144,8 @@ int main(int argc, char** argv) {
             sleep(3);
             continue;
         }
+        // lock
+        pthread_mutex_lock(&lock);
         for(i=0; i<max_thread; ++i) {
             // if any thread is available
             if(thread_status[i] == 'a' || thread_status[i] == 0) {
@@ -153,10 +160,14 @@ int main(int argc, char** argv) {
                 break;
             }
         }
+        // unlock
+        pthread_mutex_unlock(&lock);
+
         if(!k) {
             printf("No thread available now\n");
             log("Too many connections, max_thread num:[%d] may not handle\n", max_thread);
             close(j);
+            sleep(1);
         }
     }
 

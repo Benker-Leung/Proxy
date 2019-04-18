@@ -33,7 +33,7 @@ int reformat_request_header(char* req_buf) {
     }
 
     
-    // remove http:// or https:// to \0
+    // remove http://.... to \0, in order words, it remains the uri
     i = 7+host_len;
     j = 0;
     start = strcasestr(req_buf, "http://");
@@ -146,19 +146,19 @@ int is_chunked(char *buf) {
 }
 
 /* get method of http request header */
-int get_request_method(char* buf) {
+int get_request_method(char* req_buf) {
     
     int ret;
 
-    ret = strncasecmp(buf, "GET", 3);
+    ret = strncasecmp(req_buf, "GET", 3);
     if(ret == 0) {
         return GET;
     }
-    ret = strncasecmp(buf, "POST", 4);
+    ret = strncasecmp(req_buf, "POST", 4);
     if(ret == 0) {
         return POST;
     }
-    ret = strncasecmp(buf, "CONNECT", 7);
+    ret = strncasecmp(req_buf, "CONNECT", 7);
     if(ret == 0) {
         return CONNECT;
     }

@@ -270,7 +270,7 @@ int connect_https_server(char* req_buffer) {
     return ret;
 }
 
-/* forward the request header given server fd and req_buffer */
+/* forward the packet given server fd and buffer */
 int forward_packet(int serverfd, char* buf, int len) {
 
     int ret;

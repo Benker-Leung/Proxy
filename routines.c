@@ -15,7 +15,7 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
 
     int ret;                    // store return value
     int req_ready = 1;          // indicate that request buffer is ready for next usage
-    int serverfd;
+    int serverfd = -1;
     struct header_status req_hs;
     struct header_status res_hs;
 

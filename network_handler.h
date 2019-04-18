@@ -19,7 +19,7 @@ void clear_buffer(char* req_buffer, char* res_buffer, int size);
 
 
 /**
- *  This function get file descriptor given ip, default port is 80
+ *  This function get file descriptor given ip and port
  * 
  *  Return (+ve) if success, -1 if fail
  * 
@@ -31,7 +31,7 @@ int get_serverfd(char* ip_buf, int port);
 
 
 /**
- *  This function return fd that can accept connection
+ *  This function return fd that can accept connection given port and maxListen
  * 
  *  Return nonzero if success, zero if fail
  * 
@@ -40,7 +40,7 @@ int get_listen_fd(int port, int maxListen);
 
 
 /**
- *  This function get ip by host name
+ *  This function fill in ip_buf given host, ip_buf with 16 bytes
  * 
  *  Return -1 if resolve fail, 1 if success
  * 
@@ -58,7 +58,7 @@ int get_reqres_header(int fd, char* buf, int size, int request_id);
 
 
 /**
- *  This function handle all details stuff e.g parse hostname, get ip etc, given request header
+ *  This function return serverfd given req_buffer
  *
  *  Return (+ve) ==> connected serverfd if success, -1 if fail 
  *
@@ -67,7 +67,7 @@ int connect_server(char* req_buffer);
 
 
 /**
- *  This function establish the connection requested by https
+ *  This function return serverfd given req_buffer
  * 
  *  Return (+ve) ===> connected serverfd if success, -1 if fail
  * 
@@ -76,12 +76,12 @@ int connect_https_server(char* req_buffer);
 
 
 /**
- *  This function forward the req header only
+ *  This function forward the packet in buf with length len, blocking write used
  *
  *  Return (+ve) if success, (-ve) if fail
  *
  */
-int forward_packet(int serverfd, char* req_buffer, int len);
+int forward_packet(int serverfd, char* buf, int len);
 
 
 /**
@@ -114,12 +114,5 @@ int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int requ
 
 
 
-
-
-
-int get_request_data();
-int preprocess_request();
-int forward_request_data();
-int get_response_data();
 
 #endif
