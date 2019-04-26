@@ -6,7 +6,7 @@ CFLAGS=-c -Wall
 CLINK=-lpthread
 
 all: main.o logger.o routines.o network_handler.o http_header_handler.o
-	$(CC) -o proxy main.o logger.o routines.o network_handler.o http_header_handler.o $(CLINK)
+	$(CC) -o proxy main.o logger.o routines.o network_handler.o http_header_handler.o $(CLINK) && rm *.o
 
 # to be continued
 main.o: main.c logger.o
