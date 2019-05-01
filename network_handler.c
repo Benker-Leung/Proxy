@@ -11,6 +11,8 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
+// #include <sys/sendfile.h>
+
 
 #include "logger.h"
 #include "network_handler.h"
@@ -153,7 +155,8 @@ int get_reqres_header(int fd, char* buf, int size, int request_id) {
 
     while(i < size-1) {
         // read 1 byte each time
-        j = recv(fd, &r, 1, MSG_DONTWAIT);
+        // j = recv(fd, &r, 1, MSG_DONTWAIT);
+        j = read(fd, &r, 1);
         if(j <= 0) {
             // not ready to read
             if(errno == EAGAIN) {
@@ -313,17 +316,26 @@ int forward_data_length(int clientfd, int serverfd, char* buf, int buf_size, int
     while(length > 0) {
         // read from server
         ret = read(serverfd, buf, buf_size);
+        printf("[%s]\n", buf);
         if(ret <= 0) {
             return -1;
         }
         length -= ret;
+
+        // printf("Fuck me!(%d)\n", ret);
+        
         // write to client
         ret = write(clientfd, buf, ret);
+        // printf("Can u Fuck me?(%d)\n", ret);
         if(ret <= 0) {
             return -1;
         }
         bzero(buf, buf_size);
     }
+
+    // ret = sendfile(clientfd, serverfd, NULL, length);
+    if(ret == -1)
+        return ret;
 
     return 1;
 }

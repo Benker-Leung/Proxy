@@ -120,7 +120,7 @@ void* thread_network_action(void *args) {
     pthread_mutex_lock(&lock);
 
     thread_status[tp->id] = 'z';
-    printf("clearing thread[%d]\n", tp->id);
+    printf("clearing thread[%d], release fd[%d]\n", tp->id, tp->fd);
     close(tp->fd);
 
     // unlock
@@ -137,9 +137,10 @@ int main(int argc, char** argv) {
 
 
     init_proxy(argc, argv);
-
+    
     i=0;    // for counting
     while(1) {  // loop to accept and handle new connection
+        // printf("=========================== 1 ==================================\n");
         k=0;    // k for check connection well handled or not
         if((j = accept(proxyfd, NULL, NULL)) <= 0) {            
             log("Cannot accept connection, errno: [%d]\n", errno);
@@ -147,8 +148,10 @@ int main(int argc, char** argv) {
             sleep(3);
             continue;
         }
+        // printf("*****************************************************************\n");
         // lock
         pthread_mutex_lock(&lock);
+        // printf("=========================== 2 ==================================\n");
         for(i=0; i<max_thread; ++i) {
             if(thread_status[i] == 'z') {
                 pthread_join(thread[i], NULL);
@@ -168,17 +171,17 @@ int main(int argc, char** argv) {
                 // set the status to occupied
                 thread_status[i] = 'o';
                 k = 1;
-                printf("Allocated thread[%d] to new connection\n", i);
+                printf("Allocated thread[%d], fd[%d] to new connection\n", i, j);
                 break;
             }
         }
         // unlock
         pthread_mutex_unlock(&lock);
-
+        // printf("=========================== 3 ==================================\n");
         if(!k) {
+            close(j);
             printf("No thread available now\n");
             log("Too many connections, max_thread num:[%d] may not handle\n", max_thread);
-            close(j);
             sleep(1);
         }
     }

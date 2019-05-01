@@ -4,6 +4,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/time.h>
 
 #include "routines.h"
 #include "network_handler.h"
@@ -14,49 +15,61 @@
 int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_size, int request_id, char timeout_allow) {
 
     int ret;                    // store return value
-    int req_ready = 1;          // indicate that request buffer is ready for next usage
+    // int req_ready = 1;          // indicate that request buffer is ready for next usage
     int serverfd = -1;
     struct header_status req_hs;
-    struct header_status res_hs;
+    // struct header_status res_hs;
 
-    char client_timeout = 0;    // indicate the # of time client timeout
+    // char client_timeout = 0;    // indicate the # of time client timeout
 
-    bzero(req_buffer, buf_size);    // to identify http request header attribute
-    bzero(res_buffer, buf_size);    // to identify http response header attribute
+    // bzero(req_buffer, buf_size);    // to identify http request header attribute
+    // bzero(res_buffer, buf_size);    // to identify http response header attribute
+
+    struct timeval timeout = {10, 0};
+    ret = setsockopt(clientfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(struct timeval));
+    if(ret)
+        return -1;
+    ret = setsockopt(clientfd, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(struct timeval));
+    if(ret)
+        return -1;
+
+    clear_buffer(req_buffer, res_buffer, buf_size);
     bzero(&req_hs, sizeof(struct header_status));
-    bzero(&res_hs, sizeof(struct header_status));
+    // bzero(&res_hs, sizeof(struct header_status));
 
     // infinity loop
     while(1) {
 
-        // reached timeout
-        if(client_timeout >= timeout_allow) {
-            log("Timeout for request[%d]\n", request_id);
-            ret = -EAGAIN;
-            goto EXIT_PROXY_ROUTINES;
-        }
-        // sleep to wait for a while
-        else if (client_timeout > 0){
-            sleep(1);
-        }
+        // // reached timeout
+        // if(client_timeout >= timeout_allow) {
+        //     log("Timeout for request[%d]\n", request_id);
+        //     ret = -EAGAIN;
+        //     goto EXIT_PROXY_ROUTINES;
+        // }
+        // // sleep to wait for a while
+        // else if (client_timeout > 0){
+        //     sleep(1);
+        // }
 
-        // if the prev req is not yet retreive all
-        if(!req_ready) {
-            return -1;
-        }
+        // // if the prev req is not yet retreive all
+        // if(!req_ready) {
+        //     return -1;
+        // }
+
         // try to get the request header from client
         ret = get_reqres_header(clientfd, req_buffer, buf_size, request_id);
 
         if(ret == -EAGAIN) {
-            // not ready to read request from client, timeout++
-            ++client_timeout;
-            // this should be change in future
-            continue;
+            // // not ready to read request from client, timeout++
+            // ++client_timeout;
+            // // this should be change in future
+            // continue;
+            return -EAGAIN;
         }
         else if(ret == 0) {
 
             // reset client timeout, if got one request header
-            client_timeout = 0;
+            // client_timeout = 0;
 
             // init the request header
             ret = init_header_status(&req_hs, req_buffer, REQUEST);
@@ -89,10 +102,11 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
 
                     // format the request header correctly
                     ret = reformat_request_header(req_buffer);
-
                     if(ret < 0)
                         goto EXIT_PROXY_ROUTINES;
 
+                    printf("======================= Request =======================\n");
+                    printf("%s", req_buffer);
                     // only connect to server for the first time
                     if(serverfd < 0) {
                         ret = connect_server(req_buffer, ret);
@@ -100,6 +114,18 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
                             goto EXIT_PROXY_ROUTINES;
                         }
                         serverfd = ret;
+                        ret = setsockopt(serverfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(struct timeval));
+                        if(ret) {
+                            close(serverfd);
+                            ret = -1;
+                            goto EXIT_PROXY_ROUTINES;
+                        }
+                        ret = setsockopt(serverfd, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(struct timeval));
+                        if(ret) {
+                            close(serverfd);
+                            ret = -1;
+                            goto EXIT_PROXY_ROUTINES;
+                        }
                     }
                     
                     // call the routine
@@ -229,16 +255,21 @@ int no_cache_routine(int clientfd, int serverfd, char* req_buffer, char* res_buf
     // clear buffer
     clear_buffer(req_buffer, res_buffer, buf_size);
 
-    // get response header
-    while(1) {
-        ret = get_reqres_header(serverfd, res_buffer, buf_size, -1);
-        if(ret != -EAGAIN) {
-            if(ret == 0)
-                break;
-            else return -1;
-        }
-        sleep(1);
-    }
+    // // get response header
+    // while(1) {
+    //     ret = get_reqres_header(serverfd, res_buffer, buf_size, -1);
+    //     if(ret != -EAGAIN) {
+    //         if(ret == 0)
+    //             break;
+    //         else return -1;
+    //     }
+    //     sleep(1);
+    // }
+    ret = get_reqres_header(serverfd, res_buffer, buf_size, 1);
+    if(ret < 0)
+        return -1;
+    printf("======================= Response =======================\n");
+    printf("%s", res_buffer);
 
     // forward the response header to client
     ret = forward_packet(clientfd, res_buffer, strlen(res_buffer));
@@ -248,7 +279,6 @@ int no_cache_routine(int clientfd, int serverfd, char* req_buffer, char* res_buf
     bzero(&hs, sizeof(struct header_status));
     // parse the response header
     ret = init_header_status(&hs, res_buffer, RESPONSE);
-
 
     if(hs.is_chunked) {
         ret = forward_data_chunked(clientfd, serverfd);
