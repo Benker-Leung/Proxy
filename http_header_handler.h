@@ -7,7 +7,7 @@ enum HTTP_METHOD{NOT_SUPPORTED=0, GET, POST, CONNECT};
  *  This function helps to reformat the request header,
  *  e.g set [GET http://sgss.edu.hk/] to [GET /]
  * 
- *  Return (+ve) if no error, (-ve) if error occur (wrong format)
+ *  Return port number if no error, (-ve) if error occur (wrong format)
  * 
  */
 int reformat_request_header(char* req_buf);
@@ -36,6 +36,7 @@ int is_persistent(char* req_buf);
  * 
  */
 int is_chunked(char *req_buf);
+
 
 /**
  *  This function get the request method(enum) given req_buffer

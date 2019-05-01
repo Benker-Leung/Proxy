@@ -26,6 +26,11 @@ void clear_buffer(char* req_buffer, char* res_buffer, int size);
  */
 int get_serverfd(char* ip_buf, int port);
 
+/**
+ *  This function just print header type info
+ */
+void print_header_status(struct header_status *hs);
+
 
 /* ================================= Actual function can be used outside are below =================== */
 
@@ -63,7 +68,7 @@ int get_reqres_header(int fd, char* buf, int size, int request_id);
  *  Return (+ve) ==> connected serverfd if success, -1 if fail 
  *
  */
-int connect_server(char* req_buffer);
+int connect_server(char* req_buffer, int port);
 
 
 /**
@@ -91,6 +96,13 @@ int forward_packet(int serverfd, char* buf, int len);
  * 
  */
  int get_data_by_len(int fd, char* buf, int bytes_to_read);
+
+ /**
+  *  This function read and forward chunked data
+  * 
+  *  Return 1 if success, -1 if fail
+  */
+ int get_data_chunked(int clientfd, int serverfd);
 
 
 /**

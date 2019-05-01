@@ -16,6 +16,10 @@ int reformat_request_header(char* req_buf) {
     char* start;
     char* end;
 
+    int port_offset = 0;
+    int port_len = 0;
+    int port = 80;  // default port
+
 
     start = end = strcasestr(req_buf, "Host:");
     if(start) {
@@ -25,6 +29,19 @@ int reformat_request_header(char* req_buf) {
         // get host start address
         start += 6;
         host_len = strlen(start);
+
+        // check if port is appened or not
+        start = strcasestr(start, ":");
+        if(start) {
+            int temp;
+            port_offset = start-req_buf;
+            start += 1;
+            sscanf(start, "%d", &port);
+            temp = port;
+            port_len = 2;
+            while(temp/=10)
+                ++port_len;
+        }
         *end = '\r';
     }
     else {
@@ -45,15 +62,15 @@ int reformat_request_header(char* req_buf) {
         start[j++] = '\0';
     }
 
-    // // remove Accept-Encoding ??
-    // start = strcasestr(req_buf+j+i, "Accept-Encoding:");
-    // i=0;
-    // if(start) {
-    //     while(start[i] != '\n'){
-    //         start[i++] = '\0';
-    //     }
-    //     start[i] = '\0';
-    // }
+    // remove the additional port info in HOST:
+    if(port_len > 0) {
+        i = 0;
+        while(port_len--) {
+            req_buf[port_offset + i++] = 0;
+        }
+    }
+
+
 
     char* req = calloc(len+1, sizeof(char));
     i = j = 0;
@@ -68,7 +85,8 @@ int reformat_request_header(char* req_buf) {
     bzero(req_buf, len);
     strncpy(req_buf, req, j);
     free(req);
-    return 1;
+
+    return port;
 }
 
 /* get Content-Length if any */

@@ -184,7 +184,7 @@ int get_reqres_header(int fd, char* buf, int size, int request_id) {
 }
 
 /* get the server fd given req_buffer if success */
-int connect_server(char* req_buffer) {
+int connect_server(char* req_buffer, int port) {
 
     char* start;
     char* end;
@@ -209,7 +209,7 @@ int connect_server(char* req_buffer) {
         // cannot solve ip
         return -1;
 
-    ret = get_serverfd(ip_buf, 80);
+    ret = get_serverfd(ip_buf, port);
     if(ret <= 0)
         // cannot get server fd
         return -1;
@@ -304,6 +304,47 @@ int get_data_by_len(int fd, char* buf, int bytes_to_read) {
     return 0;
 }
 
+/* read chunked data */
+int get_data_chunked(int clientfd, int serverfd) {
+
+    int ret;
+    int status;
+    char c;
+
+
+    status = 0;
+    while(1) {
+        
+        ret = read(serverfd, &c, 1);
+        if(ret < 0)
+            return -1;
+
+        switch(c) {
+            case 13:    // \r
+                if(status%2 == 0)
+                    ++status;
+                break;
+            case 10:    // \n
+                if(status%2)
+                    ++status;
+                break;
+            default:
+                status = 0;
+                break;
+        }
+        ret = write(clientfd, &c, 1);
+
+        if(ret < 0)
+            return -1;
+
+        if(status == 4)
+            break;
+        
+
+    }
+    return 1;
+}
+
 /* init header_status */
 int init_header_status(struct header_status* hs, char* req_buf, enum HTTP_HEADER type) {
 
@@ -327,11 +368,12 @@ int init_header_status(struct header_status* hs, char* req_buf, enum HTTP_HEADER
             return -1;
         }
         hs->is_persistent = ret;
-    }
 
-    // method that do not have data
-    if(hs->http_method == GET || hs->http_method == CONNECT) {
-        return 0;
+        // method that do not have data
+        if(hs->http_method == GET || hs->http_method == CONNECT) {
+            return 0;
+        }
+
     }
 
     // determine is chunked or not
@@ -342,6 +384,7 @@ int init_header_status(struct header_status* hs, char* req_buf, enum HTTP_HEADER
     }
     // data is chunked
     else if(ret == 1) {
+        hs->is_chunked = 1;
         hs->hv_data = 1;
         hs->data_length = -1;
     }
@@ -352,6 +395,8 @@ int init_header_status(struct header_status* hs, char* req_buf, enum HTTP_HEADER
             hs->data_length = 0;
             hs->hv_data = 0;
         }
+        hs->data_length = ret;
+        hs->hv_data = 1;
     }
 
     return 0;
@@ -426,7 +471,7 @@ GET_CLIENT_REQUEST:
             // get the serverfd for the first time
             if(serverfd == -1) {
                 // get the connected serverfd
-                ret = connect_server(req_buffer);
+                ret = connect_server(req_buffer, 80);
                 if(ret <= 0) {
                     // fail to connect to this host
                     printf("Cannot connect to host for request[%d]\n", request_id);

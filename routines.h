@@ -22,10 +22,12 @@ int https_routine(int clientfd, int serverfd, char* req_buffer, char* res_buffer
 /**
  *  This function helps to handle the http with cache miss in local
  * 
+ *  Jobs including forward the request, get back and update the response object
+ * 
  *  Return?
  * 
  */
-int no_cache_routine(char* req_header);
+int no_cache_routine(int clientfd, int serverfd, char* req_buffer, char* res_buff, int buf_size, char timeout_allow);
 
 /**
  *  This function helps to handle the http with cache hit in local
