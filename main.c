@@ -140,7 +140,6 @@ int main(int argc, char** argv) {
     
     i=0;    // for counting
     while(1) {  // loop to accept and handle new connection
-        // printf("=========================== 1 ==================================\n");
         k=0;    // k for check connection well handled or not
         if((j = accept(proxyfd, NULL, NULL)) <= 0) {            
             log("Cannot accept connection, errno: [%d]\n", errno);
@@ -148,10 +147,8 @@ int main(int argc, char** argv) {
             sleep(3);
             continue;
         }
-        // printf("*****************************************************************\n");
         // lock
         pthread_mutex_lock(&lock);
-        // printf("=========================== 2 ==================================\n");
         for(i=0; i<max_thread; ++i) {
             if(thread_status[i] == 'z') {
                 pthread_join(thread[i], NULL);
@@ -177,7 +174,6 @@ int main(int argc, char** argv) {
         }
         // unlock
         pthread_mutex_unlock(&lock);
-        // printf("=========================== 3 ==================================\n");
         if(!k) {
             close(j);
             printf("No thread available now\n");
