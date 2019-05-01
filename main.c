@@ -10,6 +10,7 @@
 
 #include "logger.h"
 #include "network_handler.h"
+#include "routines.h"
 
 
 
@@ -108,7 +109,7 @@ void* thread_network_action(void *args) {
     struct thread_param* tp = args;
 
     bzero(tp->request_header_buffer, HEADER_BUFFER_SIZE);
-    if((status = proxy_routine(tp->fd, tp->request_header_buffer, tp->response_header_buffer, HEADER_BUFFER_SIZE, tp->id, 10)) != 0) {
+    if((status = proxy_routines(tp->fd, tp->request_header_buffer, tp->response_header_buffer, HEADER_BUFFER_SIZE, tp->id, 10)) != 0) {
         if(status == -EAGAIN)
             printf("Time out for thread[%d]\n", tp->id);
         else

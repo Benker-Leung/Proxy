@@ -120,6 +120,7 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
             if(ret < 0) {
                 // printf("Wrong request header for request[%d]\n", request_id);
                 ret = -1;
+                goto EXIT_PROXY_ROUTINES;
             }
             
             // clear the request buffer
@@ -128,6 +129,7 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
         else {
             // printf("Fail to read client request for request[%d]\n", request_id);
             ret = -1;
+            goto EXIT_PROXY_ROUTINES;
         }
     }
 EXIT_PROXY_ROUTINES:
