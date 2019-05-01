@@ -97,12 +97,20 @@ int forward_packet(int serverfd, char* buf, int len);
  */
  int get_data_by_len(int fd, char* buf, int bytes_to_read);
 
+
+ /**
+  *  This function read and forward data specified in length
+  * 
+  *  Return 1 if success, -1 if fail
+  */
+int forward_data_length(int clientfd, int serverfd, char* buf, int buf_size, int length);
+
  /**
   *  This function read and forward chunked data
   * 
   *  Return 1 if success, -1 if fail
   */
- int get_data_chunked(int clientfd, int serverfd);
+ int forward_data_chunked(int clientfd, int serverfd);
 
 
 /**
@@ -112,18 +120,6 @@ int forward_packet(int serverfd, char* buf, int len);
  * 
  */
 int init_header_status(struct header_status* hs, char* req_buf, enum HTTP_HEADER type);
-
-
-
-/**
- *  This function handle all actions for proxy networking 
- *  one thread used to read, one used to write
- * 
- *  Return -1 if fail or timeout, should close this fd
- * 
- */
-int proxy_routine(int fd, char* req_buffer, char* res_buffer, int size, int request_id, char timeout_allow);
-
 
 
 

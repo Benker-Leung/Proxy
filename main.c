@@ -30,8 +30,8 @@ int proxyfd;               // proxyfd
 struct thread_param {
     int id;     // to distinguish thread_id
     int fd;     // to store the connection file descriptor
-    char request_header_buffer[4096];   // only support 4KB header
-    char response_header_buffer[4096];
+    char request_header_buffer[HEADER_BUFFER_SIZE];   // only support 4KB header
+    char response_header_buffer[HEADER_BUFFER_SIZE];
 };
 
 /* init the global variables about thread and port */
@@ -118,18 +118,20 @@ void* thread_network_action(void *args) {
 
     // lock
     pthread_mutex_lock(&lock);
-    thread_status[tp->id] = 'a';
-    // unlock
-    pthread_mutex_unlock(&lock);
-    
+
+    thread_status[tp->id] = 'z';
     printf("clearing thread[%d]\n", tp->id);
     close(tp->fd);
+
+    // unlock
+    pthread_mutex_unlock(&lock);
     pthread_exit(NULL);
 }
 
 int main(int argc, char** argv) {
 
     int i, j, k;
+    int ret;
     // capture ctrl+c to cleanup before exit
     signal(SIGINT, cleanup_before_exit);
 
@@ -148,12 +150,21 @@ int main(int argc, char** argv) {
         // lock
         pthread_mutex_lock(&lock);
         for(i=0; i<max_thread; ++i) {
+            if(thread_status[i] == 'z') {
+                pthread_join(thread[i], NULL);
+                thread_status[i] = 'a';
+            }
             // if any thread is available
             if(thread_status[i] == 'a' || thread_status[i] == 0) {
                 // assign i-th resouces to this new connection
                 tps[i].id = i;
                 tps[i].fd = j;
-                pthread_create(&thread[i], NULL, thread_network_action, &tps[i]);
+                ret = pthread_create(&thread[i], NULL, thread_network_action, &tps[i]);
+                if(ret) {
+                    printf("Fail to create thread\n");
+                    thread[i] = 'a';
+                    continue;
+                }
                 // set the status to occupied
                 thread_status[i] = 'o';
                 k = 1;

@@ -70,21 +70,21 @@ int reformat_request_header(char* req_buf) {
         }
     }
 
-
-
-    char* req = calloc(len+1, sizeof(char));
-    i = j = 0;
-    while(i != len) {
-        if(req_buf[i] != '\0') {
-            // copy those not \0 char only
-            req[j++] = req_buf[i];
-        }
+    // remove the \0 in the req_buf
+    i = 0;
+    // find the first \0
+    while(req_buf[i] != '\0')
         ++i;
+    j = i;
+    while(j != len) {
+        // if \0, skip
+        if(req_buf[j] == '\0') {
+            ++j;
+            continue;
+        }
+        req_buf[i++] = req_buf[j++];
     }
-    req[j++] = '\0';
-    bzero(req_buf, len);
-    strncpy(req_buf, req, j);
-    free(req);
+    req_buf[i] = '\0';
 
     return port;
 }

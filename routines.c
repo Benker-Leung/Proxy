@@ -67,10 +67,6 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
                 goto EXIT_PROXY_ROUTINES;
             }
 
-            // print the request header struct info
-            // print_header_status(&req_hs);
-            // printf("%s\n", req_buffer);
-
             // use different routines here
             switch(req_hs.http_method) {
                 case CONNECT:
@@ -97,14 +93,20 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
                     if(ret < 0)
                         goto EXIT_PROXY_ROUTINES;
 
-                    ret = connect_server(req_buffer, ret);
-                    if(ret == -1) {
-                        goto EXIT_PROXY_ROUTINES;
+                    // only connect to server for the first time
+                    if(serverfd < 0) {
+                        ret = connect_server(req_buffer, ret);
+                        if(ret == -1) {
+                            goto EXIT_PROXY_ROUTINES;
+                        }
+                        serverfd = ret;
                     }
-                    serverfd = ret;
                     
                     // call the routine
                     ret = no_cache_routine(clientfd, serverfd, req_buffer, res_buffer, buf_size, timeout_allow);
+                    if(ret == serverfd) {
+                        continue;
+                    }
                     close(serverfd);
                     goto EXIT_PROXY_ROUTINES;
 
@@ -235,7 +237,6 @@ int no_cache_routine(int clientfd, int serverfd, char* req_buffer, char* res_buf
                 break;
             else return -1;
         }
-        // printf("Response not ready, partly\n%s\n", res_buffer);
         sleep(1);
     }
 
@@ -250,22 +251,19 @@ int no_cache_routine(int clientfd, int serverfd, char* req_buffer, char* res_buf
 
 
     if(hs.is_chunked) {
-        ret = get_data_chunked(clientfd, serverfd);
+        ret = forward_data_chunked(clientfd, serverfd);
         if(ret < 0)
             return -1;
     }
     else if(hs.hv_data) {
-        ret = get_data_by_len(serverfd, req_buffer, hs.data_length);
-        if(ret < 0)
-            return -1;
-        ret = forward_packet(clientfd, req_buffer, hs.data_length);
+        ret = forward_data_length(clientfd, serverfd, res_buffer, buf_size, hs.data_length);
         if(ret < 0)
             return -1;
     }
 
-    // printf("======================== Response ===========================\n");
-    // printf("%s\n", res_buffer);
-    return -1;
+    if(hs.is_persistent)
+        return serverfd;
+    return 0;
 
 }
 
