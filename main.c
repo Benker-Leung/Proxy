@@ -32,10 +32,13 @@ struct thread_param {
     int fd;     // to store the connection file descriptor
     char request_header_buffer[HEADER_BUFFER_SIZE];   // only support 4KB header
     char response_header_buffer[HEADER_BUFFER_SIZE];
+    pthread_mutex_t *thread_lock;               // for synchronize open or close socket
 };
 
 /* init the global variables about thread and port */
 void init_proxy(int argc, char** argv) {
+
+    int i;
 
     max_thread = DEFAULT_MAX_THREAD;
 
@@ -70,7 +73,11 @@ void init_proxy(int argc, char** argv) {
     thread = calloc(max_thread, sizeof(pthread_t));
     // allocate thread_param arrays
     tps = calloc(max_thread, sizeof(struct thread_param));
-    
+
+    // assign the same lock to all thread_param object
+    for(i=0; i<max_thread; ++i) {
+        tps[i].thread_lock = &lock;
+    }
 
     log("Start proxy, listen at port [%d]\n", port);
     log("Max_thread supported:[%d]\n", max_thread);
