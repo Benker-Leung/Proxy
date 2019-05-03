@@ -117,19 +117,23 @@ int get_ip_by_host(char* host, char* ip_buf) {
     struct addrinfo* next;
     int status;
 
-    // remove "www."
-    if(strncmp(host, "www.", 4) == 0) {
-        host += 4;
-    }
-
     hints.ai_family = AF_INET;      // IPv4 only
     hints.ai_socktype = SOCK_STREAM;// TCP
     hints.ai_protocol = 0;          // TCP
 
+    // first try not remove 'www.'
     status = getaddrinfo(host, "http", &hints, &result);
+    // if error, try remove 'www.' and again
     if(status != 0) {
-        log("Invalid host: [%s], return: [%d]\n", host, status);
-        return -1;
+        // remove "www."
+        if(strncmp(host, "www.", 4) == 0) {
+            host += 4;
+        }
+        status = getaddrinfo(host, "http", &hints, &result);
+        if(status != 0) {
+            log("Invalid host: [%s], ErrMsg(%d):[%s]\n", host, status, gai_strerror(status));
+            return -1;
+        }
     }
 
     for(next = result; next != NULL; next = next->ai_next) {
@@ -208,7 +212,7 @@ int connect_server(char* req_buffer, int port) {
     }
     ret = get_ip_by_host(start, ip_buf);
     *end = '\r';
-    if(ret == -1)
+    if(ret < 0)
         // cannot solve ip
         return -1;
 
@@ -316,22 +320,35 @@ int forward_data_length(int clientfd, int serverfd, char* buf, int buf_size, int
     while(length > 0) {
         // read from server
         ret = read(serverfd, buf, buf_size);
-        printf("[%s]\n", buf);
+
         if(ret <= 0) {
             return -1;
         }
         length -= ret;
 
-        // printf("Fuck me!(%d)\n", ret);
-        
         // write to client
         ret = write(clientfd, buf, ret);
-        // printf("Can u Fuck me?(%d)\n", ret);
+
         if(ret <= 0) {
             return -1;
         }
         bzero(buf, buf_size);
     }
+    // char c;
+    // while(length > 0) {
+    //     ret = read(serverfd, &c, 1);
+    //     if(ret <= 0) {
+    //         return -1;
+    //     }
+        
+    //     length -= 1;
+    //     printf("Fuck you\n");
+    //     ret = write(clientfd, &c, 1);
+    //     printf("You can't fuck me\n");
+    //     if(ret <= 0) {
+    //         return -1;
+    //     }
+    // }
 
     // ret = sendfile(clientfd, serverfd, NULL, length);
     if(ret == -1)
@@ -376,7 +393,6 @@ int forward_data_chunked(int clientfd, int serverfd) {
         if(status == 4)
             break;
         
-
     }
     return 1;
 }

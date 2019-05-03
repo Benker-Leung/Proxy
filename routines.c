@@ -25,7 +25,7 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
     // bzero(req_buffer, buf_size);    // to identify http request header attribute
     // bzero(res_buffer, buf_size);    // to identify http response header attribute
 
-    struct timeval timeout = {10, 0};
+    struct timeval timeout = {30, 0};
     ret = setsockopt(clientfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(struct timeval));
     if(ret)
         return -1;
@@ -87,14 +87,13 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
                     ret = connect_https_server(req_buffer);
                     if(ret == -1) {
                         // printf("Error in handling https request id:[%d]\n", request_id);
-                        printf("%s\n", req_buffer);
+                        // printf("%s\n", req_buffer);
                         ret = -1;
                         goto EXIT_PROXY_ROUTINES;
                     }
                     serverfd = ret;
                     // call the routine
                     ret = https_routine(clientfd, serverfd, req_buffer, res_buffer, buf_size, timeout_allow);
-                    close(serverfd);
                     goto EXIT_PROXY_ROUTINES;
 
                 case GET:
@@ -105,8 +104,8 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
                     if(ret < 0)
                         goto EXIT_PROXY_ROUTINES;
 
-                    printf("======================= Request =======================\n");
-                    printf("%s", req_buffer);
+                    // printf("======================= Request =======================\n");
+                    // printf("%s", req_buffer);
                     // only connect to server for the first time
                     if(serverfd < 0) {
                         ret = connect_server(req_buffer, ret);
@@ -116,24 +115,21 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
                         serverfd = ret;
                         ret = setsockopt(serverfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(struct timeval));
                         if(ret) {
-                            close(serverfd);
                             ret = -1;
                             goto EXIT_PROXY_ROUTINES;
                         }
                         ret = setsockopt(serverfd, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(struct timeval));
                         if(ret) {
-                            close(serverfd);
                             ret = -1;
                             goto EXIT_PROXY_ROUTINES;
                         }
                     }
                     
                     // call the routine
-                    ret = no_cache_routine(clientfd, serverfd, req_buffer, res_buffer, buf_size, timeout_allow);
+                    ret = no_cache_routine(clientfd, serverfd, req_buffer, res_buffer, buf_size, timeout_allow, request_id);
                     if(ret == serverfd) {
                         continue;
                     }
-                    close(serverfd);
                     goto EXIT_PROXY_ROUTINES;
 
                 default:
@@ -161,6 +157,8 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
         }
     }
 EXIT_PROXY_ROUTINES:
+    if(serverfd > 0)
+        close(serverfd);
     return ret;
 }
 
@@ -241,11 +239,15 @@ int https_routine(int clientfd, int serverfd, char* req_buffer, char* res_buffer
 }
 
 /* routine for http request without cache */
-int no_cache_routine(int clientfd, int serverfd, char* req_buffer, char* res_buffer, int buf_size, char timeout_allow) {
+int no_cache_routine(int clientfd, int serverfd, char* req_buffer, char* res_buffer, int buf_size, char timeout_allow, int thread_id) {
 
     int ret;        // record the return value result
+    int is_persistent = 0;
     struct header_status hs;
 
+    bzero(&hs, sizeof(struct header_status));
+    ret = init_header_status(&hs, req_buffer, REQUEST);
+    is_persistent = hs.is_persistent;
 
     // forward the request header to server
     ret = forward_packet(serverfd, req_buffer, strlen(req_buffer));
@@ -253,22 +255,15 @@ int no_cache_routine(int clientfd, int serverfd, char* req_buffer, char* res_buf
         return -1;
 
     // clear buffer
-    clear_buffer(req_buffer, res_buffer, buf_size);
+    bzero(res_buffer, buf_size);
 
-    // // get response header
-    // while(1) {
-    //     ret = get_reqres_header(serverfd, res_buffer, buf_size, -1);
-    //     if(ret != -EAGAIN) {
-    //         if(ret == 0)
-    //             break;
-    //         else return -1;
-    //     }
-    //     sleep(1);
-    // }
     ret = get_reqres_header(serverfd, res_buffer, buf_size, 1);
     if(ret < 0)
         return -1;
-    printf("======================= Response =======================\n");
+
+    printf("======================= Request [%d] =======================\n", thread_id);
+    printf("%s", req_buffer);
+    printf("======================= Response [%d] =======================\n", thread_id);
     printf("%s", res_buffer);
 
     // forward the response header to client
@@ -277,6 +272,7 @@ int no_cache_routine(int clientfd, int serverfd, char* req_buffer, char* res_buf
         return -1;
 
     bzero(&hs, sizeof(struct header_status));
+
     // parse the response header
     ret = init_header_status(&hs, res_buffer, RESPONSE);
 
@@ -291,8 +287,10 @@ int no_cache_routine(int clientfd, int serverfd, char* req_buffer, char* res_buf
             return -1;
     }
 
-    if(hs.is_persistent)
+    if(is_persistent) {
         return serverfd;
+    }
+
     return 0;
 
 }

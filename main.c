@@ -122,13 +122,12 @@ void* thread_network_action(void *args) {
         else
             printf("Error in proxy routine, thread[%d]\n", tp->id);
     }
-
+    close(tp->fd);
     // lock
     pthread_mutex_lock(&lock);
 
     thread_status[tp->id] = 'z';
     printf("clearing thread[%d], release fd[%d]\n", tp->id, tp->fd);
-    close(tp->fd);
 
     // unlock
     pthread_mutex_unlock(&lock);
@@ -170,6 +169,9 @@ int main(int argc, char** argv) {
                 if(ret) {
                     printf("Fail to create thread\n");
                     thread[i] = 'a';
+                    
+                    // unlock
+                    pthread_mutex_unlock(&lock);
                     continue;
                 }
                 // set the status to occupied

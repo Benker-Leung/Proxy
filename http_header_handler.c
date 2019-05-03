@@ -70,6 +70,17 @@ int reformat_request_header(char* req_buf) {
         }
     }
 
+    // // DEBUG
+    // // remove Accept-Encoding ??
+    // start = strcasestr(req_buf+j+i, "Accept-Encoding:");
+    // i=0;
+    // if(start) {
+    //     while(start[i] != '\n'){
+    //         start[i++] = '\0';
+    //     }
+    //     start[i] = '\0';
+    // }
+
     // remove the \0 in the req_buf
     i = 0;
     // find the first \0
