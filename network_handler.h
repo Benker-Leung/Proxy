@@ -68,7 +68,7 @@ int get_reqres_header(int fd, char* buf, int size, int request_id);
  *  Return (+ve) ==> connected serverfd if success, -1 if fail 
  *
  */
-int connect_server(char* req_buffer, int port);
+int connect_server(char* req_buffer, int port, char* hostname);
 
 
 /**

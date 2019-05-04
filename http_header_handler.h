@@ -45,4 +45,11 @@ int is_chunked(char *req_buf);
  */
 int get_request_method(char* req_buf);
 
+/**
+ *  This function determine whether the host is the same
+ * 
+ *  Return 1 if same, 0 if differ, -1 if fail
+ */
+int is_same_hostname(char* req_buffer, char* hostname);
+
 #endif

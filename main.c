@@ -15,7 +15,7 @@
 
 
 #define DEFAULT_MAX_THREAD 3
-#define HEADER_BUFFER_SIZE 4096
+#define HEADER_BUFFER_SIZE 2048
 
 /* global variables used */
 struct thread_param* tps;   // thread_param array
@@ -30,8 +30,10 @@ int proxyfd;               // proxyfd
 struct thread_param {
     int id;     // to distinguish thread_id
     int fd;     // to store the connection file descriptor
-    char request_header_buffer[HEADER_BUFFER_SIZE];   // only support 4KB header
-    char response_header_buffer[HEADER_BUFFER_SIZE];
+    // char request_header_buffer[HEADER_BUFFER_SIZE];   // only support 4KB header
+    // char response_header_buffer[HEADER_BUFFER_SIZE];
+    char* request_header_buffer;   // only support 4KB header
+    char* response_header_buffer;
     pthread_mutex_t *thread_lock;               // for synchronize open or close socket
 };
 
@@ -67,16 +69,36 @@ void init_proxy(int argc, char** argv) {
     }
 
     // allocate and init the status to available 'a'
-    thread_status = malloc(sizeof(char) * max_thread);
+    thread_status = calloc(max_thread, sizeof(char));
+    if(thread_status == NULL) {
+        printf("Cannot allocate memory for thread_status\n");
+        exit(EXIT_FAILURE);
+    }
+
     memset(thread_status, 'a', max_thread);
     // allocate and init thread array
     thread = calloc(max_thread, sizeof(pthread_t));
+    if(thread == NULL) {
+        printf("Cannot allocate memory for thread\n");
+        exit(EXIT_FAILURE);
+    }
     // allocate thread_param arrays
     tps = calloc(max_thread, sizeof(struct thread_param));
+    if(tps == NULL) {
+        printf("Cannot allocate memory for thread_params\n");
+        exit(EXIT_FAILURE);
+    }
 
     // assign the same lock to all thread_param object
     for(i=0; i<max_thread; ++i) {
         tps[i].thread_lock = &lock;
+        tps[i].request_header_buffer = calloc(HEADER_BUFFER_SIZE, sizeof(char));
+        tps[i].response_header_buffer = calloc(HEADER_BUFFER_SIZE, sizeof(char));
+        if(tps[i].request_header_buffer == NULL || tps[i].response_header_buffer == NULL) {
+            printf("Cannot allocate memory for tps header buffer\n");
+            exit(EXIT_FAILURE);
+        }
+        clear_buffer(tps[i].request_header_buffer, tps[i].response_header_buffer, HEADER_BUFFER_SIZE);
     }
 
     log("Start proxy, listen at port [%d]\n", port);
@@ -118,9 +140,9 @@ void* thread_network_action(void *args) {
     bzero(tp->request_header_buffer, HEADER_BUFFER_SIZE);
     if((status = proxy_routines(tp->fd, tp->request_header_buffer, tp->response_header_buffer, HEADER_BUFFER_SIZE, tp->id, 10)) != 0) {
         if(status == -EAGAIN)
-            printf("Time out for thread[%d]\n", tp->id);
+            printf("Detected Time out for thread[%d]\n", tp->id);
         else
-            printf("Error in proxy routine, thread[%d]\n", tp->id);
+            printf("Error in proxy routine, thread[%d], return code from routine[%d]\n", tp->id, status);
     }
     close(tp->fd);
     // lock
@@ -187,7 +209,7 @@ int main(int argc, char** argv) {
             close(j);
             printf("No thread available now\n");
             log("Too many connections, max_thread num:[%d] may not handle\n", max_thread);
-            sleep(1);
+            sleep(3);
         }
     }
 

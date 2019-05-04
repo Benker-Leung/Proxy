@@ -15,6 +15,7 @@ int reformat_request_header(char* req_buf) {
     int i, j;
     char* start;
     char* end;
+    char* first_line_end;
 
     int port_offset = 0;
     int port_len = 0;
@@ -49,18 +50,24 @@ int reformat_request_header(char* req_buf) {
         return -1;
     }
 
-    
+    // only remove the http in the first line
+    first_line_end = req_buf;
+    while(*first_line_end != '\r') {
+        if(*first_line_end == '\n' || *first_line_end == '\0')
+            return -1;
+        ++first_line_end;
+    }
+    *first_line_end = '\0';
     // remove http://.... to \0, in order words, it remains the uri
     i = 7+host_len;
     j = 0;
     start = strcasestr(req_buf, "http://");
-    if(!start) {
-        log("Wrong HTTP header syntax\n");
-        return -1;
+    if(start) {
+        while(j != i) {
+            start[j++] = '\0';
+        }
     }
-    while(j != i) {
-        start[j++] = '\0';
-    }
+    *first_line_end = '\r';
 
     // remove the additional port info in HOST:
     if(port_len > 0) {
@@ -97,6 +104,7 @@ int reformat_request_header(char* req_buf) {
     }
     req_buf[i] = '\0';
 
+
     return port;
 }
 
@@ -109,7 +117,7 @@ int get_content_length(char* buf) {
 
     start = end = strcasestr(buf, "Content-Length:");
     if(!start) {
-        log("No content_length\n");
+        // log("No content_length\n");
         return -1;
     }
     start += 16;
@@ -195,5 +203,38 @@ int get_request_method(char* req_buf) {
     log("HTTP Method not supported by this proxy\n");
     return NOT_SUPPORTED;
 
+}
+
+/* determine whether the host is the same */
+int is_same_hostname(char* req_buffer, char* hostname) {
+
+    char* start;
+    char* end;
+    int ret;
+
+    start = end = strcasestr(req_buffer, "Host:");
+    if(start) {
+        while(*end != '\r' && *end != '\0')
+            ++end;
+        *end = '\0';
+        start += 6;
+        // printf("Original host[%s], New host[%s]\n", hostname, start);
+        ret = strcmp(start, hostname);
+        if(ret == 0) {
+            // same
+            *end = '\r';
+            return 1;
+        }
+        else {
+            strncpy(hostname, start, 255);
+            *end = '\r';
+            // different
+            return 0;
+        }
+    }
+    else {
+        // fail to parse host
+        return -1;
+    }
 }
 

@@ -165,12 +165,14 @@ int get_reqres_header(int fd, char* buf, int size, int request_id) {
             // not ready to read
             if(errno == EAGAIN) {
                 // printf("Not ready to read\n");
+                // printf("***\n");
                 return -EAGAIN;
             }
             // other error
             else {
-                log("Error in reading, errno: [%d], request [%d]\n", errno, request_id);
-                return -1;
+                // log("Error in reading, errno: [%d], request [%d]\n", errno, request_id);
+                // return -1;
+                continue;
             }
         }
         buf[i++] = r;
@@ -192,7 +194,7 @@ int get_reqres_header(int fd, char* buf, int size, int request_id) {
 }
 
 /* get the server fd given req_buffer if success */
-int connect_server(char* req_buffer, int port) {
+int connect_server(char* req_buffer, int port, char* hostname) {
 
     char* start;
     char* end;
@@ -206,6 +208,7 @@ int connect_server(char* req_buffer, int port) {
             ++end;
         *end = '\0';
         start += 6;
+        strncpy(hostname, start, 255);
     }
     else {
         // fail to parse host
@@ -285,7 +288,7 @@ int forward_packet(int serverfd, char* buf, int len) {
 
     while(len != 0) {
         ret = write(serverfd, buf, len);
-        if(ret < 0) {
+        if(ret <= 0) {
             log("Cannot forward request to server, errno: [%d]\n", errno);
             return ret;
         }
@@ -370,7 +373,7 @@ int forward_data_chunked(int clientfd, int serverfd) {
     while(1) {
         
         ret = read(serverfd, &c, 1);
-        if(ret < 0)
+        if(ret <= 0)
             return -1;
 
         switch(c) {
@@ -386,9 +389,9 @@ int forward_data_chunked(int clientfd, int serverfd) {
                 status = 0;
                 break;
         }
+        
         ret = write(clientfd, &c, 1);
-
-        if(ret < 0)
+        if(ret <= 0)
             return -1;
 
         if(status == 4)
@@ -444,12 +447,16 @@ int init_header_status(struct header_status* hs, char* req_buf, enum HTTP_HEADER
     // check content-length if data is not chunked
     else if(ret == 0) {
         ret = get_content_length(req_buf);
+        // if no content-length
         if(ret == -1) {
             hs->data_length = 0;
             hs->hv_data = 0;
+        } 
+        // if ot content-length
+        else {
+            hs->data_length = ret;
+            hs->hv_data = 1;
         }
-        hs->data_length = ret;
-        hs->hv_data = 1;
     }
 
     return 0;
