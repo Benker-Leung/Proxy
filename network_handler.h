@@ -58,6 +58,7 @@ int get_ip_by_host(char* host, char* ip_buf);
  *  Return -EAGAIN if not ready to read
  *         -1 if error, check errno
  *          0 if success
+ *          1 if nothing read, consider as timeout
  */
 int get_reqres_header(int fd, char* buf, int size, int request_id);
 

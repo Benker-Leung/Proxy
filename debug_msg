@@ -1,0 +1,2274 @@
+Allocated thread[0], fd[4] to new connection
+======================= Request [0] =======================
+GET / HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+Upgrade-Insecure-Requests: 1
+
+======================= Response [0] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: text/html
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sun, 18 Feb 2018 08:29:03 GMT
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df32e21d1db-HKG
+Content-Encoding: gzip
+
+Same hostname detected
+======================= Request [0] =======================
+GET /cdn-cgi/apps/head/FsxV50r-y2qwdePUBA8uPsyfAE4.js HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [0] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: application/javascript; charset=utf-8
+Content-Length: 2184
+Connection: keep-alive
+x-amz-id-2: zfUR+HBmIo8v6z6fxvxS0EQfN1sEHfso2s1ms0vriftVovwCO0CL3F67t1q/IRi522T4gI2v58s=
+x-amz-request-id: AF8305E2E04CAD0B
+Cache-Control: public, max-age=31536000
+Content-Encoding: gzip
+Last-Modified: Thu, 20 Jul 2017 22:51:02 GMT
+x-amz-version-id: N5glTVnFUdO7XZafXd473u.YL6afhcmX
+ETag: "6a3c5244935b36f90163ee7000747857"
+CF-Cache-Status: HIT
+Expires: Sun, 03 May 2020 08:42:07 GMT
+Accept-Ranges: bytes
+Alt-Svc: h2=":443"; ma=60
+Vary: Accept-Encoding
+Server: cloudflare
+CF-RAY: 4d192df38fa9d1db-HKG
+
+Same hostname detected
+======================= Request [0] =======================
+GET /cdn-cgi/apps/body/A0zR8aXOlTLO_95Dgsm9Ba4N--s.js HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [0] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: application/javascript; charset=utf-8
+Content-Length: 5573
+Connection: keep-alive
+x-amz-id-2: aPOT6qoa8emlgWWLxqCKMLdX5FJoe2/rwcSJdcYtZLpDeHHufymLQ/vItJO5tT/vXtQA0KbQp+I=
+x-amz-request-id: C39286CFE3EA2729
+Cache-Control: public, max-age=31536000
+Content-Encoding: gzip
+Last-Modified: Thu, 20 Jul 2017 22:51:01 GMT
+x-amz-version-id: z14DSeJgKh2PmNrbLFoGfBxRpt6HRdYK
+ETag: "d382386b3634e7fdfe216730ea01405a"
+CF-Cache-Status: HIT
+Expires: Sun, 03 May 2020 08:42:07 GMT
+Accept-Ranges: bytes
+Alt-Svc: h2=":443"; ma=60
+Vary: Accept-Encoding
+Server: cloudflare
+CF-RAY: 4d192df3d8add1db-HKG
+
+Same hostname detected
+======================= Request [0] =======================
+GET /favicon.ico HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [0] =======================
+HTTP/1.1 404 Not Found
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: text/html; charset=iso-8859-1
+Transfer-Encoding: chunked
+Connection: keep-alive
+Vary: Accept-Encoding
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df429dad1db-HKG
+Content-Encoding: gzip
+
+Allocated thread[1], fd[5] to new connection
+======================= Request [1] =======================
+GET /jq1/index.php HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+Upgrade-Insecure-Requests: 1
+
+======================= Response [1] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: text/html
+Transfer-Encoding: chunked
+Connection: keep-alive
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Vary: Accept-Encoding
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df46daed18b-HKG
+Content-Encoding: gzip
+
+Same hostname detected
+Allocated thread[2], fd[7] to new connection
+Allocated thread[3], fd[10] to new connection
+Allocated thread[4], fd[11] to new connection
+Allocated thread[5], fd[12] to new connection
+Allocated thread[6], fd[13] to new connection
+Allocated thread[7], fd[14] to new connection
+Allocated thread[8], fd[15] to new connection
+Allocated thread[9], fd[17] to new connection
+======================= Request [1] =======================
+GET /css/reset.css HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [1] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: text/css
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Thu, 21 Nov 2013 06:09:50 GMT
+ETag: "349-4eba9becdc780-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df5495bd18b-HKG
+
+======================= Request [2] =======================
+GET /css/styles.css HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [2] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: text/css
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Thu, 25 Jun 2015 04:18:38 GMT
+ETag: "61e6-5194feaec0380-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df559c2d1c7-HKG
+
+======================= Request [6] =======================
+GET /css/onebyone.css HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [6] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: text/css
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Thu, 21 Nov 2013 06:09:50 GMT
+ETag: "563-4eba9becdc780-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df56ceed1eb-HKG
+
+======================= Request [5] =======================
+GET /jq1/js10/demo.css HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [5] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: text/css
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Thu, 21 Nov 2013 05:51:37 GMT
+ETag: "1b1-4eba97da7ec40-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df569fbd1c7-HKG
+
+======================= Request [8] =======================
+GET /jq1/sooperfish.css HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [8] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: text/css
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Thu, 21 Nov 2013 05:51:35 GMT
+ETag: "890-4eba97d8967c0-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df57e50d1db-HKG
+
+======================= Request [3] =======================
+GET /css/print.css HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [3] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: text/css
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Thu, 21 Nov 2013 06:09:50 GMT
+ETag: "117-4eba9becdc780-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df57f87d1d7-HKG
+
+======================= Request [9] =======================
+GET /jq1/sooperfish-theme-large.css HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [9] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: text/css
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Thu, 21 Nov 2013 05:51:35 GMT
+ETag: "3ce-4eba97d8967c0-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df57f85d1d7-HKG
+
+======================= Request [7] =======================
+GET /css/coda-slider-2.0.css HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [7] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: text/css
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Thu, 21 Nov 2013 06:09:50 GMT
+ETag: "aa6-4eba9becdc780-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df57f27d1f7-HKG
+
+======================= Request [4] =======================
+GET /jq1/js10/lightbox/css/jquery.lightbox-0.5.css HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [4] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: text/css
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Thu, 21 Nov 2013 05:51:40 GMT
+ETag: "948-4eba97dd5b300-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df58980d187-HKG
+
+Same hostname detected
+Same hostname detected
+Same hostname detected
+Same hostname detected
+Same hostname detected
+Same hostname detected
+Same hostname detected
+Same hostname detected
+Same hostname detected
+======================= Request [7] =======================
+GET /jq1/images/banner2.png HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [7] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: image/png
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Thu, 21 Nov 2013 05:51:35 GMT
+ETag: "b7f5-4eba97d8967c0-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df5b81ad1f7-HKG
+
+======================= Request [9] =======================
+GET /cms/upload/uploader/admin/2898slogo4.png HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [9] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: image/png
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Wed, 23 Oct 2013 14:01:50 GMT
+ETag: "126a-4e968f568cf80-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df5b863d1d7-HKG
+
+======================= Request [4] =======================
+GET /cms/upload/uploader/admin/4886slogo1.png HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [4] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: image/png
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Wed, 23 Oct 2013 14:02:00 GMT
+ETag: "2ee9-4e968f6016600-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df5ba3ed187-HKG
+
+Allocated thread[10], fd[18] to new connection
+======================= Request [2] =======================
+GET /images/logo.png HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [2] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: image/png
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Mon, 11 Apr 2016 06:49:39 GMT
+ETag: "ff15-5302ff2d8d255-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df5bb08d1c7-HKG
+
+======================= Request [8] =======================
+GET /cms/upload/uploader/admin/6855slogo2.png HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [8] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: image/png
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Wed, 23 Oct 2013 14:01:57 GMT
+ETag: "1c95-4e968f5d39f40-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df5bf3ed1db-HKG
+
+======================= Request [3] =======================
+GET /cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [3] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: application/javascript
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Tue, 30 Apr 2019 16:26:05 GMT
+ETag: W/"5cc8771d-4d7"
+Alt-Svc: h2=":443"; ma=60
+Vary: Accept-Encoding
+Server: cloudflare
+CF-RAY: 4d192df5b867d1d7-HKG
+X-Frame-Options: SAMEORIGIN
+Expires: Mon, 06 May 2019 08:42:07 GMT
+Cache-Control: max-age=172800
+Cache-Control: public
+Content-Encoding: gzip
+
+======================= Request [1] =======================
+GET /cms/upload/uploader/admin/3125logo1.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [1] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Wed, 23 Oct 2013 14:01:42 GMT
+ETag: "dcd-4e968f4eebd80-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df5bb19d18b-HKG
+
+======================= Request [6] =======================
+GET /cms/upload/uploader/admin/2020slogo3.png HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [6] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: image/png
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Wed, 23 Oct 2013 14:01:54 GMT
+ETag: "28a8-4e968f5a5d880-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df5be88d1eb-HKG
+
+Allocated thread[11], fd[25] to new connection
+Allocated thread[12], fd[26] to new connection
+======================= Request [10] =======================
+GET /cms/upload/uploader/admin/339wisenew.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [10] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sun, 20 Oct 2013 14:15:58 GMT
+ETag: "6f2-4e92cce6e2380-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df5ed8ad1ef-HKG
+
+Same hostname detected
+======================= Request [5] =======================
+GET /jq1/images/no.png HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [5] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: image/png
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Thu, 21 Nov 2013 05:51:36 GMT
+ETag: "39c-4eba97d98aa00-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df5cb60d1c7-HKG
+
+Same hostname detected
+======================= Request [10] =======================
+GET /cms/upload/uploader/admin/5839sep_icon_4369.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [10] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Wed, 10 Jun 2020 05:17:45 GMT
+ETag: "2472-5a7b3f6d7ddc0-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df60dfad1ef-HKG
+
+======================= Request [12] =======================
+GET /cms/upload/uploader/admin/2732ScreenClip.png HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [12] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: image/png
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Thu, 14 Jan 2016 02:03:44 GMT
+ETag: "ea67-52941b2448000-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df60868d203-HKG
+
+Same hostname detected
+======================= Request [1] =======================
+GET /cms/upload/uploader/admin/63631p.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [1] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Thu, 15 Oct 2020 04:52:52 GMT
+ETag: "27ba9-5b1ae6bac0a00-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df62d19d18b-HKG
+
+Same hostname detected
+Same hostname detected
+======================= Request [11] =======================
+GET /cms/upload/uploader/admin/5804chsc.gif HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [11] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: image/gif
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Thu, 07 Nov 2013 06:15:20 GMT
+ETag: "36c3-4ea9030b1ee00-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df62ac9d1fb-HKG
+
+======================= Request [6] =======================
+GET /cms/upload/uploader/admin/562IMG_6638pp.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [6] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Thu, 08 Oct 2020 11:49:24 GMT
+ETag: "23337-5b1276c6e2540-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df65925d1eb-HKG
+
+Same hostname detected
+======================= Request [8] =======================
+GET /jq1/images/bg.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [8] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Thu, 21 Nov 2013 05:51:35 GMT
+ETag: "97ab-4eba97d8967c0-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df669a7d1db-HKG
+
+Same hostname detected
+======================= Request [9] =======================
+GET /js2/example5.php HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+Upgrade-Insecure-Requests: 1
+
+======================= Response [9] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: text/html
+Transfer-Encoding: chunked
+Connection: keep-alive
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Vary: Accept-Encoding
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df629fcd1d7-HKG
+Content-Encoding: gzip
+
+Same hostname detected
+Same hostname detected
+======================= Request [10] =======================
+GET /cms/upload/uploader/admin/2097IMG_20190323_103321%E5%BE%97%E7%8D%8E%E7%9B%B8pp.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [10] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sat, 03 Oct 2020 11:09:03 GMT
+ETag: "3356c-5b0c246ea6640-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df67fe0d1ef-HKG
+
+Allocated thread[13], fd[28] to new connection
+Same hostname detected
+======================= Request [11] =======================
+GET /cms/upload/banner/4566banner.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [11] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Mon, 13 May 2013 05:54:39 GMT
+ETag: "a27a-4dc9326f905c0-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:07 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df6dd11d1fb-HKG
+
+======================= Request [4] =======================
+GET /jq1/test.php HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+Upgrade-Insecure-Requests: 1
+
+======================= Response [4] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: text/html
+Transfer-Encoding: chunked
+Connection: keep-alive
+Vary: Accept-Encoding
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df68df1d187-HKG
+Content-Encoding: gzip
+
+Fail to connect to server[www.ppandp.de]
+Error in proxy routine, thread[13], return code from routine[-1]
+clearing thread[13], release fd[28]
+Not same hostname detected!
+GET /404.html HTTP/1.1
+Host: www.ppandp.de
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/
+DNT: 1
+Connection: keep-alive
+
+
+Fail to connect host[www.ppandp.de]
+Error in proxy routine, thread[7], return code from routine[-1]
+clearing thread[7], release fd[14]
+Not same hostname detected!
+GET /404.html HTTP/1.1
+Host: www.ppandp.de
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/
+DNT: 1
+Connection: keep-alive
+
+
+======================= Request [5] =======================
+GET /jq1/imgslider/slider2.1.php HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+Upgrade-Insecure-Requests: 1
+
+======================= Response [5] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: text/html
+Transfer-Encoding: chunked
+Connection: keep-alive
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Vary: Accept-Encoding
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df6beaad1c7-HKG
+Content-Encoding: gzip
+
+Fail to connect host[www.ppandp.de]
+Error in proxy routine, thread[9], return code from routine[-1]
+Allocated thread[7], fd[31] to new connection
+clearing thread[9], release fd[17]
+Fail to connect to server[www.ppandp.de]
+Error in proxy routine, thread[7], return code from routine[-1]
+clearing thread[7], release fd[31]
+Allocated thread[7], fd[14] to new connection
+======================= Request [3] =======================
+GET /js2/example3.php HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+Upgrade-Insecure-Requests: 1
+
+======================= Response [3] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:07 GMT
+Content-Type: text/html
+Transfer-Encoding: chunked
+Connection: keep-alive
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Vary: Accept-Encoding
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192df6bc63d1d7-HKG
+Content-Encoding: gzip
+
+Fail to connect to server[www.ppandp.de]
+Error in proxy routine, thread[7], return code from routine[-1]
+clearing thread[7], release fd[14]
+Not same hostname detected!
+GET /404.html HTTP/1.1
+Host: www.ppandp.de
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/
+DNT: 1
+Connection: keep-alive
+
+
+Fail to connect host[www.ppandp.de]
+Error in proxy routine, thread[4], return code from routine[-1]
+clearing thread[4], release fd[11]
+Not same hostname detected!
+GET /404.html HTTP/1.1
+Host: www.ppandp.de
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/
+DNT: 1
+Connection: keep-alive
+
+
+Fail to connect host[www.ppandp.de]
+Error in proxy routine, thread[5], return code from routine[-1]
+clearing thread[5], release fd[12]
+Allocated thread[4], fd[17] to new connection
+Not same hostname detected!
+GET /404.html HTTP/1.1
+Host: www.ppandp.de
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/
+DNT: 1
+Connection: keep-alive
+
+
+Fail to connect host[www.ppandp.de]
+Error in proxy routine, thread[3], return code from routine[-1]
+clearing thread[3], release fd[10]
+Fail to connect to server[www.ppandp.de]
+Error in proxy routine, thread[4], return code from routine[-1]
+clearing thread[4], release fd[17]
+Not same hostname detected!
+GET /404.html HTTP/1.1
+Host: www.ppandp.de
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/
+DNT: 1
+Connection: keep-alive
+
+
+Fail to connect host[www.ppandp.de]
+Error in proxy routine, thread[8], return code from routine[-1]
+clearing thread[8], release fd[15]
+Same hostname detected
+Same hostname detected
+Same hostname detected
+Same hostname detected
+Allocated thread[3], fd[11] to new connection
+Allocated thread[4], fd[10] to new connection
+Allocated thread[5], fd[12] to new connection
+Same hostname detected
+Same hostname detected
+======================= Request [10] =======================
+GET /favicon.ico HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [10] =======================
+HTTP/1.1 404 Not Found
+Date: Sat, 04 May 2019 08:42:08 GMT
+Content-Type: text/html; charset=iso-8859-1
+Transfer-Encoding: chunked
+Connection: keep-alive
+Vary: Accept-Encoding
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:08 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192dfb3c32d1ef-HKG
+Content-Encoding: gzip
+
+Same hostname detected
+Allocated thread[7], fd[14] to new connection
+Allocated thread[8], fd[17] to new connection
+Allocated thread[9], fd[20] to new connection
+======================= Request [6] =======================
+GET /cms/upload/banner/L-hl.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [6] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:08 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Fri, 02 Oct 2020 04:56:34 GMT
+ETag: "80b54-5b0a8f4fe92c0-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:08 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192dfb3c69d1eb-HKG
+
+======================= Request [12] =======================
+GET /cms/upload/banner/L-HKI%20Sdtudent.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [12] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:08 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sat, 26 Sep 2020 07:51:03 GMT
+ETag: "7c5d5-5b032b1ef59e0-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:08 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192dfb4d53d203-HKG
+
+Allocated thread[13], fd[21] to new connection
+======================= Request [1] =======================
+GET /cms/upload/banner/L-sn.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [1] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:08 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Thu, 15 Oct 2020 04:57:16 GMT
+ETag: "3e1f6-5b1ae7b683cc0-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:08 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192dfb3a72d18b-HKG
+
+Allocated thread[14], fd[31] to new connection
+======================= Request [11] =======================
+GET /cms/upload/banner/L-Info%20day%202018.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [11] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:08 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sat, 26 Sep 2020 07:28:46 GMT
+ETag: "5f12f-5b032623d30c0-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:08 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192dfb4c8dd1fb-HKG
+
+======================= Request [4] =======================
+GET /cms/upload/banner/L-flag%20rising2018.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [4] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:08 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sat, 26 Sep 2020 07:14:26 GMT
+ETag: "46e22-5b0322ef9c700-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:08 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192dfb4caad1fb-HKG
+
+Allocated thread[15], fd[32] to new connection
+Allocated thread[16], fd[34] to new connection
+Allocated thread[17], fd[37] to new connection
+======================= Request [10] =======================
+GET /jq1/css/tab_menu.css HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/test.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [10] =======================
+HTTP/1.1 404 Not Found
+Date: Sat, 04 May 2019 08:42:08 GMT
+Content-Type: text/html; charset=iso-8859-1
+Transfer-Encoding: chunked
+Connection: keep-alive
+Vary: Accept-Encoding
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:08 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192dfbce9cd1ef-HKG
+Content-Encoding: gzip
+
+======================= Request [3] =======================
+GET /cms/upload/banner/L-%E5%9C%96%E7%89%871%E5%8D%93%E8%B6%8A%E4%BB%8A%E5%A4%A9.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [3] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:08 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sat, 26 Sep 2020 07:12:32 GMT
+ETag: "7f772-5b032282abc40-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:08 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192dfbce38d1eb-HKG
+
+======================= Request [2] =======================
+GET /cms/upload/banner/L-speech.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [2] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:08 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sat, 26 Sep 2020 08:31:22 GMT
+ETag: "85f90-5b033421469c0-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:08 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192dfb4f96d1c7-HKG
+
+======================= Request [5] =======================
+GET /cms/upload/banner/L-camp2.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [5] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:08 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sun, 26 Apr 2020 10:16:59 GMT
+ETag: "3fb2e-5a42ee6134a20-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:08 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192dfc1e93d18f-HKG
+
+======================= Request [8] =======================
+GET /cms/upload/banner/L-am.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [8] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:08 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sat, 26 Sep 2020 08:13:51 GMT
+ETag: "68112-5b0330375f4e0-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:08 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192dfc28dcd1f7-HKG
+
+======================= Request [7] =======================
+GET /cms/upload/banner/L-SA3.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [7] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:08 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sun, 26 Apr 2020 10:19:09 GMT
+ETag: "39c0f-5a42eeddcd1e0-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:08 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192dfc28f5d19b-HKG
+
+======================= Request [9] =======================
+GET /jq1/css/menu.css HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/test.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [9] =======================
+HTTP/1.1 404 Not Found
+Date: Sat, 04 May 2019 08:42:08 GMT
+Content-Type: text/html; charset=iso-8859-1
+Transfer-Encoding: chunked
+Connection: keep-alive
+Vary: Accept-Encoding
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:08 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192dfc4caed1cb-HKG
+Content-Encoding: gzip
+
+======================= Request [14] =======================
+GET /cms/upload/banner/L-sci%20trip.png HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [14] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:08 GMT
+Content-Type: image/png
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sun, 27 Sep 2020 11:55:51 GMT
+ETag: "474f93-5b04a3b3c7680-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:08 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192dfc4883d1ef-HKG
+
+======================= Request [13] =======================
+GET /cms/upload/banner/L-AusStudyTour.jpg HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [13] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:08 GMT
+Content-Type: image/jpeg
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sun, 26 Apr 2020 12:36:18 GMT
+ETag: "30776-5a430d85b0b00-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:08 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192dfc7833d18f-HKG
+
+======================= Request [15] =======================
+GET /cms/upload/banner/L-vb.png HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [15] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:08 GMT
+Content-Type: image/png
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sun, 27 Sep 2020 12:18:22 GMT
+ETag: "40aa5a-5b04a8bbea1a0-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:08 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192dfca99ed1eb-HKG
+
+======================= Request [16] =======================
+GET /cms/upload/banner/L-sw.png HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [16] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:08 GMT
+Content-Type: image/png
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sun, 27 Sep 2020 12:32:58 GMT
+ETag: "173285-5b04abff73900-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:08 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192dfcba0fd1eb-HKG
+
+======================= Request [17] =======================
+GET /cms/upload/banner/L-2017%E5%B9%B4%E5%A4%9A%E5%85%83%E5%8D%93%E8%B6%8A%E7%8D%8E%E5%AD%B8%E9%87%91%E9%A0%92%E7%8D%8E%E5%85%B8%E7%A6%AE.png HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [17] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:08 GMT
+Content-Type: image/png
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sun, 27 Sep 2020 11:38:39 GMT
+ETag: "3abd68-5b049fdb666e0-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:08 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192dfcfef8d1df-HKG
+
+Same hostname detected
+Same hostname detected
+======================= Request [9] =======================
+GET /jq1/imgslider/arrow.png HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [9] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:09 GMT
+Content-Type: image/png
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sat, 30 May 2015 07:07:32 GMT
+ETag: "dd4e-517473f14d500-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:09 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192e0439c8d1cb-HKG
+
+======================= Request [10] =======================
+GET /jq1/imgslider/loading.gif HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [10] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:09 GMT
+Content-Type: image/gif
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Thu, 14 May 2015 10:44:32 GMT
+ETag: "129d-5160869ac4400-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:09 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192e0438e8d1ef-HKG
+
+Time out for thread[10]
+Detected Time out for thread[10]
+clearing thread[10], release fd[18]
+Time out for thread[9]
+Detected Time out for thread[9]
+clearing thread[9], release fd[20]
+Time out for thread[1]
+Detected Time out for thread[1]
+clearing thread[1], release fd[5]
+Time out for thread[13]
+Detected Time out for thread[13]
+Time out for thread[7]
+Detected Time out for thread[7]
+clearing thread[13], release fd[21]
+clearing thread[7], release fd[14]
+Time out for thread[5]
+Detected Time out for thread[5]
+clearing thread[5], release fd[12]
+Time out for thread[4]
+Detected Time out for thread[4]
+clearing thread[4], release fd[10]
+Time out for thread[11]
+Detected Time out for thread[11]
+clearing thread[11], release fd[25]
+Time out for thread[8]
+Detected Time out for thread[8]
+clearing thread[8], release fd[17]
+Time out for thread[2]
+Detected Time out for thread[2]
+clearing thread[2], release fd[7]
+Time out for thread[3]
+Detected Time out for thread[3]
+clearing thread[3], release fd[11]
+Time out for thread[6]
+Detected Time out for thread[6]
+Time out for thread[12]
+Detected Time out for thread[12]
+clearing thread[12], release fd[26]
+clearing thread[6], release fd[13]
+Time out for thread[16]
+Detected Time out for thread[16]
+clearing thread[16], release fd[34]
+Allocated thread[1], fd[38] to new connection
+======================= Request [1] =======================
+GET /jq1/index.php HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+Upgrade-Insecure-Requests: 1
+
+======================= Response [1] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:27 GMT
+Content-Type: text/html
+Transfer-Encoding: chunked
+Connection: keep-alive
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Vary: Accept-Encoding
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192e72fb4cd1fb-HKG
+Content-Encoding: gzip
+
+Same hostname detected
+Allocated thread[2], fd[5] to new connection
+Allocated thread[3], fd[10] to new connection
+======================= Request [1] =======================
+GET /jq1/test.php HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+Upgrade-Insecure-Requests: 1
+
+======================= Response [1] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:27 GMT
+Content-Type: text/html
+Transfer-Encoding: chunked
+Connection: keep-alive
+Vary: Accept-Encoding
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192e745824d1fb-HKG
+Content-Encoding: gzip
+
+Allocated thread[4], fd[11] to new connection
+Allocated thread[5], fd[14] to new connection
+======================= Request [2] =======================
+GET /js2/example5.php HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+Upgrade-Insecure-Requests: 1
+
+======================= Response [2] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:27 GMT
+Content-Type: text/html
+Transfer-Encoding: chunked
+Connection: keep-alive
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Vary: Accept-Encoding
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192e746ce1d1cb-HKG
+Content-Encoding: gzip
+
+======================= Request [3] =======================
+GET /js2/example3.php HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+Upgrade-Insecure-Requests: 1
+
+======================= Response [3] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:27 GMT
+Content-Type: text/html
+Transfer-Encoding: chunked
+Connection: keep-alive
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Vary: Accept-Encoding
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192e746cdfd1cb-HKG
+Content-Encoding: gzip
+
+Fail to connect to server[www.ppandp.de]
+Error in proxy routine, thread[5], return code from routine[-1]
+clearing thread[5], release fd[14]
+Not same hostname detected!
+GET /404.html HTTP/1.1
+Host: www.ppandp.de
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/
+DNT: 1
+Connection: keep-alive
+
+
+Fail to connect host[www.ppandp.de]
+Error in proxy routine, thread[1], return code from routine[-1]
+clearing thread[1], release fd[38]
+Not same hostname detected!
+GET /404.html HTTP/1.1
+Host: www.ppandp.de
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/
+DNT: 1
+Connection: keep-alive
+
+
+Fail to connect host[www.ppandp.de]
+Error in proxy routine, thread[2], return code from routine[-1]
+clearing thread[2], release fd[5]
+Allocated thread[1], fd[17] to new connection
+Fail to connect to server[www.ppandp.de]
+Error in proxy routine, thread[1], return code from routine[-1]
+clearing thread[1], release fd[17]
+Allocated thread[1], fd[5] to new connection
+Fail to connect to server[www.ppandp.de]
+Error in proxy routine, thread[1], return code from routine[-1]
+clearing thread[1], release fd[5]
+Not same hostname detected!
+GET /404.html HTTP/1.1
+Host: www.ppandp.de
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/
+DNT: 1
+Connection: keep-alive
+
+
+Fail to connect host[www.ppandp.de]
+Error in proxy routine, thread[3], return code from routine[-1]
+clearing thread[3], release fd[10]
+Allocated thread[1], fd[7] to new connection
+======================= Request [4] =======================
+GET /jq1/imgslider/slider2.1.php HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/index.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+Upgrade-Insecure-Requests: 1
+
+======================= Response [4] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:28 GMT
+Content-Type: text/html
+Transfer-Encoding: chunked
+Connection: keep-alive
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Vary: Accept-Encoding
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192e7508d6d1c7-HKG
+Content-Encoding: gzip
+
+Fail to connect to server[www.ppandp.de]
+Error in proxy routine, thread[1], return code from routine[-1]
+clearing thread[1], release fd[7]
+Allocated thread[1], fd[5] to new connection
+Fail to connect to server[www.ppandp.de]
+Error in proxy routine, thread[1], return code from routine[-1]
+clearing thread[1], release fd[5]
+Not same hostname detected!
+GET /404.html HTTP/1.1
+Host: www.ppandp.de
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/
+DNT: 1
+Connection: keep-alive
+
+
+Fail to connect host[www.ppandp.de]
+Error in proxy routine, thread[4], return code from routine[-1]
+clearing thread[4], release fd[11]
+Allocated thread[1], fd[7] to new connection
+Fail to connect to server[www.ppandp.de]
+Error in proxy routine, thread[1], return code from routine[-1]
+clearing thread[1], release fd[7]
+Allocated thread[1], fd[5] to new connection
+Allocated thread[2], fd[7] to new connection
+======================= Request [1] =======================
+GET /jq1/css/tab_menu.css HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/test.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [1] =======================
+HTTP/1.1 404 Not Found
+Date: Sat, 04 May 2019 08:42:28 GMT
+Content-Type: text/html; charset=iso-8859-1
+Transfer-Encoding: chunked
+Connection: keep-alive
+Vary: Accept-Encoding
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:28 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192e762b7fd19b-HKG
+Content-Encoding: gzip
+
+======================= Request [2] =======================
+GET /jq1/css/menu.css HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/test.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [2] =======================
+HTTP/1.1 404 Not Found
+Date: Sat, 04 May 2019 08:42:28 GMT
+Content-Type: text/html; charset=iso-8859-1
+Transfer-Encoding: chunked
+Connection: keep-alive
+Vary: Accept-Encoding
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:28 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192e763bced19b-HKG
+Content-Encoding: gzip
+
+Same hostname detected
+Same hostname detected
+Allocated thread[3], fd[10] to new connection
+======================= Request [1] =======================
+GET /cms/upload/banner/L-sci%20trip.png HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [1] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:28 GMT
+Content-Type: image/png
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sun, 27 Sep 2020 11:55:51 GMT
+ETag: "474f93-5b04a3b3c7680-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:28 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192e766ca6d19b-HKG
+
+Allocated thread[4], fd[13] to new connection
+======================= Request [2] =======================
+GET /cms/upload/banner/L-vb.png HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [2] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:28 GMT
+Content-Type: image/png
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sun, 27 Sep 2020 12:18:22 GMT
+ETag: "40aa5a-5b04a8bbea1a0-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:28 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192e768d6cd19b-HKG
+
+======================= Request [4] =======================
+GET /cms/upload/banner/L-2017%E5%B9%B4%E5%A4%9A%E5%85%83%E5%8D%93%E8%B6%8A%E7%8D%8E%E5%AD%B8%E9%87%91%E9%A0%92%E7%8D%8E%E5%85%B8%E7%A6%AE.png HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [4] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:28 GMT
+Content-Type: image/png
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sun, 27 Sep 2020 11:38:39 GMT
+ETag: "3abd68-5b049fdb666e0-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:28 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192e76ab9bd1ef-HKG
+
+======================= Request [3] =======================
+GET /cms/upload/banner/L-sw.png HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/imgslider/slider2.1.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [3] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:28 GMT
+Content-Type: image/png
+Transfer-Encoding: chunked
+Connection: keep-alive
+Last-Modified: Sun, 27 Sep 2020 12:32:58 GMT
+ETag: "173285-5b04abff73900-gzip"
+Vary: Accept-Encoding
+Content-Encoding: gzip
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:28 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192e76ce61d19b-HKG
+
+Allocated thread[5], fd[14] to new connection
+======================= Request [5] =======================
+GET /jq1/css/tab_menu.css HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/css,*/*;q=0.1
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/test.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [5] =======================
+HTTP/1.1 404 Not Found
+Date: Sat, 04 May 2019 08:42:28 GMT
+Content-Type: text/html; charset=iso-8859-1
+Transfer-Encoding: chunked
+Connection: keep-alive
+Vary: Accept-Encoding
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:28 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192e79de1ad18f-HKG
+Content-Encoding: gzip
+
+Same hostname detected
+======================= Request [5] =======================
+GET /jq1/script/chg_lang.js HTTP/1.1
+Host: www.sgss.edu.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://www.sgss.edu.hk/jq1/test.php
+DNT: 1
+Connection: keep-alive
+Cookie: __cfduid=d52cf3d4b7bacfd43e790b6646b33683b1556958975; PHPSESSID=eevnon8buvc9lo52lp7ceijev2
+
+======================= Response [5] =======================
+HTTP/1.1 200 OK
+Date: Sat, 04 May 2019 08:42:31 GMT
+Content-Type: application/javascript
+Transfer-Encoding: chunked
+Connection: keep-alive
+Cf-Bgj: minify
+Cf-Polished: origSize=256
+ETag: W/"100-4eba97da7ec40-gzip"
+Last-Modified: Thu, 21 Nov 2013 05:51:37 GMT
+Vary: Accept-Encoding
+CF-Cache-Status: HIT
+Expires: Sat, 04 May 2019 12:42:31 GMT
+Cache-Control: public, max-age=14400
+Alt-Svc: h2=":443"; ma=60
+Server: cloudflare
+CF-RAY: 4d192e8dc851d18f-HKG
+Content-Encoding: gzip
+

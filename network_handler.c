@@ -11,8 +11,6 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
-// #include <sys/sendfile.h>
-
 
 #include "logger.h"
 #include "network_handler.h"
@@ -160,7 +158,7 @@ int get_reqres_header(int fd, char* buf, int size, int request_id) {
     while(i < size-1) {
         // read 1 byte each time
         // j = recv(fd, &r, 1, MSG_DONTWAIT);
-        j = read(fd, &r, 1);
+        j = recv(fd, &r, 1, MSG_NOSIGNAL);
         if(j <= 0) {
             // not ready to read
             if(errno == EAGAIN) {
@@ -168,11 +166,13 @@ int get_reqres_header(int fd, char* buf, int size, int request_id) {
                 // printf("***\n");
                 return -EAGAIN;
             }
-            // other error
+            // no data read
+            else if(j == 0){
+                return 1;
+            }
             else {
                 // log("Error in reading, errno: [%d], request [%d]\n", errno, request_id);
-                // return -1;
-                continue;
+                return -1;
             }
         }
         buf[i++] = r;
@@ -287,7 +287,7 @@ int forward_packet(int serverfd, char* buf, int len) {
     int ret;
 
     while(len != 0) {
-        ret = write(serverfd, buf, len);
+        ret = send(serverfd, buf, len, MSG_NOSIGNAL);
         if(ret <= 0) {
             log("Cannot forward request to server, errno: [%d]\n", errno);
             return ret;
@@ -304,7 +304,7 @@ int get_data_by_len(int fd, char* buf, int bytes_to_read) {
     int ret;
 
     while(bytes_to_read > 0) {
-        ret = read(fd, buf, bytes_to_read);
+        ret = recv(fd, buf, bytes_to_read, MSG_NOSIGNAL);
         if(ret <= 0) {
             log("Error in getting data\n");
             return -1;
@@ -323,38 +323,20 @@ int forward_data_length(int clientfd, int serverfd, char* buf, int buf_size, int
 
     while(length > 0) {
         // read from server
-        ret = read(serverfd, buf, buf_size);
+        ret = recv(serverfd, buf, buf_size, MSG_NOSIGNAL);
 
         if(ret <= 0) {
             return -1;
         }
         length -= ret;
-
         // write to client
-        ret = write(clientfd, buf, ret);
-
+        ret = send(clientfd, buf, ret, MSG_NOSIGNAL);
         if(ret <= 0) {
             return -1;
         }
         bzero(buf, buf_size);
     }
-    // char c;
-    // while(length > 0) {
-    //     ret = read(serverfd, &c, 1);
-    //     if(ret <= 0) {
-    //         return -1;
-    //     }
-        
-    //     length -= 1;
-    //     printf("Fuck you\n");
-    //     ret = write(clientfd, &c, 1);
-    //     printf("You can't fuck me\n");
-    //     if(ret <= 0) {
-    //         return -1;
-    //     }
-    // }
 
-    // ret = sendfile(clientfd, serverfd, NULL, length);
     if(ret == -1)
         return ret;
 
@@ -372,7 +354,7 @@ int forward_data_chunked(int clientfd, int serverfd) {
     status = 0;
     while(1) {
         
-        ret = read(serverfd, &c, 1);
+        ret = recv(serverfd, &c, 1, MSG_NOSIGNAL);
         if(ret <= 0)
             return -1;
 
@@ -390,9 +372,10 @@ int forward_data_chunked(int clientfd, int serverfd) {
                 break;
         }
         
-        ret = write(clientfd, &c, 1);
-        if(ret <= 0)
+        ret = send(clientfd, &c, 1, MSG_NOSIGNAL);
+        if(ret <= 0) {
             return -1;
+        }
 
         if(status == 4)
             break;
@@ -413,7 +396,7 @@ int init_header_status(struct header_status* hs, char* req_buf, enum HTTP_HEADER
         // get request method
         ret = get_request_method(req_buf);
         if(ret == NOT_SUPPORTED) {
-            printf("The http request method is not supported\n");
+            // printf("The http request method is not supported\n");
             return -1;
         }
         hs->http_method = ret;
@@ -421,7 +404,7 @@ int init_header_status(struct header_status* hs, char* req_buf, enum HTTP_HEADER
         // get persistency of the request
         ret = is_persistent(req_buf);
         if(ret == -1) {
-            printf("The http version is not supported\n");
+            // printf("The http version is not supported\n");
             return -1;
         }
         hs->is_persistent = ret;

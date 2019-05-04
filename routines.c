@@ -12,7 +12,7 @@
 #include "logger.h"
 
 /* previous routine */
-int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_size, int request_id, char timeout_allow) {
+int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_size, int request_id, int timeout_allow) {
 
     int ret;                    // store return value
     int serverfd = -1;
@@ -40,8 +40,7 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
         bzero(req_buffer, buf_size);
         // try to get the request header from client
         ret = get_reqres_header(clientfd, req_buffer, buf_size, request_id);
-
-        if(ret == -EAGAIN) {
+        if(ret == -EAGAIN || ret == 1) {
             printf("Time out for thread[%d]\n", request_id);
             return -EAGAIN;
         }
@@ -164,82 +163,6 @@ EXIT_PROXY_ROUTINES:
     return ret;
 }
 
-/* routine for https request */
-int https_routine(int clientfd, int serverfd, char* req_buffer, char* res_buffer, int buf_size, char timeout_allow) {
-
-    int wrote;
-    int ret;
-    char timeout = 0;
-
-    clear_buffer(req_buffer, res_buffer, buf_size);
-
-    // response to client that connection established
-    ret = write(clientfd, "HTTP/1.1 200 Connection Established\r\n\r\n", 40);
-
-    if(ret != 40) {
-        printf("Error in writing response to client CONNECT\n");
-        return -1;
-    }
-
-    while(1) {
-
-        if(timeout >= timeout_allow) {
-            printf("Timeout for HTTPS request\n");
-            return 0;
-        }
-        else if(timeout > 0) {
-            sleep(1);
-        }
-
-        // read from client
-        ret = recv(clientfd, req_buffer, buf_size, MSG_DONTWAIT);
-        if(ret <= 0) {
-            if(errno == EAGAIN) {
-                ++timeout;
-            }
-            else {
-                printf("Error for https request during reading from client\n");
-                return -1;
-            }
-        }
-        // forward to server
-        else {
-            timeout = 0;
-            wrote = write(serverfd, req_buffer, ret);
-            if(wrote != ret) {
-                printf("Error for https request during forwarding from client to server");
-                return -1;
-            }
-            bzero(req_buffer, buf_size);
-        }
-
-        // read from server
-        ret = recv(serverfd, res_buffer, buf_size, MSG_DONTWAIT);
-        if(ret <= 0) {
-            if(errno == EAGAIN) {
-                ++timeout;
-            }
-            else {
-                printf("Error for https request during reading from server\n");
-                return -1;
-            }
-        }
-        // forward to client
-        else {
-            timeout = 0;
-            wrote = write(clientfd, res_buffer, ret);
-            if(wrote != ret) {
-                printf("Error for https request during forwarding from server to client");
-                return -1;
-            }
-            bzero(res_buffer, buf_size);
-        }
-        
-    }
-
-    return 0;
-}
-
 /* routine for http request without cache */
 int no_cache_routine(int clientfd, int serverfd, char* req_buffer, char* res_buffer, int buf_size, char timeout_allow, int thread_id) {
 
@@ -303,7 +226,81 @@ int no_cache_routine(int clientfd, int serverfd, char* req_buffer, char* res_buf
 
 }
 
+/* routine for https request */
+int https_routine(int clientfd, int serverfd, char* req_buffer, char* res_buffer, int buf_size, char timeout_allow) {
 
+    int wrote;
+    int ret;
+    char timeout = 0;
+
+    clear_buffer(req_buffer, res_buffer, buf_size);
+
+    // response to client that connection established
+    ret = send(clientfd, "HTTP/1.1 200 Connection Established\r\n\r\n", 40, MSG_NOSIGNAL);
+
+    if(ret != 40) {
+        printf("Error in writing response to client CONNECT\n");
+        return -1;
+    }
+
+    while(1) {
+
+        if(timeout >= timeout_allow) {
+            printf("Timeout for HTTPS request\n");
+            return 0;
+        }
+        else if(timeout > 0) {
+            sleep(1);
+        }
+
+        // read from client
+        ret = recv(clientfd, req_buffer, buf_size, MSG_DONTWAIT|MSG_NOSIGNAL);
+        if(ret <= 0) {
+            if(errno == EAGAIN) {
+                ++timeout;
+            }
+            else {
+                printf("Error for https request during reading from client\n");
+                return -1;
+            }
+        }
+        // forward to server
+        else {
+            timeout = 0;
+            wrote = send(serverfd, req_buffer, ret, MSG_NOSIGNAL);
+            if(wrote != ret) {
+                printf("Error for https request during forwarding from client to server");
+                return -1;
+            }
+            bzero(req_buffer, buf_size);
+        }
+
+        // read from server
+        ret = recv(serverfd, res_buffer, buf_size, MSG_DONTWAIT|MSG_NOSIGNAL);
+        if(ret <= 0) {
+            if(errno == EAGAIN) {
+                ++timeout;
+            }
+            else {
+                printf("Error for https request during reading from server\n");
+                return -1;
+            }
+        }
+        // forward to client
+        else {
+            timeout = 0;
+            wrote = send(clientfd, res_buffer, ret, MSG_NOSIGNAL);
+            if(wrote != ret) {
+                printf("Error for https request during forwarding from server to client");
+                return -1;
+            }
+            bzero(res_buffer, buf_size);
+        }
+        
+    }
+
+    return 0;
+}
 
 
 

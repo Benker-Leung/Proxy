@@ -8,7 +8,7 @@
  *  Return -1 if fail or timeout, should close this fd
  * 
  */
-int proxy_routines(int fd, char* req_buffer, char* res_buffer, int size, int request_id, char timeout_allow);
+int proxy_routines(int fd, char* req_buffer, char* res_buffer, int size, int request_id, int timeout_allow);
 
 
 /**
