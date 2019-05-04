@@ -56,6 +56,7 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
         //     return -1;
         // }
 
+        bzero(req_buffer, buf_size);
         // try to get the request header from client
         ret = get_reqres_header(clientfd, req_buffer, buf_size, request_id);
 
@@ -256,15 +257,16 @@ int no_cache_routine(int clientfd, int serverfd, char* req_buffer, char* res_buf
 
     // clear buffer
     bzero(res_buffer, buf_size);
-
     ret = get_reqres_header(serverfd, res_buffer, buf_size, 1);
     if(ret < 0)
         return -1;
 
-    printf("======================= Request [%d] =======================\n", thread_id);
+    printf("\n======================= Request Start [%d] =======================\n", thread_id);
     printf("%s", req_buffer);
-    printf("======================= Response [%d] =======================\n", thread_id);
+    printf("======================= Request End [%d] =======================\n", thread_id);
+    printf("\n======================= Response Start [%d] =======================\n", thread_id);
     printf("%s", res_buffer);
+    printf("\n======================= Response End [%d] =======================\n", thread_id);
 
     // forward the response header to client
     ret = forward_packet(clientfd, res_buffer, strlen(res_buffer));

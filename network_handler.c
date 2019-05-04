@@ -178,6 +178,7 @@ int get_reqres_header(int fd, char* buf, int size, int request_id) {
             // reach end of header
             if(buf[i-4] == 13 && buf[i-3] == 10 && buf[i-2] == 13 && buf[i-1] == 10) {
                 buf[i] = '\0';
+                // printf("{%s}", buf);
                 return 0;
             }
         }
