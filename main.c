@@ -26,6 +26,7 @@ pthread_attr_t pt_attr;
 int port;               // port number
 int max_thread;         // max thread
 int proxyfd;               // proxyfd
+int available_threads;      // the total available_thread
 
 /* used to param to a thread */
 struct thread_param {
@@ -62,6 +63,7 @@ void init_proxy(int argc, char** argv) {
             max_thread = DEFAULT_MAX_THREAD;
         }
     }
+    available_threads = max_thread;
 
     // setup the listen fd
     if((proxyfd = get_listen_fd(port, max_thread)) <= 0) {
@@ -165,10 +167,11 @@ void* thread_network_action(void *args) {
     pthread_mutex_lock(&lock);
 
     thread_status[tp->id] = 'z';
+    ++available_threads;
 
     // unlock
     pthread_mutex_unlock(&lock);
-    printf_with_time("Exit thread[%d], released fd[%d]\n", tp->id, tp->fd);
+    printf_with_time("Exit thread[%d], released fd[%d], (not atomic)available thread[%d]\n", tp->id, tp->fd, available_threads);
     // pthread_exit(NULL);
     return NULL;
 }
@@ -199,7 +202,7 @@ int main(int argc, char** argv) {
             if(thread_status[i] == 'z') {
                 pthread_join(thread[i], &res);
                 thread_status[i] = 'a';
-                printf_with_time("Cleared thread[%d]\n", i);
+                // printf_with_time("Cleared thread[%d]\n", i);
             }
             // if any thread is available
             if(thread_status[i] == 'a') {
@@ -218,6 +221,7 @@ int main(int argc, char** argv) {
                 }
                 // set the status to occupied
                 thread_status[i] = 'o';
+                --available_threads;
                 k = 1;
                 break;
             }
@@ -237,7 +241,7 @@ int main(int argc, char** argv) {
             // log("Too many connections, max_thread num:[%d] may not handle\n", max_thread);
             // sleep(3);
         }
-        printf_with_time("Allocated thread[%d], fd[%d] to new connection\n", i, j);
+        printf_with_time("Allocated thread[%d], fd[%d] to new connection, (not atomic)available thread remains[%d]\n", i, j, available_threads);
     }
 
     return 0;
