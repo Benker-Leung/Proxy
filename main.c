@@ -6,7 +6,7 @@
 #include <sys/socket.h>
 #include <errno.h>
 #include <fcntl.h>
-
+#include <sys/stat.h>
 
 #include "logger.h"
 #include "network_handler.h"
@@ -120,6 +120,19 @@ void init_proxy(int argc, char** argv) {
     log("Start proxy, listen at port [%d]\n", port);
     log("Max_thread supported:[%d]\n", max_thread);
 
+    // create cache_files directory
+    if(mkdir("cache_files", 0744)) {
+        if(errno != EEXIST) {
+            printf("Cannot create cache_files dir\n");
+            exit(0);
+        }
+    }
+    // change directory to cache folder
+    if(chdir("./cache_files")) {
+        printf("Fail to change directory to cache_files\n");
+        exit(0);
+    }
+
 }
 
 /* action to be taken before exit */
@@ -168,10 +181,11 @@ void* thread_network_action(void *args) {
 
     thread_status[tp->id] = 'z';
     ++available_threads;
-    printf_with_time("Exit thread[%d], released fd[%d], (not atomic)available thread[%d]\n", tp->id, tp->clientfd, available_threads);
 
     // unlock
     pthread_mutex_unlock(&lock);
+
+    printf_with_time("Exit thread[%d], released fd[%d], (not atomic)available thread[%d]\n", tp->id, tp->clientfd, available_threads);
     // pthread_exit(NULL);
     return NULL;
 }
