@@ -11,11 +11,11 @@
 #include "logger.h"
 #include "network_handler.h"
 #include "routines.h"
+#include "data_structure.h"
 
-
-#define MY_TIMEOUT 5
+// #define MY_TIMEOUT 5
 #define DEFAULT_MAX_THREAD 3
-#define HEADER_BUFFER_SIZE 4096
+// #define HEADER_BUFFER_SIZE 4096
 
 /* global variables used */
 struct thread_param* tps;   // thread_param array
@@ -28,16 +28,16 @@ int max_thread;         // max thread
 int proxyfd;               // proxyfd
 int available_threads;      // the total available_thread
 
-/* used to param to a thread */
-struct thread_param {
-    int id;     // to distinguish thread_id
-    int fd;     // to store the connection file descriptor
-    char request_header_buffer[HEADER_BUFFER_SIZE];   // only support 4KB header
-    char response_header_buffer[HEADER_BUFFER_SIZE];
-    // char* request_header_buffer;   // only support 4KB header
-    // char* response_header_buffer;
-    // pthread_mutex_t *thread_lock;               // for synchronize open or close socket
-};
+// /* used to param to a thread */
+// struct thread_param {
+//     int id;     // to distinguish thread_id
+//     int fd;     // to store the connection file descriptor
+//     char request_header_buffer[HEADER_BUFFER_SIZE];   // only support 4KB header
+//     char response_header_buffer[HEADER_BUFFER_SIZE];
+//     // char* request_header_buffer;   // only support 4KB header
+//     // char* response_header_buffer;
+//     // pthread_mutex_t *thread_lock;               // for synchronize open or close socket
+// };
 
 /* init the global variables about thread and port */
 void init_proxy(int argc, char** argv) {
@@ -131,7 +131,7 @@ void cleanup_before_exit() {
     pthread_mutex_lock(&lock);
     for(i=0; i<max_thread; ++i) {
         if(thread_status[i] == 'o') {
-            close(tps[i].fd);
+            close(tps[i].clientfd);
             pthread_cancel(thread[i]);
         }
     }
@@ -155,14 +155,14 @@ void* thread_network_action(void *args) {
     int status;
     struct thread_param* tp = args;
 
-    bzero(tp->request_header_buffer, HEADER_BUFFER_SIZE);
-    if((status = proxy_routines(tp->fd, tp->request_header_buffer, tp->response_header_buffer, HEADER_BUFFER_SIZE, tp->id, MY_TIMEOUT)) != 0) {
+    bzero(tp->req_buffer, HEADER_BUFFER_SIZE);
+    if((status = proxy_routines(tp)) != 0) {
         if(status == -EAGAIN)
             printf_with_time("Detected Time out for thread[%d]\n", tp->id);
         else
             printf_with_time("Error in proxy routine, thread[%d], return code from routine[%d]\n", tp->id, status);
     }
-    close(tp->fd);
+    close(tp->clientfd);
     // lock
     pthread_mutex_lock(&lock);
 
@@ -171,7 +171,7 @@ void* thread_network_action(void *args) {
 
     // unlock
     pthread_mutex_unlock(&lock);
-    printf_with_time("Exit thread[%d], released fd[%d], (not atomic)available thread[%d]\n", tp->id, tp->fd, available_threads);
+    printf_with_time("Exit thread[%d], released fd[%d], (not atomic)available thread[%d]\n", tp->id, tp->clientfd, available_threads);
     // pthread_exit(NULL);
     return NULL;
 }
@@ -208,7 +208,7 @@ int main(int argc, char** argv) {
             if(thread_status[i] == 'a') {
                 // assign i-th resouces to this new connection
                 tps[i].id = i;
-                tps[i].fd = j;
+                tps[i].clientfd = j;
                 // ret = pthread_create(&thread[i], &pt_attr, thread_network_action, &tps[i]);
                 ret = pthread_create(&thread[i], &pt_attr, thread_network_action, &tps[i]);
                 if(ret) {

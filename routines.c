@@ -11,45 +11,59 @@
 #include "http_header_handler.h"
 #include "logger.h"
 
+/* set recv and response to timeout */
+int set_socket_timeout(int fd, int t) {
+    
+    int ret;
+    struct timeval timeout = {t, 0};
+
+    ret = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(struct timeval));
+    if(ret) {
+        return -1;
+    }
+    ret = setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(struct timeval));
+    if(ret) {
+        return -1;
+    }
+    return 0;
+
+}
+
+
 /* previous routine */
-int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_size, int request_id, int timeout_allow) {
+// int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_size, int request_id, int timeout_allow) {
+int proxy_routines(struct thread_param* tp) {
 
     int ret;                    // store return value
     int serverfd = -1;
     struct header_status req_hs;
     char hostname[256];
 
-    struct timeval timeout = {timeout_allow, 0};
-    ret = setsockopt(clientfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(struct timeval));
-    if(ret) {
-        printf("Fail to set socket option to clientfd\n");
-        return -1;
-    }
-    ret = setsockopt(clientfd, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(struct timeval));
-    if(ret) {
+    // set socket timeout
+    if(set_socket_timeout(tp->clientfd, MY_TIMEOUT)) {
         printf("Fail to set socket option to clientfd\n");
         return -1;
     }
 
-    clear_buffer(req_buffer, res_buffer, buf_size);
+    clear_buffer(tp->req_buffer, tp->res_buffer, HEADER_BUFFER_SIZE);
     bzero(&req_hs, sizeof(struct header_status));
 
     // infinity loop
     while(1) {
 
-        bzero(req_buffer, buf_size);
+        bzero(tp->req_buffer, HEADER_BUFFER_SIZE);
         // try to get the request header from client
-        ret = get_reqres_header(clientfd, req_buffer, buf_size, request_id);
+        ret = get_reqres_header(tp->clientfd, tp->req_buffer, HEADER_BUFFER_SIZE, tp->id);
         if(ret == -EAGAIN || ret == 1) {
-            printf("Time out for thread[%d]\n", request_id);
+            printf("Time out for thread[%d]\n", tp->id);
             return -EAGAIN;
         }
         else if(ret == 0) {
 
             // init the request header
-            ret = init_header_status(&req_hs, req_buffer, REQUEST);
+            ret = init_header_status(&req_hs, tp->req_buffer, REQUEST);
             if(ret == -1) {
-                printf("================== HEADER NOT SUPPORTED ====================\n%s\n", req_buffer);
+                printf("================== HEADER NOT SUPPORTED ====================\n%s\n", tp->req_buffer);
                 ret = -1;
                 goto EXIT_PROXY_ROUTINES;
             }
@@ -57,70 +71,59 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
             // use different routines here
             switch(req_hs.http_method) {
                 case CONNECT:
-                    ret = connect_https_server(req_buffer);
+                    ret = connect_https_server(tp->req_buffer);
                     if(ret == -1) {
-                        printf("Error in handling https request, thread_id:[%d]\n", request_id);
+                        printf("Error in handling https request, thread_id:[%d]\n", tp->id);
                         // printf("%s\n", req_buffer);
                         ret = -1;
                         goto EXIT_PROXY_ROUTINES;
                     }
                     serverfd = ret;
                     // call the routine
-                    ret = https_routine(clientfd, serverfd, req_buffer, res_buffer, buf_size, 2 * timeout_allow);
+                    ret = https_routine(tp->clientfd, serverfd, tp->req_buffer, tp->res_buffer, HEADER_BUFFER_SIZE, 2 * MY_TIMEOUT);
                     goto EXIT_PROXY_ROUTINES;
 
                 case GET:
 
                     // format the request header correctly, and ret store the port#
-                    ret = reformat_request_header(req_buffer);
+                    ret = reformat_request_header(tp->req_buffer);
                     if(ret < 0) {
-                        printf("Error in reformat request[%s]\n", req_buffer);
+                        printf("Error in reformat request[%s]\n", tp->req_buffer);
                         goto EXIT_PROXY_ROUTINES;
                     }
 
                     // only connect to server for the first time
                     if(serverfd < 0) {
-                        ret = connect_server(req_buffer, ret, hostname);
+                        ret = connect_server(tp->req_buffer, ret, hostname);
                         if(ret == -1) {
                             printf("Fail to connect to server[%s]\n", hostname);
                             goto EXIT_PROXY_ROUTINES;
                         }
                         serverfd = ret;
-                        ret = setsockopt(serverfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(struct timeval));
-                        if(ret) {
-                            printf("Fail to setsocket\n");
+                        // set socket timeout
+                        if(set_socket_timeout(serverfd, MY_TIMEOUT)) {
+                            printf("Fail to set socket\n");
                             ret = -1;
                             goto EXIT_PROXY_ROUTINES;
                         }
-                        ret = setsockopt(serverfd, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(struct timeval));
-                        if(ret) {
-                            printf("Fail to setsocket\n");
-                            ret = -1;
-                            goto EXIT_PROXY_ROUTINES;
-                        }
+
                     } else {
                         int port = ret;
                         // check whether is same host or not
-                        ret = is_same_hostname(req_buffer, hostname);
+                        ret = is_same_hostname(tp->req_buffer, hostname);
                         // if not the same hostname, new connection should be done
                         if(ret == 0) {
-                            printf("Not same hostname detected!\n%s\n", req_buffer);
+                            printf("Not same hostname detected!\n%s\n", tp->req_buffer);
                             close(serverfd);    // close the previous server socket
                             serverfd = -1;
-                            ret = connect_server(req_buffer, port, hostname);
+                            ret = connect_server(tp->req_buffer, port, hostname);
                             if(ret == -1) {
                                 printf("Fail to connect host[%s]\n", hostname);
                                 goto EXIT_PROXY_ROUTINES;
                             }
                             serverfd = ret;
-                            ret = setsockopt(serverfd, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(struct timeval));
-                            if(ret) {
-                                printf("Fail to set socket\n");
-                                ret = -1;
-                                goto EXIT_PROXY_ROUTINES;
-                            }
-                            ret = setsockopt(serverfd, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(struct timeval));
-                            if(ret) {
+                            // set socket opt
+                            if(set_socket_timeout(serverfd, MY_TIMEOUT)) {
                                 printf("Fail to set socket\n");
                                 ret = -1;
                                 goto EXIT_PROXY_ROUTINES;
@@ -136,7 +139,7 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
                     }
                     
                     // call the routine
-                    ret = no_cache_routine(clientfd, serverfd, req_buffer, res_buffer, buf_size, timeout_allow, request_id);
+                    ret = no_cache_routine(tp->clientfd, serverfd, tp->req_buffer, tp->res_buffer, HEADER_BUFFER_SIZE, MY_TIMEOUT, tp->id);
                     if(ret == serverfd) {
                         continue;
                     }
@@ -146,13 +149,13 @@ int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_siz
 
                 default:
                     printf("================== METHOD NOT SUPPORTED YET ====================\n");
-                    printf("%s\n", req_buffer);
+                    printf("%s\n", tp->req_buffer);
                     ret = -1;
                     goto EXIT_PROXY_ROUTINES;
             }
         }
         else {
-            printf("Fail to read client request for thread_id[%d]\n", request_id);
+            printf("Fail to read client request for thread_id[%d]\n", tp->id);
             ret = -1;
             goto EXIT_PROXY_ROUTINES;
         }

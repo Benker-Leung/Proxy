@@ -1,6 +1,15 @@
 #ifndef __ROUTINES_H
 #define __ROUTINES_H
 
+#include "data_structure.h"
+
+/**
+ *  This function helps to set the given socket the timeout
+ * 
+ *  Return 0 if success, -1 if fail
+ */
+int set_socket_timeout(int fd, int t);
+
 /**
  *  This function helps to decide actual which routine 
  *  a particular request takes.
@@ -8,7 +17,8 @@
  *  Return -1 if fail or timeout, should close this fd
  * 
  */
-int proxy_routines(int fd, char* req_buffer, char* res_buffer, int size, int request_id, int timeout_allow);
+// int proxy_routines(int fd, char* req_buffer, char* res_buffer, int size, int request_id, int timeout_allow);
+int proxy_routines(struct thread_param* tp);
 
 
 /**

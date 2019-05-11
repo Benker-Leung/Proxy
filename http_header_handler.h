@@ -1,7 +1,7 @@
 #ifndef __HTTP_HEADER_HANDLER_H
 #define __HTTP_HEADER_HANDLER_H
 
-enum HTTP_METHOD{NOT_SUPPORTED=0, GET, POST, CONNECT};
+#include "data_structure.h"
 
 /**
  *  This function helps to reformat the request header,
@@ -11,6 +11,7 @@ enum HTTP_METHOD{NOT_SUPPORTED=0, GET, POST, CONNECT};
  * 
  */
 int reformat_request_header(char* req_buf);
+
 
 /**
  *  This function parse the content length given header buffer

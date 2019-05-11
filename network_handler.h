@@ -1,7 +1,7 @@
 #ifndef __NETWORK_HANDLER_H
 #define __NETWORK_HANDLER_H
 
-enum HTTP_HEADER{REQUEST=0, RESPONSE};
+#include "data_structure.h"
 
 struct header_status {
     int http_method;    // indicate the method, only support(GET, POST)
