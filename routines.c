@@ -46,12 +46,14 @@ int proxy_routines(struct thread_param* tp) {
     }
 
     clear_buffer(tp->req_buffer, tp->res_buffer, HEADER_BUFFER_SIZE);
-    bzero(&req_hs, sizeof(struct header_status));
+
 
     // infinity loop
     while(1) {
 
+        bzero(&req_hs, sizeof(struct header_status));
         bzero(tp->req_buffer, HEADER_BUFFER_SIZE);
+
         // try to get the request header from client
         ret = get_reqres_header(tp->clientfd, tp->req_buffer, HEADER_BUFFER_SIZE, tp->id);
         if(ret == -EAGAIN || ret == 1) {
@@ -84,6 +86,7 @@ int proxy_routines(struct thread_param* tp) {
                     goto EXIT_PROXY_ROUTINES;
 
                 case GET:
+                case POST:
 
                     // format the request header correctly, and ret store the port#
                     ret = reformat_request_header(tp->req_buffer);
@@ -139,7 +142,7 @@ int proxy_routines(struct thread_param* tp) {
                     }
                     
                     // call the routine
-                    ret = no_cache_routine(tp->clientfd, serverfd, tp->req_buffer, tp->res_buffer, HEADER_BUFFER_SIZE, MY_TIMEOUT, tp->id);
+                    ret = no_cache_routine(serverfd, tp, &req_hs);
                     if(ret == serverfd) {
                         continue;
                     }
@@ -167,61 +170,74 @@ EXIT_PROXY_ROUTINES:
 }
 
 /* routine for http request without cache */
-int no_cache_routine(int clientfd, int serverfd, char* req_buffer, char* res_buffer, int buf_size, char timeout_allow, int thread_id) {
+// int no_cache_routine(int clientfd, int serverfd, char* req_buffer, char* res_buffer, int buf_size, char timeout_allow, int thread_id) {
+int no_cache_routine(int serverfd, struct thread_param* tp, struct header_status* hs) {
 
     int ret;        // record the return value result
-    int is_persistent = 0;
-    struct header_status hs;
+    // int is_persistent = 0;
 
-    bzero(&hs, sizeof(struct header_status));
-    ret = init_header_status(&hs, req_buffer, REQUEST);
-    is_persistent = hs.is_persistent;
+    // bzero(&hs, sizeof(struct header_status));
+    // ret = init_header_status(&hs, tp->req_buffer, REQUEST);
+    // is_persistent = hs->is_persistent;
 
     // forward the request header to server
-    ret = forward_packet(serverfd, req_buffer, strlen(req_buffer));
+    ret = forward_packet(serverfd, tp->req_buffer, strlen(tp->req_buffer));
     if(ret < 0) {
         printf("Fail to forward packet to serverfd\n");
         return -1;
     }
 
+    // if it is post, get the payload and forward
+    if(hs->http_method == POST) {
+        if(hs->is_chunked) {
+            ret = forward_data_chunked(serverfd, tp->clientfd);
+        }
+        else if(hs->hv_data) {
+            bzero(tp->req_buffer, HEADER_BUFFER_SIZE);
+            ret = forward_data_length(serverfd, tp->clientfd, tp->req_buffer, HEADER_BUFFER_SIZE, hs->data_length);
+        }
+        else {
+            return -1;
+        }
+    }
+
     // clear buffer
-    bzero(res_buffer, buf_size);
-    ret = get_reqres_header(serverfd, res_buffer, buf_size, 1);
+    bzero(tp->res_buffer, HEADER_BUFFER_SIZE);
+    ret = get_reqres_header(serverfd, tp->res_buffer, HEADER_BUFFER_SIZE, tp->id);
     if(ret < 0) {
         printf("Fail to get response header from serverfd\n");
         return -1;
     }
 
-    printf("======================= Request [%d] =======================\n%s======================= Response [%d] =======================\n%s", thread_id, req_buffer, thread_id, res_buffer);
+    printf("======================= Request [%d] =======================\n%s======================= Response [%d] =======================\n%s", tp->id, tp->req_buffer, tp->id, tp->res_buffer);
 
     // forward the response header to client
-    ret = forward_packet(clientfd, res_buffer, strlen(res_buffer));
+    ret = forward_packet(tp->clientfd, tp->res_buffer, strlen(tp->res_buffer));
     if(ret < 0) {
         printf("Fail to forward response header to client\n");
         return -1;
     }
 
-    bzero(&hs, sizeof(struct header_status));
+    bzero(hs, sizeof(struct header_status));
 
     // parse the response header
-    ret = init_header_status(&hs, res_buffer, RESPONSE);
+    ret = init_header_status(hs, tp->res_buffer, RESPONSE);
 
-    if(hs.is_chunked) {
-        ret = forward_data_chunked(clientfd, serverfd);
+    if(hs->is_chunked) {
+        ret = forward_data_chunked(tp->clientfd, serverfd);
         if(ret < 0) {
             printf("Fail to forward chunked data to clientfd\n");
             return -1;
         }
     }
-    else if(hs.hv_data) {
-        ret = forward_data_length(clientfd, serverfd, res_buffer, buf_size, hs.data_length);
+    else if(hs->hv_data) {
+        ret = forward_data_length(tp->clientfd, serverfd, tp->res_buffer, HEADER_BUFFER_SIZE, hs->data_length);
         if(ret < 0) {
             printf("Fail to forward data length to clientfd\n");
             return -1;
         }
     }
-
-    if(is_persistent) {
+    if(hs->is_persistent) {
         return serverfd;
     }
 

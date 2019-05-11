@@ -1,6 +1,7 @@
 #ifndef DATA_STRUCTURE_H
 #define DATA_STRUCTURE_H
 
+#define DEFAULT_MAX_THREAD 3
 #define MY_TIMEOUT 5
 #define HEADER_BUFFER_SIZE 4096
 
@@ -9,6 +10,14 @@ enum HTTP_METHOD{NOT_SUPPORTED=0, GET, POST, CONNECT};
 
 // use for determine http header type
 enum HTTP_HEADER{REQUEST=0, RESPONSE};
+
+struct header_status {
+    int http_method;    // indicate the method, only support(GET, POST)
+    int is_persistent;  // indicate the HTTP version
+    int hv_data;        // indicate whether HTTP hv data or nt
+    int is_chunked;     // indicate the data transfer method
+    int data_length;    // if is not chunked, the data len should be specify in content-length
+};
 
 /* used to param to a thread */
 struct thread_param {

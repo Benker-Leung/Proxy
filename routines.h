@@ -37,7 +37,8 @@ int https_routine(int clientfd, int serverfd, char* req_buffer, char* res_buffer
  *  Return?
  * 
  */
-int no_cache_routine(int clientfd, int serverfd, char* req_buffer, char* res_buff, int buf_size, char timeout_allow, int thread_id);
+// int no_cache_routine(int clientfd, int serverfd, char* req_buffer, char* res_buff, int buf_size, char timeout_allow, int thread_id);
+int no_cache_routine(int serverfd, struct thread_param* tp, struct header_status* hs);
 
 /**
  *  This function helps to handle the http with cache hit in local

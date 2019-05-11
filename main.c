@@ -14,7 +14,7 @@
 #include "data_structure.h"
 
 // #define MY_TIMEOUT 5
-#define DEFAULT_MAX_THREAD 3
+// #define DEFAULT_MAX_THREAD 3
 // #define HEADER_BUFFER_SIZE 4096
 
 /* global variables used */
@@ -168,10 +168,10 @@ void* thread_network_action(void *args) {
 
     thread_status[tp->id] = 'z';
     ++available_threads;
+    printf_with_time("Exit thread[%d], released fd[%d], (not atomic)available thread[%d]\n", tp->id, tp->clientfd, available_threads);
 
     // unlock
     pthread_mutex_unlock(&lock);
-    printf_with_time("Exit thread[%d], released fd[%d], (not atomic)available thread[%d]\n", tp->id, tp->clientfd, available_threads);
     // pthread_exit(NULL);
     return NULL;
 }

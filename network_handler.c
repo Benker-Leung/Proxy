@@ -316,21 +316,21 @@ int get_data_by_len(int fd, char* buf, int bytes_to_read) {
 }
 
 /* forward data len */
-int forward_data_length(int clientfd, int serverfd, char* buf, int buf_size, int length) {
+int forward_data_length(int dest_fd, int from_fd, char* buf, int buf_size, int length) {
 
     int ret;
     bzero(buf, buf_size);
 
     while(length > 0) {
-        // read from server
-        ret = recv(serverfd, buf, buf_size, MSG_NOSIGNAL);
+        // read from from fd
+        ret = recv(from_fd, buf, buf_size, MSG_NOSIGNAL);
 
         if(ret <= 0) {
             return -1;
         }
         length -= ret;
-        // write to client
-        ret = send(clientfd, buf, ret, MSG_NOSIGNAL);
+        // write to destination fd
+        ret = send(dest_fd, buf, ret, MSG_NOSIGNAL);
         if(ret <= 0) {
             return -1;
         }
@@ -344,7 +344,7 @@ int forward_data_length(int clientfd, int serverfd, char* buf, int buf_size, int
 }
 
 /* forward data chunked */
-int forward_data_chunked(int clientfd, int serverfd) {
+int forward_data_chunked(int dest_fd, int from_fd) {
 
     int ret;
     int status;
@@ -354,7 +354,7 @@ int forward_data_chunked(int clientfd, int serverfd) {
     status = 0;
     while(1) {
         
-        ret = recv(serverfd, &c, 1, MSG_NOSIGNAL);
+        ret = recv(from_fd, &c, 1, MSG_NOSIGNAL);
         if(ret <= 0)
             return -1;
 
@@ -372,7 +372,7 @@ int forward_data_chunked(int clientfd, int serverfd) {
                 break;
         }
         
-        ret = send(clientfd, &c, 1, MSG_NOSIGNAL);
+        ret = send(dest_fd, &c, 1, MSG_NOSIGNAL);
         if(ret <= 0) {
             return -1;
         }

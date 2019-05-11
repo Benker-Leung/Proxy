@@ -3,13 +3,6 @@
 
 #include "data_structure.h"
 
-struct header_status {
-    int http_method;    // indicate the method, only support(GET, POST)
-    int is_persistent;  // indicate the HTTP version
-    int hv_data;        // indicate whether HTTP hv data or nt
-    int is_chunked;     // indicate the data transfer method
-    int data_length;    // if is not chunked, the data len should be specify in content-length
-};
 
 /**
  *  This function clear the buffer with given size 
@@ -104,14 +97,16 @@ int forward_packet(int serverfd, char* buf, int len);
   * 
   *  Return 1 if success, -1 if fail
   */
-int forward_data_length(int clientfd, int serverfd, char* buf, int buf_size, int length);
+int forward_data_length(int dest_fd, int from_fd, char* buf, int buf_size, int length);
+
 
  /**
   *  This function read and forward chunked data
   * 
   *  Return 1 if success, -1 if fail
   */
- int forward_data_chunked(int clientfd, int serverfd);
+int forward_data_chunked(int dest_fd, int from_fd);
+
 
 
 /**
