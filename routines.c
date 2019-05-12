@@ -10,6 +10,7 @@
 #include "network_handler.h"
 #include "http_header_handler.h"
 #include "logger.h"
+#include "cache_handler.h"
 
 /* set recv and response to timeout */
 int set_socket_timeout(int fd, int t) {

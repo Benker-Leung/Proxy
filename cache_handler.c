@@ -1,3 +1,6 @@
+#define _GNU_SOURCE
+
+
 #include "cache_handler.h"
 
 #include <stdio.h>
@@ -9,6 +12,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <strings.h>
+
 
 // /* return current time in format for 'If-Modify-Since', but char* is static */
 // char *cache_get_time(const struct tm *timeptr) {
@@ -36,11 +40,9 @@
 /* This function create file return fd */
 int cache_create_file_by_hostname(char* hostname, int major) {
 
-    int minor = -1;
     int ret;
     int minor_start_position;
     int count_file;
-    int major_file;
     int num_of_minor;
     char file_content[1024];
     char path[512];
@@ -116,10 +118,8 @@ int cache_create_file_by_hostname(char* hostname, int major) {
 /* This function delete files */
 int cache_delete_file_by_hostname(char* hostname, int major, int minor) {
 
-    int ret;
     int minor_start_position;
     int count_file;
-    int major_file;
     int num_of_minor;
     char file_content[1024];
     char path[512];
@@ -189,11 +189,47 @@ int cache_delete_file_by_hostname(char* hostname, int major, int minor) {
 
 /* This function create file return fd */
 int cache_create_file(char* req_buffer) {
-    
+
+    return -1;
+
 }
 
 /* This function delete file */
 int cache_delete_file(char* req_buffer) {
+
+    return -1;
+
+}
+
+/* This function get hash value (x%101) */
+int cache_uri_hash(char* req_buffer) {
+
+    int i = 1;
+    int hash = 0;
+    char* uri = req_buffer + 4;
+
+    while(*uri != '\r' && *uri != '\n' && *uri != '\0' && *uri != ' ') {
+        hash += *uri << i;
+        ++i;
+        ++uri;
+    }
+
+
+    if(!(uri = strcasestr(req_buffer, "host:"))) {
+        return -1;
+    }
+    while(*uri != '\r' && *uri != '\n' && *uri != '\0' && *uri != ' ') {
+        hash += *uri;
+        ++uri;
+    }
+
+    hash = hash % 101;
+    if(hash < 0) {
+        hash *= -1;
+        hash = hash % 101;
+    }
+
+    return hash;
 
 }
 

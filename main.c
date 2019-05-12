@@ -47,8 +47,6 @@ void init_proxy(int argc, char** argv) {
 
     max_thread = DEFAULT_MAX_THREAD;
 
-    cache_create_file_by_hostname("sgss.edu.hk", 8);
-
     // check port number specify or not
     if(argc < 2) {
         printf("Missing the port number\n");
@@ -135,6 +133,9 @@ void init_proxy(int argc, char** argv) {
         printf("Fail to change directory to cache_files\n");
         exit(0);
     }
+
+    cache_create_file_by_hostname("sgss.edu.hk", 8);
+
 
 }
 
