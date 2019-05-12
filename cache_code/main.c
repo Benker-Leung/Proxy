@@ -49,6 +49,10 @@ My flow:
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <strings.h>
 
 /**
  *  This function gets the current time in format of 'If-Modify-Since'
@@ -79,18 +83,28 @@ char *asctime(const struct tm *timeptr) {
 
 /**
  *  This function create the files given Major number and hostname
+ *  the minor number is auto assigned
  * 
- *  Return 0 if success, -1 if fail
+ *  Return +ve(fd) if success, -1 if fail
  */
 /* This function create the files given Major number and hostname */
 int cache_create_file(char* hostname, int major) {
 
-    // char path[512];     // for store absolute path
+    int minor = -1;
+    int ret;
+    int minor_start_position;
+    int count_file;
+    int major_file;
+    int num_of_minor;
+    char file_content[1024];
+    char path[512];
 
-    // if(getcwd(path, 512) == NULL) {
-    //     return -1;
-    // }
-    // sprintf(path, "%s/cache_files/%s", path, hostname); // get the final abs path
+    if(getcwd(path, 512) == NULL) {
+        printf("Fail to get current directory\n");
+        return -1;
+    }
+
+    minor_start_position = sprintf(path, "%s/%s/%d_", path, hostname, major);
 
     // if mkdir fail
     if(mkdir(hostname, 0777)) {
@@ -99,9 +113,57 @@ int cache_create_file(char* hostname, int major) {
         }
     }
 
-    
+    // clear file content
+    bzero(file_content, 1024);
 
-    return 0;
+    // set path to major_0
+    sprintf(path+minor_start_position, "%d", 0);
+
+    // if major_0 not exist
+    if((count_file = open(path, O_RDWR, 0644)) == -1) {
+        // if fail to open
+        if((count_file = open(path, O_CREAT|O_RDWR, 0644)) == -1) {
+            printf("Fail to open or create the major file\n");
+            return -1;
+        }
+        // open OK, write 1 to major_0
+        else {
+            num_of_minor = 1;
+            sprintf(file_content, "%d", num_of_minor);
+            write(count_file, file_content, 1024);
+            close(count_file);
+        }
+    }
+    // if major_0 exist and successfully opened
+    else {
+        // fail to read
+        if(read(count_file, file_content, 1024) <= 0) {
+            close(count_file);
+            printf("Fail to read minor value\n");
+            return -1;
+        }
+        // non first value
+        else {
+            if((lseek(count_file, 0, SEEK_SET)) == -1) {
+                printf("Fail to lseek\n");
+                return -1;
+            }
+            num_of_minor = atoi(file_content);
+            ++num_of_minor;
+            sprintf(file_content, "%d", num_of_minor);
+            write(count_file, file_content, 1024);
+            close(count_file);
+        }
+    }
+
+    sprintf(path+minor_start_position, "%d", num_of_minor);
+
+    // if fail to open
+    if((ret = open(path, O_CREAT|O_RDWR, 0644)) <= 0) {
+        return -1;
+    }
+
+    return ret;
 }
 
 /**
@@ -112,26 +174,96 @@ int cache_create_file(char* hostname, int major) {
 /* This function delete files */
 int cache_delete_file(char* hostname, int major, int minor) {
 
+    int ret;
+    int minor_start_position;
+    int count_file;
+    int major_file;
+    int num_of_minor;
+    char file_content[1024];
+    char path[512];
+
+    if(minor <= 0 || major < 0) {
+        return -1;
+    }
+
+    bzero(file_content, 1024);
+
+    if(getcwd(path, 512) == NULL) {
+        printf("Fail to get current directory\n");
+        return -1;
+    }
+
+    minor_start_position = sprintf(path, "%s/%s/%d_", path, hostname, major);
+
+    // remove the file
+    sprintf(path+minor_start_position, "%d", minor);
+    if(unlink(path)) {
+        printf("Fail to remove the file\n");
+        return -1;
+    }
+
+
+    sprintf(path+minor_start_position, "%d", 0);
+    // get the minor number, if fail to open
+    if((count_file = open(path, O_RDWR, 0644)) <= 0) {
+        printf("Fail to open major_0\n");
+        return -1;
+    }
+    // open OK
+    else {
+        // if can't read
+        if(read(count_file, file_content, 1024) <= 0) {
+            printf("Fail to read minor number\n");
+            close(count_file);
+            return -1;
+        }
+        // read + write
+        else {
+            num_of_minor = atoi(file_content);
+            --num_of_minor;
+            sprintf(file_content, "%d", num_of_minor);
+            lseek(count_file, 0, SEEK_SET);
+            write(count_file, file_content, 1024);
+        }
+        close(count_file);
+    }
+
+    // num_of_minor is original-1
+
+    // if minor is not the last one
+    if(num_of_minor + 1 != minor) {
+        // path is new path
+        sprintf(path+minor_start_position, "%d", minor);
+        // file_content is old path
+        sprintf(file_content, "%s", path);
+        sprintf(file_content+minor_start_position, "%d", num_of_minor+1);
+        if(rename(file_content, path)) {
+            printf("Fail to move file\n");
+            return -1;
+        }
+    }
+    return 0;
 }
 
 
 int main() {
     
+    int ret;
     char* time_string;
     struct tm* time_struct;
     time_t result;
     result = time(NULL);
     
     time_string = asctime(localtime(&result));
-
     printf("Time :%s\n", time_string);
-    printf("Length [%d]\n", strlen(time_string));
+    printf("Length [%ld]\n", strlen(time_string));
 
-    printf("result code[%d]\n", cache_create_file("sgss.edu.hk", 10));
+    // ret = cache_create_file("sgss.edu.hk", 10);
+    // printf("num_of_minor [%d]\n", ret);
+    // close(ret);
+
+    ret = cache_delete_file("sgss.edu.hk", 10, 1);
+    printf("Remove result code [%d]\n", ret);
 
     return 0;
 }
-
-
-
-
