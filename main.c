@@ -12,6 +12,7 @@
 #include "network_handler.h"
 #include "routines.h"
 #include "data_structure.h"
+#include "cache_handler.h"
 
 // #define MY_TIMEOUT 5
 // #define DEFAULT_MAX_THREAD 3
@@ -45,6 +46,8 @@ void init_proxy(int argc, char** argv) {
     int i;
 
     max_thread = DEFAULT_MAX_THREAD;
+
+    cache_create_file_by_hostname("sgss.edu.hk", 8);
 
     // check port number specify or not
     if(argc < 2) {
