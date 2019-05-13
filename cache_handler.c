@@ -2,6 +2,8 @@
 
 
 #include "cache_handler.h"
+#include "http_header_handler.h"
+#include "logger.h"
 
 #include <stdio.h>
 #include <time.h>
@@ -35,6 +37,132 @@
 
 //     return result;
 // }
+
+
+/* This function get max minor */
+int cache_get_max_minor(char* hostname, int major) {
+
+    int count_file;
+    int num_of_minor;
+    char path[512];
+
+    bzero(path, 512);
+
+    if(getcwd(path, 512) == NULL) {
+        printf("Fail to get current directory\n");
+        return -1;
+    }
+    
+    sprintf(path, "%s/%s/%d_0", path, hostname, major);
+
+    // get the minor number, if fail to open
+    if((count_file = open(path, O_RDWR, 0644)) <= 0) {
+        printf("Fail to open major_0\n");
+        return -1;
+    }
+    else {
+        // if can't read
+        if(read(count_file, path, 512) <= 0) {
+            printf("Fail to read minor number\n");
+            close(count_file);
+            return -1;
+        }
+        // read
+        else {
+            num_of_minor = atoi(path);
+        }
+        close(count_file);
+    }
+    return num_of_minor;
+}
+
+
+/* This function get minor by req_buffer */
+int cache_get_minor(char* req_buffer) {
+
+    char c;
+    int i;
+    int j;
+    int cache_fd;   // fd for cache file
+    int major;      // record the hash of req_buffer
+    int num_of_minor;   // record the max num of minor
+    int minor_start_position;
+    char* host;     // record start of host
+    char* host_end;      // record end of host
+    char* uri;
+    char* uri_end;
+    char path[512];
+    char file_content[1024];
+
+    bzero(path, 512);
+
+    // get the hash value
+    major = cache_uri_hash(req_buffer);
+
+    // for prepare path
+    if(getcwd(path, 512) == NULL) {
+        printf("Fail to get current directory\n");
+        return -1;
+    }
+
+    // get host and end
+    if(get_host_end(req_buffer, &host, &host_end)) {
+        printf("Fail to get host\n");
+        return -1;
+    }
+    // get uri and end
+    if(get_uri_end(req_buffer, &uri, &uri_end)) {
+        printf("Fail to get uri\n");
+        return -1;
+    }
+    printf("host[%s]\nmajor[%d]\n", host, major);
+    // get num of minor
+    if((num_of_minor = cache_get_max_minor(host, major)) == -1) {
+        *host_end = '\r';
+        *uri_end = ' ';
+        printf("Fail to get max minor\n");
+        return -1;
+    }
+    minor_start_position = sprintf(path, "%s/%s/%d_", path, host, major);
+    *host_end = '\r';
+    // *uri_end = ' ';
+
+    // loop all files
+    for(i=1; i<=num_of_minor; ++i) {
+        // prepare full path
+        sprintf(path+minor_start_position, "%d", i);
+
+        // open and check
+        if((cache_fd = open(path, O_RDWR, 0644)) <= 0) {
+            continue;
+        }
+        bzero(file_content, 1024);
+        // open OK,
+        for(j=0; ;++j) {
+            // fail to read
+            if(read(cache_fd, &c, 1) <= 0) {
+                file_content[0] = '\0';
+                close(cache_fd);
+                break;
+            }
+            // got first line "GET ..."
+            if(c == '\r') {
+                close(cache_fd);
+                break;
+            }
+            else {
+                file_content[j] = c;
+            }
+        }
+        if(strcasestr(file_content, uri) != NULL) {
+            *uri_end = ' ';
+            return i;
+        }
+    }
+    *uri_end = ' ';
+    // means not found
+    return 0;
+}
 
 
 /* This function create file return fd */
@@ -193,29 +321,34 @@ int cache_delete_file_by_hostname(char* hostname, int major, int minor) {
 int cache_uri_hash(char* req_buffer) {
 
     int i = 1;
-    int hash = 0;
-    char* uri = req_buffer + 4;
+    unsigned int hash = 0;
+    char* host;
+    char* host_end;
+    char* uri;
+    char* uri_end;
+    if(get_host_end(req_buffer, &host, &host_end)) {
+        printf("Fail to get host\n");
+        return -1;
+    }
+    if(get_uri_end(req_buffer, &uri, &uri_end)) {
+        printf("Fail to get uri\n");
+        return -1;
+    }
 
-    while(*uri != '\r' && *uri != '\n' && *uri != '\0' && *uri != ' ') {
+    while(uri != uri_end) {
         hash += *uri << i;
         ++i;
         ++uri;
     }
-
-
-    if(!(uri = strcasestr(req_buffer, "host:"))) {
-        return -1;
+    *uri_end = ' ';
+    while(host != host_end) {
+        hash += *host;
+        ++i;
+        ++host;
     }
-    while(*uri != '\r' && *uri != '\n' && *uri != '\0' && *uri != ' ') {
-        hash += *uri;
-        ++uri;
-    }
-
+    *host_end = '\r';
+    
     hash = hash % 101;
-    if(hash < 0) {
-        hash *= -1;
-        hash = hash % 101;
-    }
 
     return hash;
 
@@ -233,24 +366,12 @@ int cache_add_file(char* req_buffer) {
 
     // get hash by req_buffer
     major = cache_uri_hash(req_buffer);
-    
-    // get starting point of host
-    host = strcasestr(req_buffer, "host:");
-    if(host == NULL) {
-        printf("Fail to add cache file\n");
+
+    // get host and end
+    if(get_host_end(req_buffer, &host, &end)) {
+        printf("Fail to get host\n");
         return -1;
     }
-    host += 6;
-    end = host;
-    while(*end != '\r') {
-        if(*end == '\0') {
-            printf("Fail to add cache file\n");
-            return -1;
-        }
-        ++end;
-    }
-    *end = '\0';
-
     // get cache file fd by host and major(hash)
     cache_fd = cache_create_file_by_hostname(host, major);
     *end = '\r';
@@ -282,6 +403,9 @@ int cache_add_file(char* req_buffer) {
 
 /* This function delete file */
 int cache_delete_file(char* req_buffer) {
+
+    
+
 
     return -1;
 

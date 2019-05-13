@@ -7,6 +7,54 @@
 #include "http_header_handler.h"
 #include "logger.h"
 
+
+/* This function get uri start and end */
+int get_uri_end(char* req_buffer, char** uri, char** uri_end) {
+
+    *uri = req_buffer;
+    while(**uri != ' ') {
+        if(**uri == '\0') {
+            return -1;
+        }
+        ++*uri;
+    }
+    ++*uri;
+    *uri_end = *uri;
+    while(**uri_end != ' ') {
+        if(**uri_end == '\0') {
+            return -1;
+        }
+        ++*uri_end;
+    }
+    **uri_end = '\0';
+    return 0;
+}
+
+
+
+/* This function get host start and end */
+int get_host_end(char* req_buffer, char** host, char** end) {
+
+    // get starting point of host
+    *host = strcasestr(req_buffer, "host:");
+    if(*host == NULL) {
+        printf("Fail to add cache file\n");
+        return -1;
+    }
+    *host += 6;
+    *end = *host;
+    while(**end != '\r') {
+        if(**end == '\0') {
+            printf("Fail to add cache file\n");
+            return -1;
+        }
+        ++*end;
+    }
+    **end = '\0';
+    return 0;
+
+}
+
 /* reformat request header */
 int reformat_request_header(char* req_buf) {
     

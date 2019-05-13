@@ -4,6 +4,21 @@
 #include "data_structure.h"
 
 /**
+ *  This function get uri and uri_end, and set end to \0
+ * 
+ *  Return 0 if success, -1 if fail
+ */
+int get_uri_end(char* req_buffer, char** uri, char** uri_end);
+
+
+/**
+ *  This function get host and end, and set end to \0
+ * 
+ *  Return 0 if success, -1 if fail
+ */
+int get_host_end(char* req_buffer, char** host, char** end);
+
+/**
  *  This function helps to reformat the request header,
  *  e.g set [GET http://sgss.edu.hk/] to [GET /]
  * 

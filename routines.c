@@ -212,6 +212,8 @@ int no_cache_routine(int serverfd, struct thread_param* tp, struct header_status
 
     // ret = cache_add_file(tp->req_buffer);
     // close(ret);
+    // printf("{%d}\n\n", cache_uri_hash(tp->req_buffer));
+    // printf("Minor{%d}\n\n", cache_get_minor(tp->req_buffer));
     printf("======================= Request [%d] =======================\n%s======================= Response [%d] =======================\n%s", tp->id, tp->req_buffer, tp->id, tp->res_buffer);
 
     // forward the response header to client

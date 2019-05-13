@@ -134,9 +134,6 @@ void init_proxy(int argc, char** argv) {
         exit(0);
     }
 
-    cache_create_file_by_hostname("sgss.edu.hk", 8);
-
-
 }
 
 /* action to be taken before exit */

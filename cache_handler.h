@@ -10,6 +10,22 @@
 
 
 /**
+ *  This function get the value of major_0
+ * 
+ *  Return +ve(include 0, value in file) if success, -1 if fail
+ */
+int cache_get_max_minor(char* hostname, int major);
+
+
+/**
+ *  This function get minor value by req_buffer
+ * 
+ *  Return +ve if success, 0 if fail
+ */
+int cache_get_minor(char* req_buffer);
+
+
+/**
  *  This function create the files given Major number and hostname
  *  the minor number is auto assigned
  * 
@@ -49,6 +65,7 @@ int cache_add_file(char* req_buffer);
  *  Return +ve(fd) if success, -1 if fail
  */
 int cache_search_file(char* req_buffer);
+
 
 /**
  *  This function delete cache file by req_buffer
