@@ -210,6 +210,8 @@ int no_cache_routine(int serverfd, struct thread_param* tp, struct header_status
         return -1;
     }
 
+    // ret = cache_add_file(tp->req_buffer);
+    // close(ret);
     printf("======================= Request [%d] =======================\n%s======================= Response [%d] =======================\n%s", tp->id, tp->req_buffer, tp->id, tp->res_buffer);
 
     // forward the response header to client

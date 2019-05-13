@@ -26,13 +26,29 @@ int cache_create_file_by_hostname(char* hostname, int major);
 int cache_delete_file_by_hostname(char* hostname, int major, int minor);
 
 
+
 /**
- *  This function create cache file by req_buffer
+ *  This function get the hash value base on uri
+ * 
+ *  Return 0-100, use (x%101)
+ */
+int cache_uri_hash(char* req_buffer);
+
+
+/**
+ *  This function add a file base on req_buffer
  * 
  *  Return +ve(fd) if success, -1 if fail
  */
-int cache_create_file(char* req_buffer);
+int cache_add_file(char* req_buffer);
 
+
+/**
+ *  This function search a file base on req_buffer
+ * 
+ *  Return +ve(fd) if success, -1 if fail
+ */
+int cache_search_file(char* req_buffer);
 
 /**
  *  This function delete cache file by req_buffer
@@ -42,12 +58,6 @@ int cache_create_file(char* req_buffer);
 int cache_delete_file(char* req_buffer);
 
 
-/**
- *  This function get the hash value base on uri
- * 
- *  Return 0-100, use (x%101)
- */
-int cache_uri_hash(char* req_buffer);
 
 
 #endif

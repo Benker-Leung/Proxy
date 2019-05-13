@@ -187,19 +187,7 @@ int cache_delete_file_by_hostname(char* hostname, int major, int minor) {
     return 0;
 }
 
-/* This function create file return fd */
-int cache_create_file(char* req_buffer) {
 
-    return -1;
-
-}
-
-/* This function delete file */
-int cache_delete_file(char* req_buffer) {
-
-    return -1;
-
-}
 
 /* This function get hash value (x%101) */
 int cache_uri_hash(char* req_buffer) {
@@ -233,4 +221,69 @@ int cache_uri_hash(char* req_buffer) {
 
 }
 
+
+/* This function create a file given req_buffer */
+int cache_add_file(char* req_buffer) {
+
+    int cache_fd;   // fd for cache file
+    int major;      // record the hash of req_buffer
+    char* temp;    // record movement of req_buffer
+    char* host;     // record start of host
+    char* end;      // record end of host
+
+    // get hash by req_buffer
+    major = cache_uri_hash(req_buffer);
+    
+    // get starting point of host
+    host = strcasestr(req_buffer, "host:");
+    if(host == NULL) {
+        printf("Fail to add cache file\n");
+        return -1;
+    }
+    host += 6;
+    end = host;
+    while(*end != '\r') {
+        if(*end == '\0') {
+            printf("Fail to add cache file\n");
+            return -1;
+        }
+        ++end;
+    }
+    *end = '\0';
+
+    // get cache file fd by host and major(hash)
+    cache_fd = cache_create_file_by_hostname(host, major);
+    *end = '\r';
+    // if fail to get fd
+    if(cache_fd == -1) {
+        printf("Fail to add cache file\n");
+        return -1;
+    }
+
+    // write GET and HOST to file
+    temp = req_buffer;
+    while(*temp != '\r') {
+        if(*temp == '\0') {
+            return -1;
+        }
+        write(cache_fd, temp, 1);
+        ++temp;
+    }
+    write(cache_fd, "\r\n", 2);
+    while(host != end) {
+        write(cache_fd, host, 1);
+        ++host;
+    }    
+    write(cache_fd, "\r\n", 2);
+
+    return cache_fd;
+}
+
+
+/* This function delete file */
+int cache_delete_file(char* req_buffer) {
+
+    return -1;
+
+}
 
