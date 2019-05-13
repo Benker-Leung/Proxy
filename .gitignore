@@ -5,3 +5,4 @@ test
 proxy
 log
 .cache_files/*
+.cache_files/
