@@ -74,7 +74,12 @@ int cache_search_file(char* req_buffer);
  */
 int cache_delete_file(char* req_buffer);
 
-
+/**
+ *  This function get file_fd by req_buffer
+ *  
+ *  Return +ve(fd) if success, -1 if fail
+ */
+int cache_get_file_fd(char* req_buffer);
 
 
 #endif

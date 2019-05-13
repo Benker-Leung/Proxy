@@ -115,7 +115,6 @@ int cache_get_minor(char* req_buffer) {
         printf("Fail to get uri\n");
         return -1;
     }
-    printf("host[%s]\nmajor[%d]\n", host, major);
     // get num of minor
     if((num_of_minor = cache_get_max_minor(host, major)) == -1) {
         *host_end = '\r';
@@ -291,11 +290,23 @@ int cache_delete_file_by_hostname(char* hostname, int major, int minor) {
         else {
             num_of_minor = atoi(file_content);
             --num_of_minor;
-            sprintf(file_content, "%d", num_of_minor);
-            lseek(count_file, 0, SEEK_SET);
-            write(count_file, file_content, 1024);
+            // last
+            if(num_of_minor == 0) {
+                close(count_file);
+                if(unlink(path)) {
+                    printf("Fail to remove major_0\n");
+                    return -1;
+                }
+                return 0;
+            }
+            // non-last
+            else {
+                sprintf(file_content, "%d", num_of_minor);
+                lseek(count_file, 0, SEEK_SET);
+                write(count_file, file_content, 1024);
+                close(count_file);
+            }
         }
-        close(count_file);
     }
 
     // num_of_minor is original-1
@@ -332,6 +343,7 @@ int cache_uri_hash(char* req_buffer) {
     }
     if(get_uri_end(req_buffer, &uri, &uri_end)) {
         printf("Fail to get uri\n");
+        *host_end = '\r';
         return -1;
     }
 
@@ -404,10 +416,66 @@ int cache_add_file(char* req_buffer) {
 /* This function delete file */
 int cache_delete_file(char* req_buffer) {
 
-    
+    int minor;
+    int major;
+    char* host;
+    char* host_end;
 
+    minor = cache_get_minor(req_buffer);
+    if(minor <= 0) {
+        printf("Fail to delete file\n");
+        return -1;
+    }
 
-    return -1;
+    major = cache_uri_hash(req_buffer);
+
+    if(get_host_end(req_buffer, &host, &host_end)) {
+        printf("Fail to delete file\n");
+        return -1;
+    }
+
+    minor = cache_delete_file_by_hostname(host, major, minor);
+    *host_end = '\r';
+    return 0;
 
 }
 
+
+/* This function get file_fd by req_buffer */
+int cache_get_file_fd(char* req_buffer) {
+
+    int file_fd;
+    int major;
+    int minor;
+    char* host;
+    char* host_end;
+    char path[512];
+
+    major = cache_uri_hash(req_buffer);
+    minor = cache_get_minor(req_buffer);
+    if(minor <= 0) {
+        printf("No such cache file\n");
+        return -1;
+    }
+
+    if(get_host_end(req_buffer, &host, &host_end)) {
+        return -1;
+    }
+
+    bzero(path, 512);
+
+    if(getcwd(path, 512) == NULL) {
+        printf("Fail to get current directory\n");
+        return -1;
+    }
+
+    sprintf(path, "%s/%s/%d_%d", path, host, major, minor);
+    *host_end = '\r';
+
+    file_fd = open(path, O_RDWR, 0644);
+    if(file_fd <= 0) {
+        printf("No such cache file\n");
+        return -1;        
+    }
+    return file_fd;
+}

@@ -175,30 +175,49 @@ EXIT_PROXY_ROUTINES:
 int no_cache_routine(int serverfd, struct thread_param* tp, struct header_status* hs) {
 
     int ret;        // record the return value result
-    // int is_persistent = 0;
+    int cache_fd;   // cached file represent this request
 
-    // bzero(&hs, sizeof(struct header_status));
-    // ret = init_header_status(&hs, tp->req_buffer, REQUEST);
-    // is_persistent = hs->is_persistent;
 
-    // forward the request header to server
-    ret = forward_packet(serverfd, tp->req_buffer, strlen(tp->req_buffer));
+    cache_fd = cache_get_file_fd(tp->req_buffer);
+    if(cache_fd > 0) {
+        printf("Found cache\n");
+        // validate cache
+        ret = cache_routine(serverfd, tp, hs, cache_fd);
+        if(ret) {
+            printf("Request handled by cache\n");
+            // cache handled successfully
+            ret = -1;
+            goto EXIT_NO_CACHE_ROUTINE;
+            // return -1;
+        }
+        close(cache_fd);
+    }
+
+    // new cache_fd, with miss local cache
+    cache_fd = cache_add_file(tp->req_buffer);
+
+    // forward the request header to server, if possible, cache the header
+    ret = forward_packet(serverfd, tp->req_buffer, strlen(tp->req_buffer), cache_fd);
     if(ret < 0) {
         printf("Fail to forward packet to serverfd\n");
-        return -1;
+        ret = -1;
+        goto EXIT_NO_CACHE_ROUTINE;
+        // return -1;
     }
 
     // if it is post, get the payload and forward
     if(hs->http_method == POST) {
         if(hs->is_chunked) {
-            ret = forward_data_chunked(serverfd, tp->clientfd);
+            ret = forward_data_chunked(serverfd, tp->clientfd, -1);
         }
         else if(hs->hv_data) {
             bzero(tp->req_buffer, HEADER_BUFFER_SIZE);
-            ret = forward_data_length(serverfd, tp->clientfd, tp->req_buffer, HEADER_BUFFER_SIZE, hs->data_length);
+            ret = forward_data_length(serverfd, tp->clientfd, tp->req_buffer, HEADER_BUFFER_SIZE, hs->data_length, -1);
         }
         else {
-            return -1;
+            ret = -1;
+            goto EXIT_NO_CACHE_ROUTINE;
+            // return -1;
         }
     }
 
@@ -207,20 +226,25 @@ int no_cache_routine(int serverfd, struct thread_param* tp, struct header_status
     ret = get_reqres_header(serverfd, tp->res_buffer, HEADER_BUFFER_SIZE, tp->id);
     if(ret < 0) {
         printf("Fail to get response header from serverfd\n");
-        return -1;
+        ret = -1;
+        goto EXIT_NO_CACHE_ROUTINE;
+        // return -1;
     }
 
     // ret = cache_add_file(tp->req_buffer);
     // close(ret);
-    // printf("{%d}\n\n", cache_uri_hash(tp->req_buffer));
+    // printf("{%d}\n\n", cache_delete_file(tp->req_buffer));
     // printf("Minor{%d}\n\n", cache_get_minor(tp->req_buffer));
     printf("======================= Request [%d] =======================\n%s======================= Response [%d] =======================\n%s", tp->id, tp->req_buffer, tp->id, tp->res_buffer);
 
-    // forward the response header to client
-    ret = forward_packet(tp->clientfd, tp->res_buffer, strlen(tp->res_buffer));
+    lseek(cache_fd, 4096, SEEK_SET);
+    // forward the response header to client, if possible, cache response header to lseek 4096
+    ret = forward_packet(tp->clientfd, tp->res_buffer, strlen(tp->res_buffer), cache_fd);
     if(ret < 0) {
         printf("Fail to forward response header to client\n");
-        return -1;
+        ret = -1;
+        goto EXIT_NO_CACHE_ROUTINE;
+        // return -1;
     }
 
     bzero(hs, sizeof(struct header_status));
@@ -229,23 +253,44 @@ int no_cache_routine(int serverfd, struct thread_param* tp, struct header_status
     ret = init_header_status(hs, tp->res_buffer, RESPONSE);
 
     if(hs->is_chunked) {
-        ret = forward_data_chunked(tp->clientfd, serverfd);
+        ret = forward_data_chunked(tp->clientfd, serverfd, cache_fd);
         if(ret < 0) {
             printf("Fail to forward chunked data to clientfd\n");
-            return -1;
+            ret = -1;
+            goto EXIT_NO_CACHE_ROUTINE;
+            // return -1;
         }
     }
     else if(hs->hv_data) {
-        ret = forward_data_length(tp->clientfd, serverfd, tp->res_buffer, HEADER_BUFFER_SIZE, hs->data_length);
+        ret = forward_data_length(tp->clientfd, serverfd, tp->res_buffer, HEADER_BUFFER_SIZE, hs->data_length, cache_fd);
         if(ret < 0) {
             printf("Fail to forward data length to clientfd\n");
-            return -1;
+            ret = -1;
+            goto EXIT_NO_CACHE_ROUTINE;
+            // return -1;
         }
     }
     if(hs->is_persistent) {
-        return serverfd;
+        ret = serverfd;
+        goto EXIT_NO_CACHE_ROUTINE;
+        // return serverfd;
     }
+    ret = 0;
+EXIT_NO_CACHE_ROUTINE:
+    close(cache_fd);
+    return ret;
+}
 
+/* routine for local cache hit */
+int cache_routine(int serverfd, struct thread_param* tp, struct header_status* hs, int cache_fd) {
+
+    // validate the cache
+    
+    // if 304
+    // forward the cache response header and cache response data
+
+    // if non-304
+    // delete the cache file
     return 0;
 
 }

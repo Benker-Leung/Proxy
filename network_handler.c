@@ -16,6 +16,7 @@
 #include "network_handler.h"
 #include "routines.h"
 #include "http_header_handler.h"
+#include "cache_handler.h"
 
 
 // struct header_status {
@@ -282,41 +283,31 @@ int connect_https_server(char* req_buffer) {
 }
 
 /* forward the packet given server fd and buffer */
-int forward_packet(int serverfd, char* buf, int len) {
+int forward_packet(int serverfd, char* buf, int len, int cache_fd) {
 
-    int ret;
+    int ret;  
 
     while(len != 0) {
         ret = send(serverfd, buf, len, MSG_NOSIGNAL);
+
+        // cache
+        if(cache_fd > 0) {
+            write(cache_fd, buf, ret);
+        }
+
         if(ret <= 0) {
             log("Cannot forward request to server, errno: [%d]\n", errno);
             return ret;
         }
         len -= ret;
+        buf += ret;
     }
     return 1;
 }
 
 
-/* read specific bytes */
-int get_data_by_len(int fd, char* buf, int bytes_to_read) {
-    
-    int ret;
-
-    while(bytes_to_read > 0) {
-        ret = recv(fd, buf, bytes_to_read, MSG_NOSIGNAL);
-        if(ret <= 0) {
-            log("Error in getting data\n");
-            return -1;
-        }
-        bytes_to_read -= ret;
-        buf += ret;
-    }
-    return 0;
-}
-
 /* forward data len */
-int forward_data_length(int dest_fd, int from_fd, char* buf, int buf_size, int length) {
+int forward_data_length(int dest_fd, int from_fd, char* buf, int buf_size, int length, int cache_fd) {
 
     int ret;
     bzero(buf, buf_size);
@@ -324,13 +315,18 @@ int forward_data_length(int dest_fd, int from_fd, char* buf, int buf_size, int l
     while(length > 0) {
         // read from from fd
         ret = recv(from_fd, buf, buf_size, MSG_NOSIGNAL);
-
         if(ret <= 0) {
             return -1;
         }
         length -= ret;
         // write to destination fd
         ret = send(dest_fd, buf, ret, MSG_NOSIGNAL);
+        
+        // cache
+        if(cache_fd > 0) {
+            write(cache_fd, buf, ret);
+        }
+
         if(ret <= 0) {
             return -1;
         }
@@ -344,12 +340,11 @@ int forward_data_length(int dest_fd, int from_fd, char* buf, int buf_size, int l
 }
 
 /* forward data chunked */
-int forward_data_chunked(int dest_fd, int from_fd) {
+int forward_data_chunked(int dest_fd, int from_fd, int cache_fd) {
 
     int ret;
     int status;
     char c;
-
 
     status = 0;
     while(1) {
@@ -373,6 +368,12 @@ int forward_data_chunked(int dest_fd, int from_fd) {
         }
         
         ret = send(dest_fd, &c, 1, MSG_NOSIGNAL);
+
+        // cache
+        if(cache_fd > 0) {
+            write(cache_fd, &c, 1);
+        }
+
         if(ret <= 0) {
             return -1;
         }

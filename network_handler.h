@@ -80,16 +80,7 @@ int connect_https_server(char* req_buffer);
  *  Return (+ve) if success, (-ve) if fail
  *
  */
-int forward_packet(int serverfd, char* buf, int len);
-
-
-/**
- *  This function read specific bytes from fd
- * 
- *  Return zero(0) if success, -1 if fail
- * 
- */
- int get_data_by_len(int fd, char* buf, int bytes_to_read);
+int forward_packet(int serverfd, char* buf, int len, int cache_fd);
 
 
  /**
@@ -97,7 +88,7 @@ int forward_packet(int serverfd, char* buf, int len);
   * 
   *  Return 1 if success, -1 if fail
   */
-int forward_data_length(int dest_fd, int from_fd, char* buf, int buf_size, int length);
+int forward_data_length(int dest_fd, int from_fd, char* buf, int buf_size, int length, int cache_fd);
 
 
  /**
@@ -105,7 +96,7 @@ int forward_data_length(int dest_fd, int from_fd, char* buf, int buf_size, int l
   * 
   *  Return 1 if success, -1 if fail
   */
-int forward_data_chunked(int dest_fd, int from_fd);
+int forward_data_chunked(int dest_fd, int from_fd, int cache_fd);
 
 
 
