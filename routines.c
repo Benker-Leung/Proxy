@@ -30,6 +30,18 @@ int set_socket_timeout(int fd, int t) {
 
 }
 
+/* This function helps to handle the restricted results */
+void restricted_routine(struct thread_param* tp) {
+
+    int ret;
+
+    ret = write(tp->clientfd, "HTTP/1.0 404 Not Found\r\nContent-Type: text/html\r\nContent-Length: 55\r\n\r\n", 71);
+    if(ret <= 0)
+        return;
+    ret = write(tp->clientfd, "<html><head><h1>NOT FOUND 404(proxy)</h1></head></html>", 55);
+    return;
+
+}
 
 /* previous routine */
 // int proxy_routines(int clientfd, char* req_buffer, char* res_buffer, int buf_size, int request_id, int timeout_allow) {
@@ -103,6 +115,10 @@ int proxy_routines(struct thread_param* tp) {
                             printf("Fail to connect to server[%s]\n", hostname);
                             goto EXIT_PROXY_ROUTINES;
                         }
+                        else if(ret == 0) {
+                            restricted_routine(tp);
+                            goto EXIT_PROXY_ROUTINES;
+                        }
                         serverfd = ret;
                         // set socket timeout
                         if(set_socket_timeout(serverfd, MY_TIMEOUT)) {
@@ -123,6 +139,10 @@ int proxy_routines(struct thread_param* tp) {
                             ret = connect_server(tp->req_buffer, port, hostname, tp->rw);
                             if(ret == -1) {
                                 printf("Fail to connect host[%s]\n", hostname);
+                                goto EXIT_PROXY_ROUTINES;
+                            }
+                            else if(ret == 0) {
+                                restricted_routine(tp);
                                 goto EXIT_PROXY_ROUTINES;
                             }
                             serverfd = ret;

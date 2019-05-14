@@ -229,7 +229,7 @@ int connect_server(char* req_buffer, int port, char* hostname, struct restricted
 
     if(!can_access_web(start, rw)) {
         *end = '\r';
-        return -1;
+        return 0;
     }
 
     ret = get_ip_by_host(start, ip_buf);
