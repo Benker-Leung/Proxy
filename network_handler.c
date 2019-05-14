@@ -195,7 +195,7 @@ int get_reqres_header(int fd, char* buf, int size, int request_id) {
 }
 
 /* get the server fd given req_buffer if success */
-int connect_server(char* req_buffer, int port, char* hostname) {
+int connect_server(char* req_buffer, int port, char* hostname, struct restricted_websites* rw) {
 
     char* start;
     char* end;
@@ -216,7 +216,7 @@ int connect_server(char* req_buffer, int port, char* hostname) {
         return -1;
     }
 
-    if(!can_access_web(start)) {
+    if(!can_access_web(start, rw)) {
         *end = '\r';
         return -1;
     }

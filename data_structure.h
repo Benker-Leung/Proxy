@@ -23,8 +23,6 @@ struct restricted_websites {
 
 };
 
-static struct restricted_websites restricted_website;
-
 struct header_status {
     int http_method;    // indicate the method, only support(GET, POST)
     int is_persistent;  // indicate the HTTP version
@@ -44,6 +42,7 @@ struct thread_param {
     // char* request_header_buffer;   // only support 4KB header
     // char* response_header_buffer;
     pthread_mutex_t *thread_lock;               // for synchronize open or close socket
+    struct restricted_websites* rw;
 };
 
 

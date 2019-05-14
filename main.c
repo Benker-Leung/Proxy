@@ -19,6 +19,7 @@
 // #define HEADER_BUFFER_SIZE 4096
 
 /* global variables used */
+struct restricted_websites restricted_website;
 struct thread_param* tps;   // thread_param array
 char* thread_status;    // status array, 'a' as available, 'o' as occupied
 pthread_t* thread;       // use to pthread_join
@@ -155,6 +156,7 @@ void init_proxy(int argc, char** argv) {
     // assign mutex
     for(i=0; i<max_thread; ++i) {
         tps[i].thread_lock = cache_lock;
+        tps[i].rw = &restricted_website;
     }
 
     // // assign the same lock to all thread_param object

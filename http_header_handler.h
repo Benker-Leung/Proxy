@@ -89,7 +89,7 @@ int get_response_code(char* res_buffer);
  * 
  *  Return 1 is able to access, 0 if cannot
  */
-int can_access_web(char* host);
+int can_access_web(char* host, struct restricted_websites* rw);
 
 
 #endif

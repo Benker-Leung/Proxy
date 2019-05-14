@@ -316,11 +316,11 @@ int get_response_code(char* res_buffer) {
 
 }
 /* This function determine host banned or not */
-int can_access_web(char* host) {
+int can_access_web(char* host, struct restricted_websites* rw) {
 
     int i;
-    for(i=0; i<restricted_website.num_of_sites; ++i) {
-        if(strcasecmp(host, restricted_website.list[i]) == 0) {
+    for(i=0; i<rw->num_of_sites; ++i) {
+        if(strcasecmp(host, rw->list[i]) == 0) {
             return 0;
         }
     }

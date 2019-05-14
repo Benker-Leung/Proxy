@@ -98,7 +98,7 @@ int proxy_routines(struct thread_param* tp) {
 
                     // only connect to server for the first time
                     if(serverfd < 0) {
-                        ret = connect_server(tp->req_buffer, ret, hostname);
+                        ret = connect_server(tp->req_buffer, ret, hostname, tp->rw);
                         if(ret == -1) {
                             printf("Fail to connect to server[%s]\n", hostname);
                             goto EXIT_PROXY_ROUTINES;
@@ -120,7 +120,7 @@ int proxy_routines(struct thread_param* tp) {
                             printf("Not same hostname detected!\n%s\n", tp->req_buffer);
                             close(serverfd);    // close the previous server socket
                             serverfd = -1;
-                            ret = connect_server(tp->req_buffer, port, hostname);
+                            ret = connect_server(tp->req_buffer, port, hostname, tp->rw);
                             if(ret == -1) {
                                 printf("Fail to connect host[%s]\n", hostname);
                                 goto EXIT_PROXY_ROUTINES;
