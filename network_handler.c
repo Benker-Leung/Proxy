@@ -145,6 +145,7 @@ int get_ip_by_host(char* host, char* ip_buf) {
         }
     }
     freeaddrinfo(result);
+    log("No ip found for host[%s]\n", host);
     return -1;
 }
 
@@ -213,7 +214,17 @@ int connect_server(char* req_buffer, int port, char* hostname, struct restricted
     }
     else {
         // fail to parse host
+        log("Fail to parse host\n");
         return -1;
+    }
+
+    // if host is length 15, try directly get
+    if(strlen(start) == 15) {
+        ret = get_serverfd(start, port);
+        if(ret != -1) {
+            *end = '\r';
+            return ret;
+        }
     }
 
     if(!can_access_web(start, rw)) {

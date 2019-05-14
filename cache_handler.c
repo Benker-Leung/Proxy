@@ -52,7 +52,7 @@ int cache_add_date(int cache_fd, char* req_buffer) {
     }
 
     bzero(date_tag, 100);
-    sprintf(date_tag, "%s %.3s, %.2d %.3s %d %.2d:%.2d:%.2d GMT\r\n\r\n", "If-Modified-Since:", wday_name[timeptr->tm_wday],
+    sprintf(date_tag, "%s %.3s, %.2d %.3s %d %.2d:%.2d:%.2d HKT\r\n\r\n", "If-Modified-Since:", wday_name[timeptr->tm_wday],
             timeptr->tm_mday, mon_name[timeptr->tm_mon], timeptr->tm_year+1900, timeptr->tm_hour, 
             timeptr->tm_min, timeptr->tm_sec);
         

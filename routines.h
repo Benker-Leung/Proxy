@@ -23,7 +23,7 @@ int proxy_routines(struct thread_param* tp);
 /**
  *  This function helps to handle the https request
  * 
- *  Return?
+ *  Return 0 if timeout, -1 if fail
  * 
  */
 int https_routine(int clientfd, int serverfd, char* req_buffer, char* res_buffer, int buf_size, char timeout_allow);
@@ -33,7 +33,7 @@ int https_routine(int clientfd, int serverfd, char* req_buffer, char* res_buffer
  * 
  *  Jobs including forward the request, get back and update the response object
  * 
- *  Return?
+ *  Return +ve(server_fd) is persistent, 0 if not persistent, -1 if fail
  * 
  */
 int no_cache_routine(int serverfd, struct thread_param* tp, struct header_status* hs);
@@ -43,25 +43,9 @@ int no_cache_routine(int serverfd, struct thread_param* tp, struct header_status
  *  This function helps to handle the http with cache hit in local
  *  no need to close any fd!
  *  
- *  Return 0 if handled, 1 if cache_fd is closed, -1 if fail
+ *  Return 0 if handled (403, 200), -1 if fail for any reasons
  */
-int cache_routine(int serverfd, struct thread_param* tp, struct header_status* hs, int cache_fd);
-
-
-/**
- *  This function helps to handle the cache hit but outdate
- * 
- *  Return?
- */
-int outdate_cache_routine(char* req_header);
-/**
- *  This function helps to handle the cache hit and not outdate
- * 
- *  Return?
- */
-int indate_cache_routine(char* req_header);
-
-
+int cache_routine(int serverfd, struct thread_param* tp, struct header_status* hs, int* cache_fd);
 
 
 #endif
