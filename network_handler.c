@@ -149,6 +149,51 @@ int get_ip_by_host(char* host, char* ip_buf) {
     return -1;
 }
 
+/* get fd by host */
+int get_fd_by_host(char* host, char* service) {
+
+    struct addrinfo hints;
+    struct addrinfo* result;
+    struct addrinfo* next;
+    int status;
+
+    hints.ai_family = AF_INET;      // IPv4 only
+    hints.ai_socktype = SOCK_STREAM;// TCP
+    hints.ai_protocol = 0;          // TCP
+
+    // first try not remove 'www.'
+    status = getaddrinfo(host, service, &hints, &result);
+    // if error, try remove 'www.' and again
+    if(status != 0) {
+        // try remove "www."
+        if(strncmp(host, "www.", 4) == 0) {
+            host += 4;
+            status = getaddrinfo(host, service, &hints, &result);
+            if(status != 0) {
+                log("Invalid host: [%s], ErrMsg(%d):[%s]\n", host, status, gai_strerror(status));
+                return -1;
+            }
+        }
+    }
+
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+
+    for(next = result; next != NULL; next = next->ai_next) {
+        // try connect
+        if(connect(sockfd, next->ai_addr, sizeof(struct sockaddr)) < 0) {
+            continue;
+        }
+        else {
+            // connect success
+            freeaddrinfo(result);
+            return sockfd;
+        }
+    }
+    freeaddrinfo(result);
+    log("cannot connect to host[%s]\n", host);
+    return -1;
+}
+
 /* get request/response header and put to buf */
 int get_reqres_header(int fd, char* buf, int size, int request_id) {
 
@@ -201,8 +246,10 @@ int connect_server(char* req_buffer, int port, char* hostname, struct restricted
     char* start;
     char* end;
     int ret;
-    char ip_buf[16];
-    bzero(ip_buf, 16);
+    char serv_buf[8];
+    bzero(serv_buf, 8);
+
+    sprintf(serv_buf, "%d", port);
 
     start = end = strcasestr(req_buffer, "Host:");
     if(start) {
@@ -218,33 +265,37 @@ int connect_server(char* req_buffer, int port, char* hostname, struct restricted
         return -1;
     }
 
-    // if host is length 15, try directly get
-    if(strlen(start) == 15) {
-        ret = get_serverfd(start, port);
-        if(ret != -1) {
-            *end = '\r';
-            return ret;
-        }
-    }
+    // // if host is length 15, try directly get
+    // if(strlen(start) == 15) {
+    //     ret = get_serverfd(start, port);
+    //     if(ret != -1) {
+    //         *end = '\r';
+    //         return ret;
+    //     }
+    // }
 
     if(!can_access_web(start, rw)) {
         *end = '\r';
         return 0;
     }
 
-    ret = get_ip_by_host(start, ip_buf);
+    ret = get_fd_by_host(start, serv_buf);
     *end = '\r';
-    if(ret < 0)
-        // cannot solve ip
-        return -1;
-
-    ret = get_serverfd(ip_buf, port);
-    if(ret <= 0)
-        // cannot get server fd
-        return -1;
-
-    // got the server fd
     return ret;
+
+    // ret = get_ip_by_host(start, ip_buf);
+    // *end = '\r';
+    // if(ret < 0)
+    //     // cannot solve ip
+    //     return -1;
+
+    // ret = get_serverfd(ip_buf, port);
+    // if(ret <= 0)
+    //     // cannot get server fd
+    //     return -1;
+
+    // // got the server fd
+    // return ret;
 
 }
 

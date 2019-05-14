@@ -46,6 +46,13 @@ int get_listen_fd(int port, int maxListen);
 int get_ip_by_host(char* host, char* ip_buf);
 
 /**
+ *  This function get fd by host
+ * 
+ *  Return (+ve) fd if success, -1 if fail
+ */
+int get_fd_by_host(char* host, char* service);
+
+/**
  *  This function get request/response header, non-blocking takes place
  * 
  *  Return -EAGAIN if not ready to read
