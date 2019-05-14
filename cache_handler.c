@@ -503,6 +503,7 @@ int cache_get_file_fd(char* req_buffer) {
     }
 
     if(get_host_end(req_buffer, &host, &host_end)) {
+        printf("Fail to get host\n");
         return -1;
     }
 

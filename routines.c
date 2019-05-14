@@ -203,9 +203,6 @@ int no_cache_routine(int serverfd, struct thread_param* tp, struct header_status
         }
     }
 
-    printf("\n\n\n\n\n\nDEBUG\n\n\n\n\n");
-
-
     if(hs->cacheable)
     // new cache_fd, with miss local cache
         cache_fd = cache_add_file(tp->req_buffer);
@@ -272,6 +269,13 @@ int no_cache_routine(int serverfd, struct thread_param* tp, struct header_status
 
     // parse the response header
     ret = init_header_status(hs, tp->res_buffer, RESPONSE);
+
+    // delete cache file if response is not 200
+    if(hs->response_code != 200) {
+        close(cache_fd);
+        cache_fd = -1;
+        cache_delete_file(tp->req_buffer);
+    }
 
     if(hs->is_chunked) {
         ret = forward_data_chunked(tp->clientfd, serverfd, cache_fd);
