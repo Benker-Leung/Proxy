@@ -175,7 +175,11 @@ EXIT_PROXY_ROUTINES:
 int no_cache_routine(int serverfd, struct thread_param* tp, struct header_status* hs) {
 
     int ret;        // record the return value result
+    int lock_num;   // lock number
     int cache_fd = -1;   // cached file represent this request
+
+    lock_num = cache_uri_hash(tp->req_buffer);
+    pthread_mutex_lock(&(tp->thread_lock[lock_num]));
 
     if(hs->cacheable)
         cache_fd = cache_get_file_fd(tp->req_buffer);
@@ -196,14 +200,14 @@ int no_cache_routine(int serverfd, struct thread_param* tp, struct header_status
             goto EXIT_NO_CACHE_ROUTINE;
         }
         else {
-            log("Satisfied by cache\n");
             // no error in cache_routine
-            ret = serverfd;
+            if(is_persistent(tp->req_buffer))
+                ret = serverfd;
             goto EXIT_NO_CACHE_ROUTINE;
         }
     }
 
-    if(hs->cacheable)
+    if(hs->cacheable && hs->http_method == GET)
     // new cache_fd, with miss local cache
         cache_fd = cache_add_file(tp->req_buffer);
 
@@ -302,6 +306,7 @@ int no_cache_routine(int serverfd, struct thread_param* tp, struct header_status
     }
     ret = 0;
 EXIT_NO_CACHE_ROUTINE:
+    pthread_mutex_unlock(&(tp->thread_lock[lock_num]));
     close(cache_fd);
     return ret;
 }
@@ -351,6 +356,7 @@ int cache_routine(int serverfd, struct thread_param* tp, struct header_status* h
             printf("Fail to forward data from cache to client\n");
             return -1;
         }
+        log("Cache used\n");
         return 0;
     }
     // if 200
@@ -397,6 +403,7 @@ int cache_routine(int serverfd, struct thread_param* tp, struct header_status* h
                 return 1;
             }
         }
+        log("Cache update\n");
         close(cache_fd);
         return 1;
     }

@@ -1,6 +1,9 @@
 #ifndef DATA_STRUCTURE_H
 #define DATA_STRUCTURE_H
 
+#include <pthread.h>
+
+#define NUM_OF_CACHE_LOCK 101
 #define DEFAULT_MAX_THREAD 3
 #define MY_TIMEOUT 5
 #define HEADER_BUFFER_SIZE 4096
@@ -29,7 +32,7 @@ struct thread_param {
     char res_buffer[HEADER_BUFFER_SIZE];
     // char* request_header_buffer;   // only support 4KB header
     // char* response_header_buffer;
-    // pthread_mutex_t *thread_lock;               // for synchronize open or close socket
+    pthread_mutex_t *thread_lock;               // for synchronize open or close socket
 };
 
 

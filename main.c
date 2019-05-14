@@ -23,22 +23,13 @@ struct thread_param* tps;   // thread_param array
 char* thread_status;    // status array, 'a' as available, 'o' as occupied
 pthread_t* thread;       // use to pthread_join
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;  // used for synchronization
+pthread_mutex_t cache_lock[NUM_OF_CACHE_LOCK];
 pthread_attr_t pt_attr;
 int port;               // port number
 int max_thread;         // max thread
 int proxyfd;               // proxyfd
 int available_threads;      // the total available_thread
 
-// /* used to param to a thread */
-// struct thread_param {
-//     int id;     // to distinguish thread_id
-//     int fd;     // to store the connection file descriptor
-//     char request_header_buffer[HEADER_BUFFER_SIZE];   // only support 4KB header
-//     char response_header_buffer[HEADER_BUFFER_SIZE];
-//     // char* request_header_buffer;   // only support 4KB header
-//     // char* response_header_buffer;
-//     // pthread_mutex_t *thread_lock;               // for synchronize open or close socket
-// };
 
 /* init the global variables about thread and port */
 void init_proxy(int argc, char** argv) {
@@ -93,6 +84,19 @@ void init_proxy(int argc, char** argv) {
     if(tps == NULL) {
         printf("Cannot allocate memory for thread_params\n");
         exit(0);
+    }
+
+    // init mutex
+    for(i=0; i<NUM_OF_CACHE_LOCK; ++i) {
+        if(pthread_mutex_init(&cache_lock[i], NULL)) {
+            printf("Fail to init cache mutex\n");
+            exit(0);
+        }
+    }
+
+    // assign mutex
+    for(i=0; i<max_thread; ++i) {
+        tps[i].thread_lock = cache_lock;
     }
 
     // // assign the same lock to all thread_param object

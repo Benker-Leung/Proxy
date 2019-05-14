@@ -336,6 +336,10 @@ int forward_data_length(int dest_fd, int from_fd, char* buf, int buf_size, int l
         bzero(buf, buf_size);
     }
 
+    if(cache_fd > 0) {
+        write(cache_fd, "0\r\n\r\n", 5);
+    }
+
     if(ret == -1)
         return ret;
 
