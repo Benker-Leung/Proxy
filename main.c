@@ -31,6 +31,64 @@ int proxyfd;               // proxyfd
 int available_threads;      // the total available_thread
 
 
+/* Init the restricted websites */
+void init_restricted_websites(struct restricted_websites* rw) {
+
+    char c;
+    int i;
+    int j = 0;
+
+
+    // try to open
+    int fd = open("restricted_websites", O_RDWR, 0644);
+    if(fd <= 0) {
+        // the file not exist
+        rw->list = NULL;
+        rw->num_of_sites = 0;
+        rw->num_of_entries = 0;
+        return;
+    }
+
+    // default make 10 entries, each 64 char
+    rw->num_of_entries = 10;
+    rw->num_of_sites = 0;
+    rw->list = calloc(rw->num_of_entries, sizeof(char*));
+    for(i=0; i<rw->num_of_entries; ++i) {
+        rw->list[i] = calloc(64, sizeof(char));
+    }
+
+    // append content
+    while(read(fd, &c, 1) > 0) {
+        // need to extend
+        if(rw->num_of_sites >= rw->num_of_entries) {
+            rw->list = realloc(rw->list, (rw->num_of_entries+10) * sizeof(char*));
+            if(rw->list == NULL) {
+                printf("No mem\n");
+                exit(0);
+            }
+            for(i=rw->num_of_entries; i<rw->num_of_entries+10; ++i) {
+                rw->list[i] = calloc(64, sizeof(char));
+            }
+            rw->num_of_entries += 10;
+        }
+        // next one
+        if(c == '\n' || j >= 63) {
+            if(j == 0) {
+                break;
+            }
+            rw->list[rw->num_of_sites][j] = '\0';
+            rw->num_of_sites += 1;
+            j = 0;
+        }
+        else {
+            rw->list[rw->num_of_sites][j++] = c;
+        }
+    }
+    return;
+}
+
+
+
 /* init the global variables about thread and port */
 void init_proxy(int argc, char** argv) {
 
@@ -122,6 +180,10 @@ void init_proxy(int argc, char** argv) {
         exit(0);
     }
 
+    // get list of restricted websites
+    init_restricted_websites(&restricted_website);
+
+
     log("Start proxy, listen at port [%d]\n", port);
     log("Max_thread supported:[%d]\n", max_thread);
 
@@ -199,6 +261,7 @@ void* thread_network_action(void *args) {
     // pthread_exit(NULL);
     return NULL;
 }
+
 
 int main(int argc, char** argv) {
 

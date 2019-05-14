@@ -215,6 +215,12 @@ int connect_server(char* req_buffer, int port, char* hostname) {
         // fail to parse host
         return -1;
     }
+
+    if(!can_access_web(start)) {
+        *end = '\r';
+        return -1;
+    }
+
     ret = get_ip_by_host(start, ip_buf);
     *end = '\r';
     if(ret < 0)

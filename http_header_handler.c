@@ -315,3 +315,15 @@ int get_response_code(char* res_buffer) {
     return ret;
 
 }
+/* This function determine host banned or not */
+int can_access_web(char* host) {
+
+    int i;
+    for(i=0; i<restricted_website.num_of_sites; ++i) {
+        if(strcasecmp(host, restricted_website.list[i]) == 0) {
+            return 0;
+        }
+    }
+    return 1;
+    
+}

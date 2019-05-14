@@ -14,6 +14,17 @@ enum HTTP_METHOD{NOT_SUPPORTED=0, GET, POST, CONNECT};
 // use for determine http header type
 enum HTTP_HEADER{REQUEST=0, RESPONSE};
 
+// use for store restricted_websites
+struct restricted_websites {
+
+    int num_of_entries; // record number of entries
+    int num_of_sites;   // number of restricted web sites
+    char** list;        // array of string to store websites chars
+
+};
+
+static struct restricted_websites restricted_website;
+
 struct header_status {
     int http_method;    // indicate the method, only support(GET, POST)
     int is_persistent;  // indicate the HTTP version

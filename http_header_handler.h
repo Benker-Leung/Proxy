@@ -84,5 +84,12 @@ int is_cacheable(char* req_buffer);
  */
 int get_response_code(char* res_buffer);
 
+/**
+ *  This function determine the host is in restricted or not
+ * 
+ *  Return 1 is able to access, 0 if cannot
+ */
+int can_access_web(char* host);
+
 
 #endif
