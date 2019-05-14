@@ -17,6 +17,8 @@ struct header_status {
     int hv_data;        // indicate whether HTTP hv data or nt
     int is_chunked;     // indicate the data transfer method
     int data_length;    // if is not chunked, the data len should be specify in content-length
+    int cacheable;      // if can cache(1), cannot cache(0)
+    int response_code;  // e.g 200 OK
 };
 
 /* used to param to a thread */
@@ -29,6 +31,8 @@ struct thread_param {
     // char* response_header_buffer;
     // pthread_mutex_t *thread_lock;               // for synchronize open or close socket
 };
+
+
 
 
 #endif

@@ -18,3 +18,15 @@ Server: Apache
 Connection: Keep-Alive
 Keep-Alive: timeout=5, max=100
 ETag: "6be-5854ef33cad32"
+
+
+GET /a.png HTTP/1.1
+Host: lyleungad.student.ust.hk
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://lyleungad.student.ust.hk/
+DNT: 1
+Connection: keep-alive
+If-Modified-Since: Sat, 30 Mar 2019 12:30:18 HKT

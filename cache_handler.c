@@ -15,6 +15,13 @@
 #include <stdlib.h>
 #include <strings.h>
 
+static char wday_name[7][3] = {
+    "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
+};
+static char mon_name[12][3] = {
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+};
 
 // /* return current time in format for 'If-Modify-Since', but char* is static */
 // char *cache_get_time(const struct tm *timeptr) {
@@ -37,6 +44,43 @@
 
 //     return result;
 // }
+
+/* This function write the if-modify-since to header */
+int cache_add_date(int cache_fd, char* req_buffer) {
+
+    // buffer for if modify since
+    char date_tag[100];
+    int ret;
+    struct tm* timeptr;
+    time_t result;
+    result = time(NULL);
+    timeptr = localtime(&result);
+
+    // if request already written inside file
+    if(req_buffer == NULL) {
+        lseek(cache_fd, -2, SEEK_CUR);
+    }
+    // if request is in req_buffer not in file
+    else {
+        // write the request
+        ret = write(cache_fd, req_buffer, sizeof(req_buffer));
+        if(ret <= 0) {
+            return -1;
+        }
+        lseek(cache_fd, -2, SEEK_CUR);
+    }
+
+    bzero(date_tag, 100);
+    sprintf(date_tag, "%s %.3s, %.2d %.3s %d %.2d:%.2d:%.2d HKT\r\n\r\n", "If-Modified-Since:", wday_name[timeptr->tm_wday],
+            timeptr->tm_mday, mon_name[timeptr->tm_mon], timeptr->tm_year+1900, timeptr->tm_hour, 
+            timeptr->tm_min, timeptr->tm_sec);
+        
+    ret = write(cache_fd, date_tag, 100);
+    if(ret <= 0) {
+        return -1;
+    }
+    return 0;
+}
 
 
 /* This function get max minor */
@@ -372,7 +416,7 @@ int cache_add_file(char* req_buffer) {
 
     int cache_fd;   // fd for cache file
     int major;      // record the hash of req_buffer
-    char* temp;    // record movement of req_buffer
+    // char* temp;    // record movement of req_buffer
     char* host;     // record start of host
     char* end;      // record end of host
 
@@ -393,21 +437,21 @@ int cache_add_file(char* req_buffer) {
         return -1;
     }
 
-    // write GET and HOST to file
-    temp = req_buffer;
-    while(*temp != '\r') {
-        if(*temp == '\0') {
-            return -1;
-        }
-        write(cache_fd, temp, 1);
-        ++temp;
-    }
-    write(cache_fd, "\r\n", 2);
-    while(host != end) {
-        write(cache_fd, host, 1);
-        ++host;
-    }    
-    write(cache_fd, "\r\n", 2);
+    // // write GET and HOST to file
+    // temp = req_buffer;
+    // while(*temp != '\r') {
+    //     if(*temp == '\0') {
+    //         return -1;
+    //     }
+    //     write(cache_fd, temp, 1);
+    //     ++temp;
+    // }
+    // write(cache_fd, "\r\n", 2);
+    // while(host != end) {
+    //     write(cache_fd, host, 1);
+    //     ++host;
+    // }    
+    // write(cache_fd, "\r\n", 2);
 
     return cache_fd;
 }

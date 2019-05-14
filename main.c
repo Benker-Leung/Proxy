@@ -136,6 +136,11 @@ void init_proxy(int argc, char** argv) {
 
 }
 
+/* do nothing function */
+void do_nothing() {
+    return;
+}
+
 /* action to be taken before exit */
 void cleanup_before_exit() {
 
@@ -198,6 +203,7 @@ int main(int argc, char** argv) {
     void* res;
     // capture ctrl+c to cleanup before exit
     signal(SIGINT, cleanup_before_exit);
+    signal(SIGPIPE, do_nothing);
 
 
     init_proxy(argc, argv);

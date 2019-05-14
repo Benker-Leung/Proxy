@@ -286,3 +286,32 @@ int is_same_hostname(char* req_buffer, char* hostname) {
     }
 }
 
+/* This function base on request determine result can cache or not */
+int is_cacheable(char* req_buffer) {
+
+    char* temp;
+
+    temp = strcasestr(req_buffer, "If-Modified-Since:");
+    if(temp != NULL)
+        return 0;
+
+
+    temp = strcasestr(req_buffer, "If-None-Match:");
+    if(temp != NULL)
+        return 0;
+
+    return 1;
+}
+
+/* This function get the response code e.g 200 */
+int get_response_code(char* res_buffer) {
+
+    int ret;
+
+    sscanf(res_buffer, "HTTP/%d.%d %d", &ret, &ret, &ret);
+    if(ret < 100 || ret > 599) {
+        return 0;
+    }
+    return ret;
+
+}

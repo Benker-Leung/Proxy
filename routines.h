@@ -41,10 +41,9 @@ int no_cache_routine(int serverfd, struct thread_param* tp, struct header_status
 
 /**
  *  This function helps to handle the http with cache hit in local
- *  success(1) means cache is valid and the request is handled
- *  fail (0) means cache is not valid, and cache is deleted, do the same as no cache
+ *  no need to close any fd!
  *  
- *  Return 1 if success, 0 if fail
+ *  Return 0 if handled, 1 if cache_fd is closed, -1 if fail
  */
 int cache_routine(int serverfd, struct thread_param* tp, struct header_status* hs, int cache_fd);
 

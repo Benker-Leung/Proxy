@@ -288,7 +288,8 @@ int forward_packet(int serverfd, char* buf, int len, int cache_fd) {
     int ret;  
 
     while(len != 0) {
-        ret = send(serverfd, buf, len, MSG_NOSIGNAL);
+        // ret = send(serverfd, buf, len, MSG_NOSIGNAL);
+        ret = write(serverfd, buf, len);
 
         // cache
         if(cache_fd > 0) {
@@ -314,13 +315,15 @@ int forward_data_length(int dest_fd, int from_fd, char* buf, int buf_size, int l
 
     while(length > 0) {
         // read from from fd
-        ret = recv(from_fd, buf, buf_size, MSG_NOSIGNAL);
+        // ret = recv(from_fd, buf, buf_size, MSG_NOSIGNAL);
+        ret = read(from_fd, buf, buf_size);
         if(ret <= 0) {
             return -1;
         }
         length -= ret;
         // write to destination fd
-        ret = send(dest_fd, buf, ret, MSG_NOSIGNAL);
+        // ret = send(dest_fd, buf, ret, MSG_NOSIGNAL);
+        ret = write(dest_fd, buf, ret);
         
         // cache
         if(cache_fd > 0) {
@@ -349,7 +352,8 @@ int forward_data_chunked(int dest_fd, int from_fd, int cache_fd) {
     status = 0;
     while(1) {
         
-        ret = recv(from_fd, &c, 1, MSG_NOSIGNAL);
+        // ret = recv(from_fd, &c, 1, MSG_NOSIGNAL);
+        ret = read(from_fd, &c, 1);
         if(ret <= 0)
             return -1;
 
@@ -367,7 +371,8 @@ int forward_data_chunked(int dest_fd, int from_fd, int cache_fd) {
                 break;
         }
         
-        ret = send(dest_fd, &c, 1, MSG_NOSIGNAL);
+        // ret = send(dest_fd, &c, 1, MSG_NOSIGNAL);
+        ret = write(dest_fd, &c, 1);
 
         // cache
         if(cache_fd > 0) {
@@ -410,12 +415,18 @@ int init_header_status(struct header_status* hs, char* req_buf, enum HTTP_HEADER
         }
         hs->is_persistent = ret;
 
+        // determine can cache or not
+        hs->cacheable = is_cacheable(req_buf);
+
         // method that do not have data
         if(hs->http_method == GET || hs->http_method == CONNECT) {
             return 0;
         }
 
     }
+
+    // get the response code, 0 if fail
+    hs->response_code = get_response_code(req_buf);
 
     // determine is chunked or not
     ret = is_chunked(req_buf);

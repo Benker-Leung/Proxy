@@ -249,23 +249,31 @@ int cache_delete_file(char* hostname, int major, int minor) {
 
 
 int main() {
-    
-    int ret;
-    char* time_string;
-    struct tm* time_struct;
-    time_t result;
-    result = time(NULL);
-    
-    time_string = asctime(localtime(&result));
-    printf("Time :%s\n", time_string);
-    printf("Length [%ld]\n", strlen(time_string));
 
-    // ret = cache_create_file("sgss.edu.hk", 10);
-    // printf("num_of_minor [%d]\n", ret);
-    // close(ret);
+    char* res = "HTTP/1.1 304 Not Modified\r\n";
 
-    ret = cache_delete_file("sgss.edu.hk", 10, 1);
-    printf("Remove result code [%d]\n", ret);
+    int res_code;
+
+    sscanf(res, "HTTP/%d.%d %d", &res_code, &res_code, &res_code);
+
+    printf("code: [%d]\n", res_code);
+
+    // int ret;
+    // char* time_string;
+    // struct tm* time_struct;
+    // time_t result;
+    // result = time(NULL);
+    
+    // time_string = asctime(localtime(&result));
+    // printf("Time :%s\n", time_string);
+    // printf("Length [%ld]\n", strlen(time_string));
+
+    // // ret = cache_create_file("sgss.edu.hk", 10);
+    // // printf("num_of_minor [%d]\n", ret);
+    // // close(ret);
+
+    // ret = cache_delete_file("sgss.edu.hk", 10, 1);
+    // printf("Remove result code [%d]\n", ret);
 
     return 0;
 }

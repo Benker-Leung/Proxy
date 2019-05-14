@@ -8,6 +8,13 @@
 //  */
 // char *cache_get_time(const struct tm *timeptr);
 
+/**
+ *  This function write the if-modify-since to header
+ *  
+ *  Return 0 if successfully write, -1 if fail
+ */
+int cache_add_date(int cache_fd, char* req_buffer);
+
 
 /**
  *  This function get the value of major_0
