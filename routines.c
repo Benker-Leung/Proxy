@@ -308,8 +308,13 @@ int no_cache_routine(int serverfd, struct thread_param* tp, struct header_status
     }
     ret = 0;
 EXIT_NO_CACHE_ROUTINE:
-    pthread_mutex_unlock(&(tp->thread_lock[lock_num]));
+    if(ret == -1) {
+        close(cache_fd);
+        cache_fd = -1;
+        cache_delete_file(tp->req_buffer);
+    }
     close(cache_fd);
+    pthread_mutex_unlock(&(tp->thread_lock[lock_num]));
     return ret;
 }
 
