@@ -74,7 +74,7 @@ int cache_get_max_minor(char* hostname, int major) {
     bzero(path, 512);
 
     if(getcwd(path, 512) == NULL) {
-        log("Fail to get current directory\n");
+        // log("Fail to get current directory\n");
         return -1;
     }
     
@@ -82,13 +82,13 @@ int cache_get_max_minor(char* hostname, int major) {
 
     // get the minor number, if fail to open
     if((count_file = open(path, O_RDWR, 0644)) <= 0) {
-        log("Fail to open major_0\n");
+        // log("Fail to open major_0\n");
         return -1;
     }
     else {
         // if can't read
         if(read(count_file, path, 512) <= 0) {
-            log("Fail to read minor number\n");
+            // log("Fail to read minor number\n");
             close(count_file);
             return -1;
         }
@@ -126,18 +126,18 @@ int cache_get_minor(char* req_buffer) {
 
     // for prepare path
     if(getcwd(path, 512) == NULL) {
-        log("Fail to get current directory\n");
+        // log("Fail to get current directory\n");
         return -1;
     }
 
     // get host and end
     if(get_host_end(req_buffer, &host, &host_end)) {
-        log("Fail to get host\n");
+        // log("Fail to get host\n");
         return -1;
     }
     // get uri and end
     if(get_uri_end(req_buffer, &uri, &uri_end)) {
-        log("Fail to get uri\n");
+        // log("Fail to get uri\n");
         *host_end = '\r';
         return -1;
     }
@@ -145,7 +145,7 @@ int cache_get_minor(char* req_buffer) {
     if((num_of_minor = cache_get_max_minor(host, major)) == -1) {
         *host_end = '\r';
         *uri_end = ' ';
-        log("Fail to get max minor\n");
+        // log("Fail to get max minor\n");
         return -1;
     }
     minor_start_position = sprintf(path, "%s/%s/%d_", path, host, major);
@@ -201,7 +201,7 @@ int cache_create_file_by_hostname(char* hostname, int major) {
     char path[512];
 
     if(getcwd(path, 512) == NULL) {
-        log("Fail to get current directory\n");
+        // log("Fail to get current directory\n");
         return -1;
     }
 
@@ -224,7 +224,7 @@ int cache_create_file_by_hostname(char* hostname, int major) {
     if((count_file = open(path, O_RDWR, 0644)) == -1) {
         // if fail to open
         if((count_file = open(path, O_CREAT|O_RDWR, 0644)) == -1) {
-            log("Fail to open or create the major file\n");
+            // log("Fail to open or create the major file\n");
             return -1;
         }
         // open OK, write 1 to major_0
@@ -240,13 +240,13 @@ int cache_create_file_by_hostname(char* hostname, int major) {
         // fail to read
         if(read(count_file, file_content, 1024) <= 0) {
             close(count_file);
-            log("Fail to read minor value\n");
+            // log("Fail to read minor value\n");
             return -1;
         }
         // non first value
         else {
             if((lseek(count_file, 0, SEEK_SET)) == -1) {
-                log("Fail to lseek\n");
+                // log("Fail to lseek\n");
                 return -1;
             }
             num_of_minor = atoi(file_content);
@@ -284,7 +284,7 @@ int cache_delete_file_by_hostname(char* hostname, int major, int minor) {
     bzero(file_content, 1024);
 
     if(getcwd(path, 512) == NULL) {
-        log("Fail to get current directory\n");
+        // log("Fail to get current directory\n");
         return -1;
     }
 
@@ -293,7 +293,7 @@ int cache_delete_file_by_hostname(char* hostname, int major, int minor) {
     // remove the file
     sprintf(path+minor_start_position, "%d", minor);
     if(unlink(path)) {
-        log("Fail to remove the file\n");
+        // log("Fail to remove the file\n");
         return -1;
     }
 
@@ -301,14 +301,14 @@ int cache_delete_file_by_hostname(char* hostname, int major, int minor) {
     sprintf(path+minor_start_position, "%d", 0);
     // get the minor number, if fail to open
     if((count_file = open(path, O_RDWR, 0644)) <= 0) {
-        log("Fail to open major_0\n");
+        // log("Fail to open major_0\n");
         return -1;
     }
     // open OK
     else {
         // if can't read
         if(read(count_file, file_content, 1024) <= 0) {
-            log("Fail to read minor number\n");
+            // log("Fail to read minor number\n");
             close(count_file);
             return -1;
         }
@@ -320,7 +320,7 @@ int cache_delete_file_by_hostname(char* hostname, int major, int minor) {
             if(num_of_minor == 0) {
                 close(count_file);
                 if(unlink(path)) {
-                    log("Fail to remove major_0\n");
+                    // log("Fail to remove major_0\n");
                     return -1;
                 }
                 return 0;
@@ -364,11 +364,11 @@ int cache_uri_hash(char* req_buffer) {
     char* uri;
     char* uri_end;
     if(get_host_end(req_buffer, &host, &host_end)) {
-        log("Fail to get host\n");
+        // log("Fail to get host\n");
         return -1;
     }
     if(get_uri_end(req_buffer, &uri, &uri_end)) {
-        log("Fail to get uri\n");
+        // log("Fail to get uri\n");
         *host_end = '\r';
         return -1;
     }
@@ -407,7 +407,7 @@ int cache_add_file(char* req_buffer) {
 
     // get host and end
     if(get_host_end(req_buffer, &host, &end)) {
-        log("Fail to get host\n");
+        // log("Fail to get host\n");
         return -1;
     }
     // get cache file fd by host and major(hash)
@@ -415,7 +415,7 @@ int cache_add_file(char* req_buffer) {
     *end = '\r';
     // if fail to get fd
     if(cache_fd == -1) {
-        log("Fail to add cache file\n");
+        // log("Fail to add cache file\n");
         return -1;
     }
 
@@ -434,14 +434,14 @@ int cache_delete_file(char* req_buffer) {
 
     minor = cache_get_minor(req_buffer);
     if(minor <= 0) {
-        log("Fail to delete file\n");
+        // log("Fail to delete file\n");
         return -1;
     }
 
     major = cache_uri_hash(req_buffer);
 
     if(get_host_end(req_buffer, &host, &host_end)) {
-        log("Fail to delete file\n");
+        // log("Fail to delete file\n");
         return -1;
     }
 
@@ -465,19 +465,19 @@ int cache_get_file_fd(char* req_buffer) {
     major = cache_uri_hash(req_buffer);
     minor = cache_get_minor(req_buffer);
     if(minor <= 0) {
-        log("No such cache file\n");
+        // log("No such cache file\n");
         return -1;
     }
 
     if(get_host_end(req_buffer, &host, &host_end)) {
-        log("Fail to get host\n");
+        // log("Fail to get host\n");
         return -1;
     }
 
     bzero(path, 512);
 
     if(getcwd(path, 512) == NULL) {
-        log("Fail to get current directory\n");
+        // log("Fail to get current directory\n");
         *host_end = '\r';
         return -1;
     }
@@ -487,7 +487,7 @@ int cache_get_file_fd(char* req_buffer) {
 
     file_fd = open(path, O_RDWR, 0644);
     if(file_fd <= 0) {
-        log("No such cache file:\n%s\n", req_buffer);
+        // log("No such cache file:\n%s\n", req_buffer);
         return -1;        
     }
     return file_fd;
