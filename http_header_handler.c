@@ -320,7 +320,10 @@ int can_access_web(char* host, struct restricted_websites* rw) {
 
     int i;
     for(i=0; i<rw->num_of_sites; ++i) {
-        if(strcasecmp(host, rw->list[i]) == 0) {
+        if(strcasestr(host, rw->list[i]) != NULL) {
+            return 0;
+        }
+        if(strcasestr(rw->list[i], host) != NULL) {
             return 0;
         }
     }

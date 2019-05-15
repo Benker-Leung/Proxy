@@ -251,29 +251,16 @@ int connect_server(char* req_buffer, int port, char* hostname, struct restricted
 
     sprintf(serv_buf, "%d", port);
 
-    start = end = strcasestr(req_buffer, "Host:");
-    if(start) {
-        while(*end != '\r' && *end != '\0')
-            ++end;
-        *end = '\0';
-        start += 6;
-        strncpy(hostname, start, 255);
-    }
-    else {
-        // fail to parse host
+    // get host start and end pointer
+    if(get_host_end(req_buffer, &start, &end)) {
         log("Fail to parse host\n");
         return -1;
     }
 
-    // // if host is length 15, try directly get
-    // if(strlen(start) == 15) {
-    //     ret = get_serverfd(start, port);
-    //     if(ret != -1) {
-    //         *end = '\r';
-    //         return ret;
-    //     }
-    // }
+    // copy to hostname array, to determine is same host for next request
+    strncpy(hostname, start, 256);
 
+    
     if(!can_access_web(start, rw)) {
         *end = '\r';
         return 0;
@@ -283,70 +270,42 @@ int connect_server(char* req_buffer, int port, char* hostname, struct restricted
     *end = '\r';
     return ret;
 
-    // ret = get_ip_by_host(start, ip_buf);
-    // *end = '\r';
-    // if(ret < 0)
-    //     // cannot solve ip
-    //     return -1;
-
-    // ret = get_serverfd(ip_buf, port);
-    // if(ret <= 0)
-    //     // cannot get server fd
-    //     return -1;
-
-    // // got the server fd
-    // return ret;
 
 }
 
 /* get the https server fd given req_buffer if success */
-int connect_https_server(char* req_buffer) {
+int connect_https_server(char* req_buffer, struct restricted_websites* rw) {
 
     int ret;
-    int port;
-    char* start;
-    char* start2;
-    char* start3;
-    char ip_buf[16];
-    bzero(ip_buf, 16);
+    char* host;
+    char* host_end;
+    char* port;
+    char* port_end;
 
-    start = strcasestr(req_buffer, "host:");
-    if(!start) {
+    // get start of host and end of port
+    if(get_host_end(req_buffer, &host, &port_end)) {
+        log("HTTPS can't parse host end\n");
         return -1;
     }
-
-    start += 6;
-    // get the port number
-    while(*start != ':') {
-        if(*start == '\0' || *start == '\r' || *start == '\n')
-            return -1;
-        ++start;
-    }
-    start3 = start2 = start + 1;
-    while(*start != '\r') {
-        if(*start == '\0' || *start == '\n')
-            return -1;
-        ++start;
-    }
-    *start = '\0';
-    port = atoi(start2);
-    *start = '\r';
-
-    // get the host name
-    start = strcasestr(req_buffer, "host:");
-    start += 6;
-    --start3;
-    *start3 = '\0';
-
-    ret = get_ip_by_host(start, ip_buf);
-    *start3 = ':';
-    if(ret == -1)
+    // get end of host
+    if((host_end = strstr(host, ":")) == NULL) {
+        log("HTTPS can't parse port\n");
+        *port_end = '\r';
         return -1;
-    
-    ret = get_serverfd(ip_buf, port);
-    if(ret == -1)
-        return -1;
+    }
+    *host_end = '\0';
+    port = host_end + 1;
 
+    if(!can_access_web(host, rw)) {
+        *host_end = ':';
+        *port_end = '\r';
+        return 0;
+    }
+
+    ret = get_fd_by_host(host, port);
+
+    *host_end = ':';
+    *port_end = '\r';
     return ret;
 }
 

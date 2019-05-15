@@ -33,7 +33,7 @@ int cache_add_date(int cache_fd, char* req_buffer) {
     struct tm* timeptr;
     time_t result;
     result = time(NULL);
-    timeptr = localtime(&result);
+    timeptr = gmtime(&result);
 
     // if request already written inside file
     if(req_buffer == NULL) {
@@ -52,10 +52,10 @@ int cache_add_date(int cache_fd, char* req_buffer) {
     }
 
     bzero(date_tag, 100);
-    sprintf(date_tag, "%s %.3s, %.2d %.3s %d %.2d:%.2d:%.2d HKT\r\n\r\n", "If-Modified-Since:", wday_name[timeptr->tm_wday],
+    sprintf(date_tag, "%s %.3s, %.2d %.3s %d %.2d:%.2d:%.2d GMT\r\n\r\n", "If-Modified-Since:", wday_name[timeptr->tm_wday],
             timeptr->tm_mday, mon_name[timeptr->tm_mon], timeptr->tm_year+1900, timeptr->tm_hour, 
             timeptr->tm_min, timeptr->tm_sec);
-        
+    
     ret = write(cache_fd, date_tag, 100);
     if(ret <= 0) {
         return -1;
@@ -487,7 +487,7 @@ int cache_get_file_fd(char* req_buffer) {
 
     file_fd = open(path, O_RDWR, 0644);
     if(file_fd <= 0) {
-        log("No such cache file\n");
+        log("No such cache file:\n%s\n", req_buffer);
         return -1;        
     }
     return file_fd;

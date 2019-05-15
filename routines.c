@@ -86,11 +86,15 @@ int proxy_routines(struct thread_param* tp) {
             // use different routines here
             switch(req_hs.http_method) {
                 case CONNECT:
-                    ret = connect_https_server(tp->req_buffer);
+                    ret = connect_https_server(tp->req_buffer, tp->rw);
                     if(ret == -1) {
                         printf("Error in handling https request, thread_id:[%d]\n", tp->id);
                         // printf("%s\n", req_buffer);
                         ret = -1;
+                        goto EXIT_PROXY_ROUTINES;
+                    }
+                    else if(ret == 0) {
+                        restricted_routine(tp);
                         goto EXIT_PROXY_ROUTINES;
                     }
                     serverfd = ret;

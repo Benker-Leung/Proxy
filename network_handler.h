@@ -79,7 +79,7 @@ int connect_server(char* req_buffer, int port, char* hostname, struct restricted
  *  Return (+ve) ===> connected serverfd if success, -1 if fail
  * 
  */
-int connect_https_server(char* req_buffer);
+int connect_https_server(char* req_buffer, struct restricted_websites* rw);
 
 
 /**
