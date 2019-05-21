@@ -287,20 +287,36 @@ int is_same_hostname(char* req_buffer, char* hostname) {
 }
 
 /* This function base on request determine result can cache or not */
-int is_cacheable(char* req_buffer) {
+int is_cacheable_request(char* req_buf) {
 
     char* temp;
 
-    temp = strcasestr(req_buffer, "If-Modified-Since:");
+    temp = strcasestr(req_buf, "If-Modified-Since:");
     if(temp != NULL)
         return 0;
 
 
-    temp = strcasestr(req_buffer, "If-None-Match:");
+    temp = strcasestr(req_buf, "If-None-Match:");
     if(temp != NULL)
         return 0;
 
     return 1;
+}
+
+/* This function base on response determine result can cache or not */
+int is_cacheable_response(char* res_buf) {
+    
+    char* temp;
+    
+    temp = strcasestr(res_buf, "ETag:");
+    if(temp != NULL)
+        return 1;
+
+    temp = strcasestr(res_buf, "Last-Modified:");
+    if(temp != NULL)
+        return 1;
+
+    return 0;
 }
 
 /* This function get the response code e.g 200 */

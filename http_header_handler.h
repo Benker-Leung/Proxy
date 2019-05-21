@@ -74,7 +74,14 @@ int is_same_hostname(char* req_buffer, char* hostname);
  * 
  *  Return 1 if can cache, 0 if cannot cache, -1 if fail
  */
-int is_cacheable(char* req_buffer);
+int is_cacheable_request(char* req_buffer);
+
+/**
+ *  This function determine base on response whether can be cache or not
+ * 
+ *  Return 1 if can cache, 0 if cannot cache, -1 if fail
+ */
+int is_cacheable_response(char* res_buffer);
 
 /**
  *  This function get the response code e.g 200

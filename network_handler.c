@@ -378,8 +378,11 @@ int forward_data_chunked(int dest_fd, int from_fd, int cache_fd) {
 
     int ret;
     int status;
+    int i;
     char c;
+    char buf[4096];
 
+    i = 0;
     status = 0;
     while(1) {
         
@@ -407,7 +410,13 @@ int forward_data_chunked(int dest_fd, int from_fd, int cache_fd) {
 
         // cache
         if(cache_fd > 0) {
-            write(cache_fd, &c, 1);
+            if(i < 4096) {
+                buf[i++] = c;
+            }
+            else {
+                write(cache_fd, buf, 4096);
+                i = 0;    
+            }
         }
 
         if(ret <= 0) {
@@ -418,6 +427,7 @@ int forward_data_chunked(int dest_fd, int from_fd, int cache_fd) {
             break;
         
     }
+    write(cache_fd, buf, i-1);
     return 1;
 }
 
@@ -447,7 +457,10 @@ int init_header_status(struct header_status* hs, char* req_buf, enum HTTP_HEADER
         hs->is_persistent = ret;
 
         // determine can cache or not
-        hs->cacheable = is_cacheable(req_buf);
+        if(hs->http_method == GET)
+            hs->cacheable = is_cacheable_request(req_buf);
+        else
+            hs->cacheable = 0;
 
         // method that do not have data
         if(hs->http_method == GET || hs->http_method == CONNECT) {
@@ -458,6 +471,7 @@ int init_header_status(struct header_status* hs, char* req_buf, enum HTTP_HEADER
 
     // get the response code, 0 if fail
     hs->response_code = get_response_code(req_buf);
+    hs->cacheable = is_cacheable_response(req_buf);
 
     // determine is chunked or not
     ret = is_chunked(req_buf);
