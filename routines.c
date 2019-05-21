@@ -308,7 +308,7 @@ int no_cache_routine(int serverfd, struct thread_param* tp, struct header_status
     }
     ret = 0;
 EXIT_NO_CACHE_ROUTINE:
-    if(ret == -1) {
+    if(ret == -1 && cache_fd > 0) {
         close(cache_fd);
         cache_fd = -1;
         cache_delete_file(tp->req_buffer);
